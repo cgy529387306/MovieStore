@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 ext {
-    SUPPORT_LIBRARY_VERSION = '27.1.1'
+    SUPPORT_LIBRARY_VERSION = '27.0.2'
 }
 
 android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.android.mb.movie"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 100
         versionName "1.0.0"
@@ -58,4 +58,7 @@ dependencies {
 
     //沉浸式导航栏管理
     implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
+
+    //完整版引入
+    implementation 'com.shuyu:GSYVideoPlayer:6.0.2'
 }

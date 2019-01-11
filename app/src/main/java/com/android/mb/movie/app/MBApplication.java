@@ -5,6 +5,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.android.mb.movie.retrofit.http.exception.ApiException;
+import com.shuyu.gsyvideoplayer.player.IjkPlayerManager;
+import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 
 /**
  * 主要用来获取全局的Context
@@ -42,6 +44,7 @@ public class MBApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		sInstance = this;
+		PlayerFactory.setPlayManager(IjkPlayerManager.class);//ijk模式
 	}
 	
 }

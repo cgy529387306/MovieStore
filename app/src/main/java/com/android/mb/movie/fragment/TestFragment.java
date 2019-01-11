@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -18,6 +17,7 @@ import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +28,12 @@ import java.util.List;
  */
 public class TestFragment extends BaseFragment implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener,BaseQuickAdapter.OnItemClickListener {
 
-
     private int mState;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private TestAdapter mAdapter;
     private int mCurrentPage = 1;
-
+    private LinearLayoutManager mLinearLayoutManager;
 
     public static Fragment getInstance(int state) {
         Fragment fragment = new TestFragment();
@@ -52,11 +51,12 @@ public class TestFragment extends BaseFragment implements View.OnClickListener,S
     @Override
     protected void bindViews(View view) {
         mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimaryDark);
-        mRecyclerView =  view.findViewById(R.id.recyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimaryDark);
+        mRecyclerView = view.findViewById(R.id.recyclerView);
+        mLinearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
-        mAdapter = new TestAdapter(R.layout.item_test,new ArrayList());
+        mAdapter = new TestAdapter(R.layout.item_test, new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -75,6 +75,36 @@ public class TestFragment extends BaseFragment implements View.OnClickListener,S
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mAdapter.setOnItemClickListener(this);
         mAdapter.setOnLoadMoreListener(this);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            int firstVisibleItem, lastVisibleItem;
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
+                lastVisibleItem = mLinearLayoutManager.findLastVisibleItemPosition();
+                //大于0说明有播放
+                if (GSYVideoManager.instance().getPlayPosition() >= 0) {
+                    //当前播放的位置
+                    int position = GSYVideoManager.instance().getPlayPosition();
+                    //对应的播放列表TAG
+                    if (GSYVideoManager.instance().getPlayTag().equals(TestAdapter.TAG)
+                            && (position < firstVisibleItem || position > lastVisibleItem)) {
+                        //如果滑出去了上面和下面就是否，和今日头条一样
+                        if(!GSYVideoManager.isFullState(getActivity())) {
+                            GSYVideoManager.releaseAllVideos();
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -135,4 +165,30 @@ public class TestFragment extends BaseFragment implements View.OnClickListener,S
             }
         },1500);
     }
+
+    public boolean onBackPressed() {
+        if (GSYVideoManager.backFromWindowFull(getActivity())) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        GSYVideoManager.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        GSYVideoManager.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        GSYVideoManager.releaseAllVideos();
+    }
+
 }

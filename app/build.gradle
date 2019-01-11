@@ -11,12 +11,36 @@ android {
         targetSdkVersion 27
         versionCode 100
         versionName "1.0.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    dexOptions {
+        preDexLibraries = false
+        javaMaxHeapSize "8g"
+        keepRuntimeAnnotatedClasses false
+    }
+
+    packagingOptions {
+        exclude 'META-INFTICE.txt'
+        exclude 'META-INF/maven/data.domybox.com/data.sdk/pom.properties'
+        exclude 'META-INF/maven/data.domybox.com/data.sdk/pom.xml'
+        exclude 'META-INF/LICENSE.txt'
+    }
+
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
     }
 }
 
@@ -59,6 +83,13 @@ dependencies {
     //沉浸式导航栏管理
     implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
 
-    //完整版引入
-    implementation 'com.shuyu:GSYVideoPlayer:6.0.2'
+    //VideoPlayer
+    implementation 'com.shuyu:gsyVideoPlayer-java:6.0.2'
+
+    //根据你的需求ijk模式的so
+    implementation 'com.shuyu:gsyVideoPlayer-armv5:6.0.2'
+    implementation 'com.shuyu:gsyVideoPlayer-armv7a:6.0.2'
+    implementation 'com.shuyu:gsyVideoPlayer-arm64:6.0.2'
+    implementation 'com.shuyu:gsyVideoPlayer-x64:6.0.2'
+    implementation 'com.shuyu:gsyVideoPlayer-x86:6.0.2'
 }

@@ -5,12 +5,8 @@
     android:padding="15dp"
     android:background="@color/white"
     android:id="@+id/lly_ring">
-    <TextView
-        android:id="@+id/tv_name"
+    <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
+        android:id="@+id/video_player"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="test"
-        android:textColor="@color/text_color"
-        android:textSize="20sp" />
+        android:layout_height="200dp" />
 </LinearLayout>

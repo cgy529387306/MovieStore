@@ -15,6 +15,7 @@ import com.android.mb.movie.fragment.TestFragment;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.widget.FragmentViewPager;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,5 +103,20 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    private static final long DOUBLE_CLICK_INTERVAL = 2000;
+    private long mLastClickTimeMills = 0;
+    @Override
+    public void onBackPressed() {
+        TestFragment testFragment = (TestFragment) mFragmentList.get(mFragmentViewPager.getCurrentItem());
+        if (testFragment.onBackPressed()) {
+            return;
+        }
+        if (System.currentTimeMillis() - mLastClickTimeMills > DOUBLE_CLICK_INTERVAL) {
+            ToastHelper.showToast("再按一次返回退出");
+            mLastClickTimeMills = System.currentTimeMillis();
+            return;
+        }
+        finish();
+    }
 
 }

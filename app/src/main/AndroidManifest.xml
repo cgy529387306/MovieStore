@@ -32,6 +32,12 @@
             android:name=".view.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.ScrollingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="ScrollingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

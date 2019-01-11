@@ -52,7 +52,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onRightAction() {
         super.onRightAction();
-        ToastHelper.showToast("搜索");
+        NavigationHelper.startActivity(mContext,ScrollingActivity.class,null,false);
     }
 
     @Override

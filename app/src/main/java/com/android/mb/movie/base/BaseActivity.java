@@ -37,7 +37,7 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class BaseActivity extends AppCompatActivity{
 
-    protected Context mContext;
+    protected Activity mContext;
 
     /**
      * 管理Rxjava。

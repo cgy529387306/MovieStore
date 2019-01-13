@@ -1,6 +1,7 @@
 package com.android.mb.movie.service;
 
 
+import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.retrofit.http.entity.HttpResult;
 import com.android.mb.movie.retrofit.http.exception.ApiException;
 
@@ -18,10 +19,10 @@ import rx.functions.Func1;
 
 public class BaseHttp {
 
-
+    public static final String BASE_URL = "http://39.96.68.92:8080/api/1.0";
 
     public String getServerHost() {
-        return "http://j.testyunoa.99.com";
+        return BASE_URL;
     }
 
     @SuppressWarnings("unchecked")
@@ -31,10 +32,14 @@ public class BaseHttp {
             HttpResult<T> httpResult;
             if (o instanceof HttpResult) {
                 httpResult = (HttpResult<T>) o;
-                if (httpResult.getCode() != 1) {
+                if (httpResult.getCode() == 1){
+                    return httpResult.getData();
+                }else if (httpResult.getCode() == 403){
+                    //Token 失效，重新登录
+                    throw new ApiException(40003, "token 过期");
+                }else {
                     throw new ApiException(40003, httpResult.getMessage());
                 }
-                return httpResult.getData();
             }
             return null;
         }
@@ -60,8 +65,9 @@ public class BaseHttp {
      */
     Map<String, String> getHead() {
         Map<String, String> cloudOfficeHeader = new HashMap<String, String>();
-        cloudOfficeHeader.put("Nd-CompanyId", "100");
-        cloudOfficeHeader.put("personId", "15850");
+        if (CurrentUser.getInstance().isLogin()){
+            cloudOfficeHeader.put("accessToken",CurrentUser.getInstance().getToken());
+        }
         return cloudOfficeHeader;
     }
 

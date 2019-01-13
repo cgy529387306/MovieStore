@@ -1,35 +1,23 @@
 package com.android.mb.movie.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.TestAdapter;
 import com.android.mb.movie.base.BaseFragment;
 import com.android.mb.movie.constants.ProjectConstants;
-import com.android.mb.movie.entity.BannerItem;
 import com.android.mb.movie.utils.Helper;
-import com.android.mb.movie.utils.NavigationHelper;
-import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.ToastHelper;
-import com.android.mb.movie.view.LoginActivity;
 import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.youth.banner.Banner;
-import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,17 +26,17 @@ import java.util.List;
 /**
  * Created by cgy on 16/7/18.
  */
-public class TestFragment extends BaseFragment implements View.OnClickListener,BaseQuickAdapter.OnItemClickListener,OnRefreshListener, OnLoadMoreListener{
+public class MainFragment extends BaseFragment implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener,BaseQuickAdapter.OnItemClickListener {
 
     private int mState;
-    private SmartRefreshLayout mRefreshLayout;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private TestAdapter mAdapter;
     private int mCurrentPage = 1;
     private LinearLayoutManager mLinearLayoutManager;
 
     public static Fragment getInstance(int state) {
-        Fragment fragment = new TestFragment();
+        Fragment fragment = new MainFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("state", state);
         fragment.setArguments(bundle);
@@ -57,34 +45,19 @@ public class TestFragment extends BaseFragment implements View.OnClickListener,B
 
     @Override
     protected int getLayoutId() {
-        return  R.layout.frg_main;
+        return  R.layout.common_recycleview;
     }
 
     @Override
     protected void bindViews(View view) {
-        mRefreshLayout = view.findViewById(R.id.refreshLayout);
+        mSwipeRefreshLayout = view.findViewById(R.id.refreshLayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimaryDark);
         mRecyclerView = view.findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
         mAdapter = new TestAdapter(R.layout.item_test, new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
-
-        //添加Header
-        View header = LayoutInflater.from(getActivity()).inflate(R.layout.item_movie_header, mRecyclerView, false);
-        Banner banner = (Banner) header;
-        banner.setImageLoader(new GlideImageLoader());
-        banner.setImages(getImageUrls());
-        banner.start();
-        mAdapter.addHeaderView(banner);
-    }
-
-    private List<BannerItem> getImageUrls(){
-        List<BannerItem> dataList = new ArrayList<>();
-        dataList.add(new BannerItem("最后的骑士", ProjectConstants.TEST_IMAGE_URL));
-        dataList.add(new BannerItem("三生三世十里桃花", ProjectConstants.TEST_IMAGE_URL));
-        dataList.add(new BannerItem("豆福传", ProjectConstants.TEST_IMAGE_URL));
-        return dataList;
     }
 
     @Override
@@ -93,15 +66,15 @@ public class TestFragment extends BaseFragment implements View.OnClickListener,B
         if (bundle != null) {
             mState = bundle.getInt("state");
         }
+        mSwipeRefreshLayout.setRefreshing(true);
         getListFormServer();
     }
 
     @Override
     protected void setListener() {
-        mRootView.findViewById(R.id.btn_history).setOnClickListener(this);
-        mRefreshLayout.setOnRefreshListener(this);
-        mRefreshLayout.setOnLoadMoreListener(this);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         mAdapter.setOnItemClickListener(this);
+        mAdapter.setOnLoadMoreListener(this);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             int firstVisibleItem, lastVisibleItem;
@@ -141,13 +114,22 @@ public class TestFragment extends BaseFragment implements View.OnClickListener,B
         }
     }
 
+    @Override
+    public void onRefresh() {
+        mCurrentPage = 1;
+        getListFormServer();
+    }
+
+
+    @Override
+    public void onLoadMoreRequested() {
+        mCurrentPage++;
+        getListFormServer();
+    }
 
     @Override
     public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.btn_history){
-            NavigationHelper.startActivity(getActivity(), LoginActivity.class,null,false);
-        }
+
     }
 
 
@@ -166,18 +148,18 @@ public class TestFragment extends BaseFragment implements View.OnClickListener,B
                 }
                 if (mCurrentPage == 1){
                     //首页
-                    mRefreshLayout.finishRefresh();
+                    mSwipeRefreshLayout.setRefreshing(false);
                     mAdapter.setNewData(result);
                     mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
                     if (result.size()< ProjectConstants.PAGE_SIZE){
-                        mRefreshLayout.finishLoadMoreWithNoMoreData();
+                        mAdapter.loadMoreEnd();
                     }
                 }else{
                     if (Helper.isEmpty(result)){
-                        mRefreshLayout.finishLoadMoreWithNoMoreData();
+                        mAdapter.loadMoreEnd();
                     }else{
                         mAdapter.addData(result);
-                        mRefreshLayout.finishLoadMore();
+                        mAdapter.loadMoreComplete();
                     }
                 }
             }
@@ -209,22 +191,4 @@ public class TestFragment extends BaseFragment implements View.OnClickListener,B
         GSYVideoManager.releaseAllVideos();
     }
 
-    @Override
-    public void onLoadMore(RefreshLayout refreshLayout) {
-        mCurrentPage++;
-        getListFormServer();
-    }
-
-    @Override
-    public void onRefresh(RefreshLayout refreshLayout) {
-        mCurrentPage = 1;
-        getListFormServer();
-    }
-
-    public class GlideImageLoader extends ImageLoader {
-        @Override
-        public void displayImage(Context context, Object path, ImageView imageView) {
-            ProjectHelper.loadImageUrl(imageView,((BannerItem)path).imageUrl);
-        }
-    }
 }

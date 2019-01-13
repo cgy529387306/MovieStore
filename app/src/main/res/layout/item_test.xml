@@ -3,7 +3,6 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:padding="15dp"
-    android:background="@color/white"
     android:id="@+id/lly_ring">
     <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
         android:id="@+id/video_player"

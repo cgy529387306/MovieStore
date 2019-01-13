@@ -4,6 +4,8 @@ public class ProjectConstants {
 
     public static final int PAGE_SIZE = 10;
 
+    public static final String TEST_IMAGE_URL = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1547199470477&di=f9ebd7e75737cb87a785eca308b70a80&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fb151f8198618367a9662f4f52d738bd4b31ce52b.jpg";
+
     //EVENT
     public static final int EVENT_UPDATE_USER_INFO = 10001;
 

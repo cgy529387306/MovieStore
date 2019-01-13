@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,6 +55,8 @@ public abstract class BaseActivity extends AppCompatActivity{
 
     private ImageView mIvAction;
 
+    private FrameLayout mActionbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +67,7 @@ public abstract class BaseActivity extends AppCompatActivity{
     }
 
     private void initStatusBar(){
-        ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.white).statusBarDarkFont(true).init();
+        ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.base_theme).statusBarDarkFont(false).init();
     }
 
     @Override
@@ -102,6 +105,7 @@ public abstract class BaseActivity extends AppCompatActivity{
         mTvTitle = findViewById(R.id.tv_title);
         mTvAction = findViewById(R.id.tv_action);
         mIvAction = findViewById(R.id.iv_action);
+        mActionbar = findViewById(R.id.fl_actionbar);
         View view = getLayoutInflater().inflate(getLayoutId(), null);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -155,6 +159,11 @@ public abstract class BaseActivity extends AppCompatActivity{
     public void hideBackImage(){
         if (mIvBack != null && mIvBack.getVisibility()==View.VISIBLE)
             mIvBack.setVisibility(View.GONE);
+    }
+
+    public void hideActionbar(){
+        if (mActionbar != null && mActionbar.getVisibility()==View.VISIBLE)
+            mActionbar.setVisibility(View.GONE);
     }
 
     private View.OnClickListener mTitleBarOnclick = new View.OnClickListener() {

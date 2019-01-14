@@ -1,7 +1,11 @@
 package com.android.mb.movie.service;
 
+import com.android.mb.movie.entity.CurrentUser;
+import com.android.mb.movie.entity.LoginData;
 import com.android.mb.movie.retrofit.cache.transformer.CacheTransformer;
 import com.android.mb.movie.retrofit.http.RetrofitHttpClient;
+
+import java.util.Map;
 
 import rx.Observable;
 
@@ -37,6 +41,18 @@ public class ScheduleMethods extends BaseHttp {
 
     public Observable getHotList(){
         return getService().getHotList()
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
+    public Observable userLogin(Map<String,Object> requestMap){
+        return getService().userLogin(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<LoginData>());
+    }
+
+    public Observable bindWx(Map<String,Object> requestMap){
+        return getService().bindWx(requestMap)
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<Object>());
     }

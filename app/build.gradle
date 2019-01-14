@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 ext {
-    SUPPORT_LIBRARY_VERSION = '27.0.2'
+    SUPPORT_LIBRARY_VERSION = '27.1.1'
 }
 
 android {
@@ -70,6 +70,13 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+
+    //轮播图
+    implementation 'com.youth.banner:banner:1.4.9'
+
+    //下拉刷新
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-19'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-19'//没有使用特殊Header，可以不加这行
 
     // MD dialog
     implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'

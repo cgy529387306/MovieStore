@@ -28,7 +28,7 @@ public abstract class BaseFragment extends Fragment {
 
     protected Activity mContext;
     protected boolean mIsFirstVisible = true;
-    protected View rootView;
+    protected View mRootView;
 
     @Nullable
     @Override
@@ -48,7 +48,7 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mContext = getActivity();
-        rootView = view;
+        mRootView = view;
         initView(view);
         boolean isVis = isHidden() || getUserVisibleHint();
         if (isVis && mIsFirstVisible) {

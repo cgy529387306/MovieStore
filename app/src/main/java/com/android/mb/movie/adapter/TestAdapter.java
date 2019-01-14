@@ -4,6 +4,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.android.mb.movie.R;
+import com.android.mb.movie.constants.ProjectConstants;
+import com.android.mb.movie.utils.ProjectHelper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -31,7 +33,7 @@ public class TestAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
     protected void convert(BaseViewHolder helper, String item) {
         StandardGSYVideoPlayer videoPlayer = helper.getView(R.id.video_player);
         ImageView imageView = new ImageView(mContext);
-        ProjectHelper.loadCover(imageView,"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1547199470477&di=f9ebd7e75737cb87a785eca308b70a80&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fb151f8198618367a9662f4f52d738bd4b31ce52b.jpg");
+        ProjectHelper.loadImageUrl(imageView, ProjectConstants.TEST_IMAGE_URL);
         mVideoOptionBuilder
                 .setIsTouchWiget(false)
                 .setThumbImageView(imageView)

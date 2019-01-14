@@ -37,9 +37,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initTitle() {
-        hideBackImage();
-        setRightImage(R.mipmap.icon_search);
-        setTitleText("首页");
+        hideActionbar();
     }
 
     @Override
@@ -52,7 +50,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onRightAction() {
         super.onRightAction();
-        NavigationHelper.startActivity(mContext,ScrollingActivity.class,null,false);
+//        NavigationHelper.startActivity(mContext,ScrollingActivity.class,null,false);
     }
 
     @Override
@@ -89,8 +87,8 @@ public class MainActivity extends BaseActivity {
         mFragmentViewPager.setOffscreenPageLimit(mFragmentList.size());
         mFragmentViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
-        String[] tabTitles = new String[]{"首页","聊天","发现","用户"};
-        int[] tabImages = new int[]{R.drawable.btn_tab_user,R.drawable.btn_tab_user,R.drawable.btn_tab_user,R.drawable.btn_tab_user};
+        String[] tabTitles = new String[]{"首页","频道","发现","我的"};
+        int[] tabImages = new int[]{R.drawable.btn_tab_main,R.drawable.btn_tab_channel,R.drawable.btn_tab_discover,R.drawable.btn_tab_user};
         for (int i = 0; i < tabTitles.length; i++) {
             TabLayout.Tab tab = mTabLayout.newTab();
             View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.custom_tab,null);

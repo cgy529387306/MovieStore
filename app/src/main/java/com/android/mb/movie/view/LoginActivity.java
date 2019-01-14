@@ -58,7 +58,11 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
 
     @Override
     protected void setListener() {
+        findViewById(R.id.btn_back).setOnClickListener(this);
+        findViewById(R.id.tv_forget_pwd).setOnClickListener(this);
+        findViewById(R.id.tv_register).setOnClickListener(this);
         mTvLogin.setOnClickListener(this);
+
     }
 
     @Override
@@ -66,6 +70,12 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
         int id = v.getId();
         if (id == R.id.tv_login){
             doLogin();
+        }else if (id == R.id.btn_back){
+            finish();
+        }else if (id == R.id.tv_forget_pwd){
+            //TODO
+        }else if (id == R.id.tv_register){
+            //TODO
         }
     }
 

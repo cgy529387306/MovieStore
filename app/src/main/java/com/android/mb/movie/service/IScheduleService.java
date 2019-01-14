@@ -5,8 +5,6 @@ import com.android.mb.movie.retrofit.http.entity.HttpResult;
 
 import java.util.Map;
 
-import retrofit2.http.FieldMap;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -25,7 +23,7 @@ public interface IScheduleService {
      * @param requestMap
      * @return
      */
-    @GET("/user/getCode")
+    @GET("/api/1.0/user/getCode")
     Observable<HttpResult<LoginData>> getCode(@QueryMap Map<String,Object> requestMap);
 
     /**
@@ -33,7 +31,7 @@ public interface IScheduleService {
      * @param requestMap
      * @return
      */
-    @POST("/user/uploadAvatar")
+    @POST("/api/1.0/user/uploadAvatar")
     Observable<HttpResult<LoginData>> uploadAvatar(@Part Map<String,Object> requestMap);
 
     /**
@@ -41,7 +39,7 @@ public interface IScheduleService {
      * @param requestMap
      * @return
      */
-    @GET("/user/getInfo")
+    @GET("/api/1.0/user/getInfo")
     Observable<HttpResult<LoginData>> getUserInfo(@Part Map<String,Object> requestMap);
 
     /**
@@ -49,7 +47,7 @@ public interface IScheduleService {
      * @param requestMap
      * @return
      */
-    @GET("/user/updateInfo")
+    @GET("/api/1.0/user/updateInfo")
     Observable<HttpResult<LoginData>> updateInfo(@Part Map<String,Object> requestMap);
 
     /**
@@ -57,7 +55,7 @@ public interface IScheduleService {
      * @param requestMap
      * @return
      */
-    @GET("/user/login")
+    @GET("/api/1.0/user/login")
     Observable<HttpResult<LoginData>> userLogin(@QueryMap Map<String,Object> requestMap);
 
     /**
@@ -65,7 +63,7 @@ public interface IScheduleService {
      * @param requestMap
      * @return
      */
-    @GET("/user/register")
+    @GET("/api/1.0/user/register")
     Observable<HttpResult<LoginData>> userRegister(@QueryMap Map<String,Object> requestMap);
 
 
@@ -74,7 +72,7 @@ public interface IScheduleService {
      * @param requestMap
      * @return
      */
-    @GET("/user/forgetPassword")
+    @GET("/api/1.0/user/forgetPassword")
     Observable<HttpResult<LoginData>> forgetPassword(@QueryMap Map<String,Object> requestMap);
 
     /**
@@ -82,12 +80,12 @@ public interface IScheduleService {
      * @param requestMap
      * @return
      */
-    @GET("/user/updatePassword")
+    @GET("/api/1.0/user/updatePassword")
     Observable<HttpResult<LoginData>> updatePassword(@QueryMap Map<String,Object> requestMap);
 
 
 
-    @POST("/app/user/bindWx")
+    @POST("/api/1.0/app/user/bindWx")
     Observable<HttpResult<Object>> bindWx(@QueryMap Map<String,Object> requestMap);
 
 }

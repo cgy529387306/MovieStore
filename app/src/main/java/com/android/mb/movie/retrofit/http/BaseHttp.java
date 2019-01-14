@@ -50,10 +50,9 @@ public abstract class BaseHttp {
             HttpResult<T> httpResult ;
             if(o instanceof HttpResult){
                 httpResult = (HttpResult<T>)o;
-                if (httpResult.getCode() == 0) {
+                if (httpResult.getCode() != 1) {
                     throw new ApiException(40003,httpResult.getErrorMessage());
                 }
-
                 return httpResult.getData();
             }
 

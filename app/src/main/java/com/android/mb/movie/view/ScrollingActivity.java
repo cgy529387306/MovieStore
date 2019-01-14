@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.android.mb.movie.R;
+import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.video.LandLayoutVideo;
 import com.android.mb.movie.video.listener.AppBarStateChangeListener;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -54,7 +55,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
         //增加封面
         ImageView imageView = new ImageView(this);
-        ProjectHelper.loadCover(imageView,"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1547199470477&di=f9ebd7e75737cb87a785eca308b70a80&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fb151f8198618367a9662f4f52d738bd4b31ce52b.jpg");
+        ProjectHelper.loadImageUrl(imageView,"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1547199470477&di=f9ebd7e75737cb87a785eca308b70a80&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fb151f8198618367a9662f4f52d738bd4b31ce52b.jpg");
         resolveNormalVideoUI();
 
         //外部辅助的旋转，帮助全屏

@@ -51,6 +51,18 @@ public class ScheduleMethods extends BaseHttp {
                 .map(new HttpCacheResultFunc<LoginData>());
     }
 
+    public Observable userRegister(Map<String,Object> requestMap){
+        return getService().userRegister(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<LoginData>());
+    }
+
+    public Observable getCode(Map<String,Object> requestMap){
+        return getService().getCode(requestMap)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<LoginData>());
+    }
+
     public Observable bindWx(Map<String,Object> requestMap){
         return getService().bindWx(requestMap)
                 .compose(CacheTransformer.emptyTransformer())

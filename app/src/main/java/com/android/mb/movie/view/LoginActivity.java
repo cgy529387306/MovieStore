@@ -1,6 +1,8 @@
 package com.android.mb.movie.view;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,6 +14,7 @@ import com.android.mb.movie.entity.LoginData;
 import com.android.mb.movie.presenter.LoginPresenter;
 import com.android.mb.movie.utils.AppHelper;
 import com.android.mb.movie.utils.Helper;
+import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.interfaces.ILoginView;
 
@@ -62,7 +65,8 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
         findViewById(R.id.tv_forget_pwd).setOnClickListener(this);
         findViewById(R.id.tv_register).setOnClickListener(this);
         mTvLogin.setOnClickListener(this);
-
+        mEtAccount.addTextChangedListener(myTextWatcher);
+        mEtPwd.addTextChangedListener(myTextWatcher);
     }
 
     @Override
@@ -75,9 +79,34 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
         }else if (id == R.id.tv_forget_pwd){
             //TODO
         }else if (id == R.id.tv_register){
-            //TODO
+            NavigationHelper.startActivity(mContext,RegisterActivity.class,null,false);
         }
     }
+
+    private TextWatcher myTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            String account = mEtAccount.getText().toString().trim();
+            String password = mEtPwd.getText().toString().trim();
+            if (Helper.isNotEmpty(account) && Helper.isNotEmpty(password)){
+                mTvLogin.setEnabled(true);
+                mTvLogin.setBackgroundColor(mContext.getResources().getColor(R.color.base_brown));
+            }else{
+                mTvLogin.setEnabled(false);
+                mTvLogin.setBackgroundColor(mContext.getResources().getColor(R.color.base_brown_light));
+            }
+        }
+    };
 
     private void doLogin(){
         String account = mEtAccount.getText().toString().trim();

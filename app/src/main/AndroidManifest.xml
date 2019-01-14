@@ -40,6 +40,10 @@
             android:label="ScrollingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.RegisterActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
         <meta-data
             android:name="android.max_aspect"
             android:value="2.4" />

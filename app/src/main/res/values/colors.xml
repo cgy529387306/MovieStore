@@ -23,6 +23,7 @@
     <color name="base_blue">#2aaeff</color>
     <color name="base_green">#12c136</color>
     <color name="base_brown">#BB7522</color>
+    <color name="base_brown_light">#EABA78</color>
 
     <color name="text_color">#ffffffff</color>
     <color name="edit_color">#a5a5a5</color>

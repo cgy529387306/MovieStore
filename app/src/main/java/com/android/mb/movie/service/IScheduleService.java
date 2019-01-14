@@ -59,7 +59,7 @@ public interface IScheduleService {
     Observable<HttpResult<LoginData>> userLogin(@QueryMap Map<String,Object> requestMap);
 
     /**
-     * account:手机号或者用户名  password:密码
+     * account:手机号或者用户名  password:密码 code:验证码
      * @param requestMap
      * @return
      */

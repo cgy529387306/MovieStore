@@ -1,10 +1,13 @@
 package com.android.mb.movie.service;
 
-import com.android.mb.movie.entity.CurrentUser;
-import com.android.mb.movie.entity.LoginData;
+import android.util.Base64;
+
+import com.android.mb.movie.entity.UserBean;
 import com.android.mb.movie.retrofit.cache.transformer.CacheTransformer;
 import com.android.mb.movie.retrofit.http.RetrofitHttpClient;
+import com.android.mb.movie.utils.JsonHelper;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import rx.Observable;
@@ -46,27 +49,27 @@ public class ScheduleMethods extends BaseHttp {
     }
 
     public Observable userLogin(Map<String,Object> requestMap){
-        return getService().userLogin(requestMap)
+        Map<String,Object> requestParams = new HashMap<>();
+        requestParams.put("params", Base64.encodeToString(JsonHelper.toJson(requestMap).getBytes(),Base64.DEFAULT));
+        return getService().userLogin(requestParams)
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<LoginData>());
+                .map(new HttpCacheResultFunc<UserBean>());
     }
 
     public Observable userRegister(Map<String,Object> requestMap){
-        return getService().userRegister(requestMap)
+        Map<String,Object> requestParams = new HashMap<>();
+        requestParams.put("params", Base64.encodeToString(JsonHelper.toJson(requestMap).getBytes(),Base64.DEFAULT));
+        return getService().userRegister(requestParams)
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<LoginData>());
+                .map(new HttpCacheResultFunc<UserBean>());
     }
 
     public Observable getCode(Map<String,Object> requestMap){
-        return getService().getCode(requestMap)
+        Map<String,Object> requestParams = new HashMap<>();
+        requestParams.put("params", Base64.encodeToString(JsonHelper.toJson(requestMap).getBytes(),Base64.DEFAULT));
+        return getService().getCode(requestParams)
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<LoginData>());
-    }
-
-    public Observable bindWx(Map<String,Object> requestMap){
-        return getService().bindWx(requestMap)
-                .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<Object>());
+                .map(new HttpCacheResultFunc<UserBean>());
     }
 
 

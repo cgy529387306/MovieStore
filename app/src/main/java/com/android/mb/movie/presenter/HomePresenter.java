@@ -1,5 +1,7 @@
 package com.android.mb.movie.presenter;
 
+import android.text.TextUtils;
+
 import com.android.mb.movie.base.BaseMvpPresenter;
 import com.android.mb.movie.presenter.interfaces.IHomePresenter;
 import com.android.mb.movie.service.ScheduleMethods;
@@ -26,18 +28,8 @@ public class HomePresenter extends BaseMvpPresenter<IHomeView> implements IHomeP
 
             @Override
             public void onError(Throwable e) {
-                if(mMvpView!=null){
-//                    if(e instanceof HttpException){
-//                        try {
-//                            String response = ((HttpException)e).response().errorBody().string();
-//                            BaseError error = GsonUtil.GsonToBean(response, BaseError.class);
-//                            mMvpView.onError(error.getMessage());
-//                        } catch (Exception e1) {
-//                            e1.printStackTrace();
-//                        }
-//                    }else if (e instanceof ApiException){
-//                        mMvpView.onError(e.getMessage());
-//                    }
+                if(mMvpView!=null && !TextUtils.isEmpty(e.getMessage())){
+                    mMvpView.showToastMessage(e.getMessage());
                 }
             }
 

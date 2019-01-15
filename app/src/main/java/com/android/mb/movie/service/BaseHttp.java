@@ -32,13 +32,10 @@ public class BaseHttp {
             HttpResult<T> httpResult;
             if (o instanceof HttpResult) {
                 httpResult = (HttpResult<T>) o;
-                if (httpResult.getCode() == 1){
+                if (httpResult.getCode() == 200){
                     return httpResult.getData();
-                }else if (httpResult.getCode() == 403){
-                    //Token 失效，重新登录
-                    throw new ApiException(40003, "token 过期");
                 }else {
-                    throw new ApiException(40003, httpResult.getMessage());
+                    throw new ApiException(ApiException.REQUEST_FAIL, httpResult.getMessage());
                 }
             }
             return null;
@@ -66,7 +63,7 @@ public class BaseHttp {
     Map<String, String> getHead() {
         Map<String, String> cloudOfficeHeader = new HashMap<String, String>();
         if (CurrentUser.getInstance().isLogin()){
-            cloudOfficeHeader.put("accessToken",CurrentUser.getInstance().getToken());
+            cloudOfficeHeader.put("accessToken",CurrentUser.getInstance().getAccesstoken());
         }
         return cloudOfficeHeader;
     }

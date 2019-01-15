@@ -2,128 +2,15 @@ package com.android.mb.movie.entity;
 
 import android.util.Log;
 
-import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.JsonHelper;
 import com.android.mb.movie.utils.PreferencesHelper;
 
 
 /**
  * 作者：cgy on 16/12/26 22:53
- * 邮箱：593960111@qq.com
+ * 邮箱：529387306@qq.com
  */
-public class CurrentUser {
-    private String username;
-    private String nickname;
-    private String mobile;
-    private String eid;
-    private long office_id;
-    private String office_name;
-    private String avatar;
-    private String token;
-    private long expiretime;
-    private long token_id;
-    private long id;
-    private int is_bind_wx;
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /**
-     * 优先显示nickname,没有显示username
-     * @return
-     */
-    public String getNickname() {
-        return Helper.isEmpty(nickname)?username:nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getEid() {
-        return eid;
-    }
-
-    public void setEid(String eid) {
-        this.eid = eid;
-    }
-
-    public long getOffice_id() {
-        return office_id;
-    }
-
-    public void setOffice_id(long office_id) {
-        this.office_id = office_id;
-    }
-
-    public String getOffice_name() {
-        return office_name;
-    }
-
-    public void setOffice_name(String office_name) {
-        this.office_name = office_name;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public long getExpiretime() {
-        return expiretime;
-    }
-
-    public void setExpiretime(long expiretime) {
-        this.expiretime = expiretime;
-    }
-
-    public long getToken_id() {
-        return token_id;
-    }
-
-    public void setToken_id(long token_id) {
-        this.token_id = token_id;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public int getIs_bind_wx() {
-        return is_bind_wx;
-    }
-
-    public void setIs_bind_wx(int is_bind_wx) {
-        this.is_bind_wx = is_bind_wx;
-    }
+public class CurrentUser extends UserBean{
 
     //region 单例
     private static final String TAG = CurrentUser.class.getSimpleName();
@@ -139,6 +26,7 @@ public class CurrentUser {
         }
         return me;
     }
+
     /**
      * 出生
      * <p>尼玛！终于出生了！！！</p>
@@ -151,24 +39,18 @@ public class CurrentUser {
         return me != null;
     }
 
-    public boolean login(CurrentUser entity,boolean isLogin) {
+    public boolean login(UserBean entity) {
         boolean born = false;
         String json = "";
         if (entity != null) {
-            me.setId(entity.getId());
-            me.setUsername(entity.getUsername());
-            me.setNickname(entity.getNickname());
-            me.setMobile(entity.getMobile());
-            me.setEid(entity.getEid());
-            me.setOffice_id(entity.getOffice_id());
-            me.setOffice_name(entity.getOffice_name());
-            me.setAvatar(entity.getAvatar());
-            if (isLogin){
-                me.setToken(entity.getToken());
-                me.setIs_bind_wx(entity.getIs_bind_wx());
-                me.setToken_id(entity.getToken_id());
-                me.setExpiretime(entity.getExpiretime());
-            }
+            me.setAccesstoken(entity.getAccesstoken());
+            me.setUserid(entity.getUserid());
+            me.setPhone(entity.getPhone());
+            me.setSex(entity.getSex());
+            me.setSexText(entity.getSexText());
+            me.setUserType(entity.getUserType());
+            me.setManager(entity.isManager());
+            me.setCreate_time(entity.getCreate_time());
             json = JsonHelper.toJson(me);
             born = me != null;
         }

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.android.mb.movie.R;
 import com.android.mb.movie.base.BaseMvpActivity;
 import com.android.mb.movie.entity.CurrentUser;
-import com.android.mb.movie.entity.LoginData;
+import com.android.mb.movie.entity.UserBean;
 import com.android.mb.movie.presenter.LoginPresenter;
 import com.android.mb.movie.utils.AppHelper;
 import com.android.mb.movie.utils.Helper;
@@ -111,14 +111,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
     private void doLogin(){
         String account = mEtAccount.getText().toString().trim();
         String pwd = mEtPwd.getText().toString().trim();
-        if (Helper.isEmpty(account)){
-            showToastMessage("请输入用户名");
-            return;
-        }
-        if (Helper.isEmpty(pwd)){
-            showToastMessage("请输入密码");
-            return;
-        }
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("account",account);
         requestMap.put("password",pwd);
@@ -131,11 +123,12 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
     }
 
     @Override
-    public void loginSuccess(LoginData result) {
-        if (result!=null && result.getUserinfo()!=null){
+    public void loginSuccess(UserBean result) {
+        if (result!=null ){
             AppHelper.hideSoftInputFromWindow(mEtAccount);
-            CurrentUser.getInstance().login(result.getUserinfo(),true);
+            CurrentUser.getInstance().login(result);
             showToastMessage("登录成功");
+            finish();
         }
     }
 

@@ -28,7 +28,7 @@ import java.util.Map;
  * Created by cgy on 2018\8\20 0020.
  */
 
-public class RegisterActivity extends BaseMvpActivity<RegisterPresenter,IRegisterView> implements IRegisterView, View.OnClickListener{
+public class ForgetPwdActivity extends BaseMvpActivity<RegisterPresenter,IRegisterView> implements IRegisterView, View.OnClickListener{
 
     private TextView mTvRegister;
     private EditText mEtAccount;
@@ -165,7 +165,6 @@ public class RegisterActivity extends BaseMvpActivity<RegisterPresenter,IRegiste
             AppHelper.hideSoftInputFromWindow(mEtAccount);
             CurrentUser.getInstance().login(result);
             showToastMessage("注册成功");
-            finish();
         }
     }
 

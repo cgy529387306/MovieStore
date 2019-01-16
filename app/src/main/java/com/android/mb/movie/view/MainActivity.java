@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.MyFragmentPagerAdapter;
 import com.android.mb.movie.base.BaseActivity;
+import com.android.mb.movie.fragment.FindFragment;
+import com.android.mb.movie.fragment.MainFragment;
 import com.android.mb.movie.fragment.TestFragment;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ToastHelper;
@@ -80,9 +82,10 @@ public class MainActivity extends BaseActivity {
 
     private void initTabPager(){
         mFragmentList = new ArrayList<>();
-        for (int i=0;i<5;i++){
-            mFragmentList.add(TestFragment.getInstance(i));
-        }
+        mFragmentList.add(new MainFragment());
+        mFragmentList.add(new MainFragment());
+        mFragmentList.add(new FindFragment());
+        mFragmentList.add(new FindFragment());
         mFragmentViewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentList));
         mFragmentViewPager.setOffscreenPageLimit(mFragmentList.size());
         mFragmentViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
@@ -105,10 +108,6 @@ public class MainActivity extends BaseActivity {
     private long mLastClickTimeMills = 0;
     @Override
     public void onBackPressed() {
-        TestFragment testFragment = (TestFragment) mFragmentList.get(mFragmentViewPager.getCurrentItem());
-        if (testFragment.onBackPressed()) {
-            return;
-        }
         if (System.currentTimeMillis() - mLastClickTimeMills > DOUBLE_CLICK_INTERVAL) {
             ToastHelper.showToast("再按一次返回退出");
             mLastClickTimeMills = System.currentTimeMillis();

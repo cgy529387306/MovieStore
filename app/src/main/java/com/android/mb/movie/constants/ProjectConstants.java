@@ -6,6 +6,7 @@ public class ProjectConstants {
 
     public static final String TEST_IMAGE_URL = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1547199470477&di=f9ebd7e75737cb87a785eca308b70a80&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fb151f8198618367a9662f4f52d738bd4b31ce52b.jpg";
 
+    public static final String TEST_IMAGE_URL1 = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1547660246891&di=cac499579b3840faa8f1d44c68fdce35&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F9d82d158ccbf6c8154bdd5ccb63eb13533fa4008.jpg";
     //EVENT
     public static final int EVENT_UPDATE_USER_INFO = 10001;
 

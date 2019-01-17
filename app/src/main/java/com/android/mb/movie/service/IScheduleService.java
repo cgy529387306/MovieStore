@@ -1,6 +1,7 @@
 package com.android.mb.movie.service;
 
 import com.android.mb.movie.entity.CurrentUser;
+import com.android.mb.movie.entity.HomeData;
 import com.android.mb.movie.entity.UserBean;
 import com.android.mb.movie.retrofit.http.entity.HttpResult;
 
@@ -85,5 +86,10 @@ public interface IScheduleService {
     Observable<HttpResult<UserBean>> updatePassword(@QueryMap Map<String,Object> requestMap);
 
 
-
+    /**
+     *
+     * @return
+     */
+    @GET("/api/1.0/common/getHomeData")
+    Observable<HttpResult<HomeData>> getHomeData();
 }

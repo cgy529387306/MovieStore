@@ -3,6 +3,7 @@ package com.android.mb.movie.presenter;
 import android.text.TextUtils;
 
 import com.android.mb.movie.base.BaseMvpPresenter;
+import com.android.mb.movie.entity.HomeData;
 import com.android.mb.movie.presenter.interfaces.IHomePresenter;
 import com.android.mb.movie.service.ScheduleMethods;
 import com.android.mb.movie.view.interfaces.IHomeView;
@@ -18,9 +19,9 @@ public class HomePresenter extends BaseMvpPresenter<IHomeView> implements IHomeP
 
 
     @Override
-    public void getHotList() {
-        Observable observable = ScheduleMethods.getInstance().getHotList();
-        toSubscribe(observable,  new Subscriber<Object>() {
+    public void getHomeData() {
+        Observable observable = ScheduleMethods.getInstance().getHomeData();
+        toSubscribe(observable,  new Subscriber<HomeData>() {
             @Override
             public void onCompleted() {
 
@@ -34,9 +35,9 @@ public class HomePresenter extends BaseMvpPresenter<IHomeView> implements IHomeP
             }
 
             @Override
-            public void onNext(Object list) {
+            public void onNext(HomeData result) {
                 if (mMvpView!=null){
-
+                    mMvpView.getHomeData(result);
                 }
             }
         });

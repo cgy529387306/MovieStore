@@ -1,10 +1,7 @@
 package com.android.mb.movie.fragment;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,15 +11,17 @@ import android.widget.ImageView;
 
 import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.MovieGridAdapter;
-import com.android.mb.movie.adapter.TestAdapter;
-import com.android.mb.movie.base.BaseFragment;
+import com.android.mb.movie.base.BaseMvpFragment;
 import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.BannerItem;
+import com.android.mb.movie.entity.HomeData;
+import com.android.mb.movie.presenter.HomePresenter;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.LoginActivity;
+import com.android.mb.movie.view.interfaces.IHomeView;
 import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -40,7 +39,7 @@ import java.util.List;
 /**
  * Created by cgy on 16/7/18.
  */
-public class MainFragment extends  BaseFragment implements View.OnClickListener,BaseQuickAdapter.OnItemClickListener,OnRefreshListener, OnLoadMoreListener {
+public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> implements IHomeView, View.OnClickListener,BaseQuickAdapter.OnItemClickListener,OnRefreshListener, OnLoadMoreListener {
 
     private SmartRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -80,6 +79,7 @@ public class MainFragment extends  BaseFragment implements View.OnClickListener,
 
     @Override
     protected void processLogic() {
+        mPresenter.getHomeData();
         getListFormServer();
     }
 
@@ -87,7 +87,7 @@ public class MainFragment extends  BaseFragment implements View.OnClickListener,
     protected void setListener() {
         mRootView.findViewById(R.id.btn_history).setOnClickListener(this);
         mRefreshLayout.setOnRefreshListener(this);
-        mRefreshLayout.setOnLoadMoreListener(this);
+//        mRefreshLayout.setOnLoadMoreListener(this);
         mAdapter.setOnItemClickListener(this);
     }
 
@@ -141,13 +141,6 @@ public class MainFragment extends  BaseFragment implements View.OnClickListener,
         },1500);
     }
 
-    public boolean onBackPressed() {
-        if (GSYVideoManager.backFromWindowFull(getActivity())) {
-            return true;
-        }
-        return false;
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -158,6 +151,11 @@ public class MainFragment extends  BaseFragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
         GSYVideoManager.onResume();
+    }
+
+    @Override
+    protected HomePresenter createPresenter() {
+        return new HomePresenter();
     }
 
     @Override
@@ -176,6 +174,16 @@ public class MainFragment extends  BaseFragment implements View.OnClickListener,
     public void onRefresh(RefreshLayout refreshLayout) {
         mCurrentPage = 1;
         getListFormServer();
+    }
+
+    @Override
+    public void getHomeData(HomeData homeData) {
+        if (homeData!=null && homeData.getVideoList()!=null){
+//            mRefreshLayout.finishRefresh();
+//            mAdapter.setNewData(homeData.getVideoList());
+//            mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
+//            mRefreshLayout.finishLoadMoreWithNoMoreData();
+        }
     }
 
     public class GlideImageLoader extends ImageLoader {

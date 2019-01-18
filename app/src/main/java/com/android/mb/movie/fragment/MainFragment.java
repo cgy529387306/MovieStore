@@ -1,19 +1,19 @@
 package com.android.mb.movie.fragment;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.android.mb.movie.R;
+import com.android.mb.movie.adapter.CateAdapter;
 import com.android.mb.movie.adapter.MovieGridAdapter;
 import com.android.mb.movie.base.BaseMvpFragment;
-import com.android.mb.movie.constants.ProjectConstants;
-import com.android.mb.movie.entity.BannerItem;
+import com.android.mb.movie.entity.Advert;
 import com.android.mb.movie.entity.HomeData;
 import com.android.mb.movie.presenter.HomePresenter;
 import com.android.mb.movie.utils.Helper;
@@ -33,7 +33,6 @@ import com.youth.banner.Banner;
 import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -44,8 +43,8 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
     private SmartRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
     private MovieGridAdapter mAdapter;
-    private int mCurrentPage = 1;
-
+    private Banner mBanner;
+    private GridView mGridCate;
     @Override
     protected int getLayoutId() {
         return  R.layout.frg_main;
@@ -62,39 +61,27 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
 
         //添加Header
         View header = LayoutInflater.from(getActivity()).inflate(R.layout.item_movie_header, mRecyclerView, false);
-        Banner banner = (Banner) header;
-        banner.setImageLoader(new GlideImageLoader());
-        banner.setImages(getImageUrls());
-        banner.start();
-        mAdapter.addHeaderView(banner);
-    }
-
-    private List<BannerItem> getImageUrls(){
-        List<BannerItem> dataList = new ArrayList<>();
-        dataList.add(new BannerItem("最后的骑士", ProjectConstants.TEST_IMAGE_URL));
-        dataList.add(new BannerItem("三生三世十里桃花", ProjectConstants.TEST_IMAGE_URL));
-        dataList.add(new BannerItem("豆福传", ProjectConstants.TEST_IMAGE_URL));
-        return dataList;
+        mBanner = header.findViewById(R.id.bannerView);
+        mGridCate = header.findViewById(R.id.gridCate);
+        mAdapter.addHeaderView(header);
     }
 
     @Override
     protected void processLogic() {
         mPresenter.getHomeData();
-        getListFormServer();
     }
 
     @Override
     protected void setListener() {
         mRootView.findViewById(R.id.btn_history).setOnClickListener(this);
         mRefreshLayout.setOnRefreshListener(this);
-//        mRefreshLayout.setOnLoadMoreListener(this);
         mAdapter.setOnItemClickListener(this);
     }
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         if (mAdapter.getItem(position)!=null){
-            ToastHelper.showLongToast(mAdapter.getItem(position));
+            ToastHelper.showLongToast(mAdapter.getItem(position).getCateName());
         }
     }
 
@@ -108,38 +95,6 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
     }
 
 
-    private void getListFormServer(){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                List<String> result = new ArrayList<>();
-                if(mCurrentPage==1){
-                    mAdapter.getData().clear();
-                }
-                int i = mAdapter.getItemCount();
-                int j = mAdapter.getItemCount()+ProjectConstants.PAGE_SIZE;
-                for(;i<j;i++){
-                    result.add("最新片源"+i);
-                }
-                if (mCurrentPage == 1){
-                    //首页
-                    mRefreshLayout.finishRefresh();
-                    mAdapter.setNewData(result);
-                    mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
-                    if (result.size()< ProjectConstants.PAGE_SIZE){
-                        mRefreshLayout.finishLoadMoreWithNoMoreData();
-                    }
-                }else{
-                    if (Helper.isEmpty(result)){
-                        mRefreshLayout.finishLoadMoreWithNoMoreData();
-                    }else{
-                        mAdapter.addData(result);
-                        mRefreshLayout.finishLoadMore();
-                    }
-                }
-            }
-        },1500);
-    }
 
     @Override
     public void onPause() {
@@ -166,30 +121,35 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
 
     @Override
     public void onLoadMore(RefreshLayout refreshLayout) {
-        mCurrentPage++;
-        getListFormServer();
     }
 
     @Override
     public void onRefresh(RefreshLayout refreshLayout) {
-        mCurrentPage = 1;
-        getListFormServer();
+        mPresenter.getHomeData();
     }
 
     @Override
     public void getHomeData(HomeData homeData) {
         if (homeData!=null && homeData.getVideoList()!=null){
-//            mRefreshLayout.finishRefresh();
-//            mAdapter.setNewData(homeData.getVideoList());
-//            mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
-//            mRefreshLayout.finishLoadMoreWithNoMoreData();
+            mRefreshLayout.finishRefresh();
+            mAdapter.setNewData(homeData.getVideoList());
+            mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
+            mRefreshLayout.finishLoadMoreWithNoMoreData();
+            if (mBanner!=null && Helper.isNotEmpty(homeData.getAdvertList())){
+                mBanner.setImageLoader(new GlideImageLoader());
+                mBanner.setImages(homeData.getAdvertList());
+                mBanner.start();
+            }
+            if (mGridCate!=null && Helper.isNotEmpty(homeData.getCateList())){
+                mGridCate.setAdapter(new CateAdapter(getActivity(),homeData.getCateList()));
+            }
         }
     }
 
     public class GlideImageLoader extends ImageLoader {
         @Override
         public void displayImage(Context context, Object path, ImageView imageView) {
-            ProjectHelper.loadImageUrl(imageView,((BannerItem)path).imageUrl);
+            ProjectHelper.loadImageUrl(imageView,((Advert)path).getCoverUrl());
         }
     }
 

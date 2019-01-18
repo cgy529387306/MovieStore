@@ -9,8 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.mb.movie.R;
-import com.android.mb.movie.constants.ProjectConstants;
-import com.android.mb.movie.entity.Video;
+import com.android.mb.movie.entity.Category;
 import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.ToastHelper;
 
@@ -20,10 +19,10 @@ import java.util.List;
 /**
  * Created by Administrator on 2015/6/24.
  */
-public class MovieAdapter extends BaseAdapter{
+public class CateAdapter extends BaseAdapter{
     private Context mContext;
-    public List<Video> mData = new ArrayList<Video>();
-    public MovieAdapter(Context context, List<Video> htList) {
+    public List<Category> mData = new ArrayList<Category>();
+    public CateAdapter(Context context, List<Category> htList) {
         mContext = context;
         mData = htList;
     }
@@ -36,7 +35,7 @@ public class MovieAdapter extends BaseAdapter{
         return false;
     }
 
-    public Video getItem(int position) {
+    public Category getItem(int position) {
         return mData.get(position);
     }
 
@@ -47,7 +46,7 @@ public class MovieAdapter extends BaseAdapter{
     public View getView(final int position, View convertView, final ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_movie, null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_cate, null);
             viewHolder = new ViewHolder();
             viewHolder.ivCover = (ImageView) convertView.findViewById(R.id.iv_cover);
             viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
@@ -55,14 +54,14 @@ public class MovieAdapter extends BaseAdapter{
         }else{
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        final Video video = mData.get(position);
-        viewHolder.tvTitle.setText(video.getName());
-        ProjectHelper.loadImageUrl(viewHolder.ivCover,video.getCoverUrl());
+        final Category category = mData.get(position);
+        viewHolder.tvTitle.setText(category.getCateName());
+        ProjectHelper.loadImageUrl(viewHolder.ivCover,category.getCoverUrl());
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                //TODO
-                ToastHelper.showLongToast(video.getName());
+                ToastHelper.showLongToast(category.getCateName());
             }
         });
         return convertView;

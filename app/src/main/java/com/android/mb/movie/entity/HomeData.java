@@ -7,7 +7,7 @@ public class HomeData implements Serializable{
 
     private List<Advert> advertList;
 
-    private List<Video> videoList;
+    private List<CateVideo> videoList;
 
     private List<Category> cateList;
 
@@ -19,11 +19,11 @@ public class HomeData implements Serializable{
         this.advertList = advertList;
     }
 
-    public List<Video> getVideoList() {
+    public List<CateVideo> getVideoList() {
         return videoList;
     }
 
-    public void setVideoList(List<Video> videoList) {
+    public void setVideoList(List<CateVideo> videoList) {
         this.videoList = videoList;
     }
 

@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,7 +30,7 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
  * CollapsingToolbarLayout的播放页面
  * 额，有点懒，细节上没处理
  */
-public class ScrollingActivity extends BaseActivity {
+public class DetailActivity extends BaseActivity {
 
     private boolean mIsPlay;
     private boolean mIsPause;
@@ -212,7 +210,7 @@ public class ScrollingActivity extends BaseActivity {
                 mOrientationUtils.resolveByClick();
 
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                mDetailPlayer.startWindowFullscreen(ScrollingActivity.this, true, true);
+                mDetailPlayer.startWindowFullscreen(DetailActivity.this, true, true);
             }
         });
 
@@ -248,10 +246,10 @@ public class ScrollingActivity extends BaseActivity {
             } else if (state == AppBarStateChangeListener.State.COLLAPSED) {
                 //折叠状态
                 //如果是小窗口就不需要处理
-                mToolbarLayout.setTitle("Title");
+                mToolbarLayout.setTitle(mVideoInfo.getName());
                 if (!mIsSmall && mIsPlay) {
                     mIsSmall = true;
-                    int size = CommonUtil.dip2px(ScrollingActivity.this, 150);
+                    int size = CommonUtil.dip2px(DetailActivity.this, 150);
                     mDetailPlayer.showSmallVideo(new Point(size, size), true, true);
                     mOrientationUtils.setEnable(false);
                 }

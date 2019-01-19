@@ -35,7 +35,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.ScrollingActivity"
+            android:name=".view.DetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="ScrollingActivity"
             android:screenOrientation="portrait"

@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onRightAction() {
         super.onRightAction();
-//        NavigationHelper.startActivity(mContext,ScrollingActivity.class,null,false);
+//        NavigationHelper.startActivity(mContext,DetailActivity.class,null,false);
     }
 
     @Override

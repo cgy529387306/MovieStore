@@ -19,12 +19,12 @@ import java.util.List;
 /**
  * Created by necer on 2017/6/7.
  */
-public class TestAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
+public class FindAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
     public final static String TAG = "RecyclerViewList";
 
     private GSYVideoOptionBuilder mVideoOptionBuilder;
 
-    public TestAdapter(int layoutResId, List data) {
+    public FindAdapter(int layoutResId, List data) {
         super(layoutResId, data);
         mVideoOptionBuilder = new GSYVideoOptionBuilder();
     }

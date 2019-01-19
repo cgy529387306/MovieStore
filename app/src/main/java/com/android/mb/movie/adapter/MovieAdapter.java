@@ -14,8 +14,7 @@ import com.android.mb.movie.R;
 import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ProjectHelper;
-import com.android.mb.movie.utils.ToastHelper;
-import com.android.mb.movie.view.ScrollingActivity;
+import com.android.mb.movie.view.DetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +65,7 @@ public class MovieAdapter extends BaseAdapter{
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("videoInfo",video);
-                NavigationHelper.startActivity((Activity) mContext, ScrollingActivity.class,bundle,false);
+                NavigationHelper.startActivity((Activity) mContext, DetailActivity.class,bundle,false);
             }
         });
         return convertView;

@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.mb.movie.R;
-import com.android.mb.movie.adapter.TestAdapter;
+import com.android.mb.movie.adapter.FindAdapter;
 import com.android.mb.movie.base.BaseFragment;
 import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.utils.Helper;
@@ -32,7 +32,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener,B
 
     private SmartRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
-    private TestAdapter mAdapter;
+    private FindAdapter mAdapter;
     private int mCurrentPage = 1;
     private LinearLayoutManager mLinearLayoutManager;
 
@@ -48,7 +48,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener,B
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
-        mAdapter = new TestAdapter(R.layout.item_test, new ArrayList());
+        mAdapter = new FindAdapter(R.layout.item_test, new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -81,7 +81,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener,B
                     //当前播放的位置
                     int position = GSYVideoManager.instance().getPlayPosition();
                     //对应的播放列表TAG
-                    if (GSYVideoManager.instance().getPlayTag().equals(TestAdapter.TAG)
+                    if (GSYVideoManager.instance().getPlayTag().equals(FindAdapter.TAG)
                             && (position < firstVisibleItem || position > lastVisibleItem)) {
                         //如果滑出去了上面和下面就是否，和今日头条一样
                         if(!GSYVideoManager.isFullState(getActivity())) {

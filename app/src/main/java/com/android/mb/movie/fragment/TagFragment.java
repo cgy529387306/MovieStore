@@ -1,27 +1,11 @@
 package com.android.mb.movie.fragment;
 
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.TagAdapter;
-import com.android.mb.movie.adapter.TestAdapter;
 import com.android.mb.movie.base.BaseFragment;
-import com.android.mb.movie.constants.ProjectConstants;
-import com.android.mb.movie.utils.Helper;
-import com.android.mb.movie.utils.ToastHelper;
-import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.android.mb.movie.widget.taglayout.FlowTagLayout;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
 import java.util.ArrayList;
 import java.util.List;

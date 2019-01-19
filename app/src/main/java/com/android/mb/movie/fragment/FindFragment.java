@@ -1,5 +1,7 @@
 package com.android.mb.movie.fragment;
 
+import android.app.Activity;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,11 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.mb.movie.R;
-import com.android.mb.movie.adapter.TestAdapter;
+import com.android.mb.movie.adapter.FindAdapter;
 import com.android.mb.movie.base.BaseFragment;
 import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.utils.Helper;
+import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ToastHelper;
+import com.android.mb.movie.view.DetailActivity;
+import com.android.mb.movie.view.SearchActivity;
 import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -32,7 +37,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener,B
 
     private SmartRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
-    private TestAdapter mAdapter;
+    private FindAdapter mAdapter;
     private int mCurrentPage = 1;
     private LinearLayoutManager mLinearLayoutManager;
 
@@ -48,7 +53,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener,B
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
-        mAdapter = new TestAdapter(R.layout.item_test, new ArrayList());
+        mAdapter = new FindAdapter(R.layout.item_test, new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -59,6 +64,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener,B
 
     @Override
     protected void setListener() {
+        mRootView.findViewById(R.id.iv_search).setOnClickListener(this);
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setOnLoadMoreListener(this);
         mAdapter.setOnItemClickListener(this);
@@ -81,7 +87,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener,B
                     //当前播放的位置
                     int position = GSYVideoManager.instance().getPlayPosition();
                     //对应的播放列表TAG
-                    if (GSYVideoManager.instance().getPlayTag().equals(TestAdapter.TAG)
+                    if (GSYVideoManager.instance().getPlayTag().equals(FindAdapter.TAG)
                             && (position < firstVisibleItem || position > lastVisibleItem)) {
                         //如果滑出去了上面和下面就是否，和今日头条一样
                         if(!GSYVideoManager.isFullState(getActivity())) {
@@ -104,7 +110,10 @@ public class FindFragment extends BaseFragment implements View.OnClickListener,B
 
     @Override
     public void onClick(View v) {
-
+        int id = v.getId();
+        if (id == R.id.iv_search){
+            NavigationHelper.startActivity(getActivity(), SearchActivity.class,null,false);
+        }
     }
 
 

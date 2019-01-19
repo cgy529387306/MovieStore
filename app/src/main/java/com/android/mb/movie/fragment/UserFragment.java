@@ -7,6 +7,7 @@ import com.android.mb.movie.base.BaseFragment;
 import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.view.LoginActivity;
+import com.android.mb.movie.view.SettingActivity;
 
 /**
  * Created by cgy on 19/1/19.
@@ -81,6 +82,7 @@ public class UserFragment extends BaseFragment implements View.OnClickListener{
             }
         }else if (id == R.id.btn_setting){
             //TODO
+            NavigationHelper.startActivity(getActivity(), SettingActivity.class,null,false);
         }
     }
 }

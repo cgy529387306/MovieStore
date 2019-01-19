@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.android.mb.movie.R;
+import com.android.mb.movie.base.BaseActivity;
+import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.video.LandLayoutVideo;
 import com.android.mb.movie.video.listener.AppBarStateChangeListener;
@@ -30,7 +32,7 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
  * CollapsingToolbarLayout的播放页面
  * 额，有点懒，细节上没处理
  */
-public class ScrollingActivity extends AppCompatActivity {
+public class ScrollingActivity extends BaseActivity {
 
     private boolean mIsPlay;
     private boolean mIsPause;
@@ -39,23 +41,96 @@ public class ScrollingActivity extends AppCompatActivity {
     private OrientationUtils mOrientationUtils;
     private LandLayoutVideo mDetailPlayer;
     private AppBarLayout mAppBarLayout;
-    private FloatingActionButton mTab;
     private CoordinatorLayout mCoordinatorLayout;
     private CollapsingToolbarLayout mToolbarLayout;
     private AppBarStateChangeListener.State curState;
+    private Video mVideoInfo;
+    @Override
+    public void onBackPressed() {
+
+        if (mOrientationUtils != null) {
+            mOrientationUtils.backToProtVideo();
+        }
+
+        if (GSYVideoManager.backFromWindowFull(this)) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scrolling);
+    protected void onPause() {
+        getCurPlay().onVideoPause();
+        super.onPause();
+        mIsPause = true;
+    }
 
-        initView();
+    @Override
+    protected void onResume() {
+        getCurPlay().onVideoResume();
+        mAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener);
+        super.onResume();
+        mIsPause = false;
+    }
 
-        String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mIsPlay) {
+            getCurPlay().release();
+        }
+        if (mOrientationUtils != null)
+            mOrientationUtils.releaseListener();
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //如果旋转了就全屏
+        if (mIsPlay && !mIsPause) {
+            mDetailPlayer.onConfigurationChanged(this, newConfig, mOrientationUtils, true, true);
+        }
+    }
+
+
+    @Override
+    protected void loadIntent() {
+        mVideoInfo = (Video) getIntent().getSerializableExtra("videoInfo");
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_scrolling;
+    }
+
+    @Override
+    protected void initTitle() {
+        hideActionbar();
+    }
+
+    @Override
+    protected void bindViews() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mDetailPlayer = (LandLayoutVideo) findViewById(R.id.detail_player);
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.root_layout);
+        toolbar.setNavigationIcon(R.mipmap.ic_back_brown);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//左侧添加一个默认的返回图标
+        getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
+        mToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        mToolbarLayout.setTitle(mVideoInfo.getName());
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+        mAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener);
+    }
+
+    @Override
+    protected void processLogic(Bundle savedInstanceState) {
 
         //增加封面
         ImageView imageView = new ImageView(this);
-        ProjectHelper.loadImageUrl(imageView,"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1547199470477&di=f9ebd7e75737cb87a785eca308b70a80&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fb151f8198618367a9662f4f52d738bd4b31ce52b.jpg");
+        ProjectHelper.loadImageUrl(imageView,mVideoInfo.getCoverUrl());
         resolveNormalVideoUI();
 
         //外部辅助的旋转，帮助全屏
@@ -71,7 +146,7 @@ public class ScrollingActivity extends AppCompatActivity {
                 .setShowFullAnimation(false)
                 .setNeedLockFull(true)
                 .setSeekRatio(1)
-                .setUrl(url)
+                .setUrl(mVideoInfo.getVideoUrl())
                 .setCacheWithPlay(false)
                 .setVideoTitle("测试视频")
                 .setVideoAllCallBack(new GSYSampleCallBack() {
@@ -84,7 +159,6 @@ public class ScrollingActivity extends AppCompatActivity {
                         //开始播放了才能旋转和全屏
                         mOrientationUtils.setEnable(true);
                         mIsPlay = true;
-                        mCoordinatorLayout.removeView(mTab);
                     }
 
                     @Override
@@ -146,74 +220,8 @@ public class ScrollingActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    protected void setListener() {
 
-        if (mOrientationUtils != null) {
-            mOrientationUtils.backToProtVideo();
-        }
-
-        if (GSYVideoManager.backFromWindowFull(this)) {
-            return;
-        }
-        super.onBackPressed();
-    }
-
-
-    @Override
-    protected void onPause() {
-        getCurPlay().onVideoPause();
-        super.onPause();
-        mIsPause = true;
-    }
-
-    @Override
-    protected void onResume() {
-        getCurPlay().onVideoResume();
-        mAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener);
-        super.onResume();
-        mIsPause = false;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mIsPlay) {
-            getCurPlay().release();
-        }
-        if (mOrientationUtils != null)
-            mOrientationUtils.releaseListener();
-    }
-
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        //如果旋转了就全屏
-        if (mIsPlay && !mIsPause) {
-            mDetailPlayer.onConfigurationChanged(this, newConfig, mOrientationUtils, true, true);
-        }
-    }
-
-    private void initView() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mDetailPlayer = (LandLayoutVideo) findViewById(R.id.detail_player);
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.root_layout);
-
-        setSupportActionBar(toolbar);
-        mToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        mToolbarLayout.setTitle(getTitle());
-
-        mTab = (FloatingActionButton) findViewById(R.id.fab);
-        mTab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mDetailPlayer.startPlayLogic();
-                mCoordinatorLayout.removeView(mTab);
-            }
-        });
-
-        mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
-        mAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener);
     }
 
     private void resolveNormalVideoUI() {

@@ -10,7 +10,7 @@
         android:id="@+id/fl_actionbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@mipmap/bg_custom_actionbar">
+        android:background="@color/base_theme">
 
         <ImageView
             android:id="@+id/iv_back"

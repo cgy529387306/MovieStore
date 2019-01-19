@@ -1,5 +1,6 @@
 package com.android.mb.movie.retrofit.http;
 
+import android.os.Environment;
 import android.text.TextUtils;
 
 import com.android.mb.movie.app.MBApplication;
@@ -11,6 +12,8 @@ import com.android.mb.movie.retrofit.http.interceptor.LogInterceptor;
 import com.android.mb.movie.retrofit.http.interceptor.NoNetWorkInterceptor;
 import com.android.mb.movie.retrofit.http.interceptor.ParameterInterceptor;
 import com.android.mb.movie.retrofit.http.util.ArrayUtil;
+import com.android.mb.movie.utils.AppHelper;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -102,7 +105,7 @@ public class RetrofitHttpClient {
         if(isCache) {
             //设置缓存.
             RetrofitCache.getInatance().init(MBApplication.getInstance());
-            File cacheDirectory = new File(MBApplication.getInstance().getCacheDir(), CACHE_DIR);
+            File cacheDirectory = new File(Environment.getExternalStorageDirectory(), CACHE_DIR);
             Cache cache = new Cache(cacheDirectory, cacheSize);
             //设置缓存大小.
             builder.cache(cache);

@@ -19,7 +19,6 @@ import rx.Observable;
 @SuppressWarnings("unchecked")
 public class ScheduleMethods extends BaseHttp {
 
-    private ScheduleMethods(){}
 
     private static class SingletonHolder {
         private static final ScheduleMethods INSTANCE = new ScheduleMethods();
@@ -35,6 +34,7 @@ public class ScheduleMethods extends BaseHttp {
                 .baseUrl(getServerHost())
                 .addHeader(getHead())
                 .addDotNetDeserializer(false)
+                .addCache(false)
                 .addLog(true)
                 .build()
                 .retrofit()

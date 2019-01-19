@@ -2,12 +2,14 @@ package com.android.mb.movie.service;
 
 
 import com.android.mb.movie.entity.CurrentUser;
+import com.android.mb.movie.retrofit.http.RetrofitHttpClient;
 import com.android.mb.movie.retrofit.http.entity.HttpResult;
 import com.android.mb.movie.retrofit.http.exception.ApiException;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import retrofit2.Retrofit;
 import rx.functions.Func1;
 
 /**
@@ -37,19 +39,6 @@ public class BaseHttp {
                 }else {
                     throw new ApiException(ApiException.REQUEST_FAIL, httpResult.getMessage());
                 }
-            }
-            return null;
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    static class HttpResultFunc<T> implements Func1 {
-        @Override
-        public Object call(Object o) {
-            HttpResult<T> httpResult;
-            if (o instanceof HttpResult) {
-                httpResult = (HttpResult<T>) o;
-                return httpResult;
             }
             return null;
         }

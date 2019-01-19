@@ -11,14 +11,12 @@ import android.widget.TextView;
 import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.MyFragmentPagerAdapter;
 import com.android.mb.movie.base.BaseActivity;
+import com.android.mb.movie.fragment.ChannelFragment;
 import com.android.mb.movie.fragment.FindFragment;
 import com.android.mb.movie.fragment.MainFragment;
-import com.android.mb.movie.fragment.TestFragment;
 import com.android.mb.movie.fragment.UserFragment;
-import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.widget.FragmentViewPager;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +82,7 @@ public class MainActivity extends BaseActivity {
     private void initTabPager(){
         mFragmentList = new ArrayList<>();
         mFragmentList.add(new MainFragment());
-        mFragmentList.add(new MainFragment());
+        mFragmentList.add(new ChannelFragment());
         mFragmentList.add(new FindFragment());
         mFragmentList.add(new UserFragment());
         mFragmentViewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentList));

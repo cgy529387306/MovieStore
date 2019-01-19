@@ -1,6 +1,8 @@
 package com.android.mb.movie.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.mb.movie.R;
-import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.Video;
+import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.ToastHelper;
+import com.android.mb.movie.view.ScrollingActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,8 +64,9 @@ public class MovieAdapter extends BaseAdapter{
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               //TODO
-                ToastHelper.showLongToast(video.getName());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("videoInfo",video);
+                NavigationHelper.startActivity((Activity) mContext, ScrollingActivity.class,bundle,false);
             }
         });
         return convertView;

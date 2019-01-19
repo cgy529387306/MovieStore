@@ -7,7 +7,6 @@ import com.android.mb.movie.entity.CateVideo;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,7 +21,7 @@ public class MovieGridAdapter extends BaseQuickAdapter<CateVideo, BaseViewHolder
 
     @Override
     protected void convert(BaseViewHolder helper, CateVideo item) {
-        helper.setText(R.id.tv_type,item.getCateName());
+//        helper.setText(R.id.tv_type,item.getCateName());
         GridView gridView = helper.getView(R.id.gridMovie);
         gridView.setAdapter(new MovieAdapter(mContext,item.getVideos()));
     }

@@ -14,6 +14,7 @@ import com.android.mb.movie.base.BaseActivity;
 import com.android.mb.movie.fragment.FindFragment;
 import com.android.mb.movie.fragment.MainFragment;
 import com.android.mb.movie.fragment.TestFragment;
+import com.android.mb.movie.fragment.UserFragment;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.widget.FragmentViewPager;
@@ -85,7 +86,7 @@ public class MainActivity extends BaseActivity {
         mFragmentList.add(new MainFragment());
         mFragmentList.add(new MainFragment());
         mFragmentList.add(new FindFragment());
-        mFragmentList.add(new FindFragment());
+        mFragmentList.add(new UserFragment());
         mFragmentViewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentList));
         mFragmentViewPager.setOffscreenPageLimit(mFragmentList.size());
         mFragmentViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));

@@ -7,8 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.android.mb.movie.R;
+import com.android.mb.movie.entity.AuthorVideo;
 import com.android.mb.movie.entity.CateVideo;
 import com.android.mb.movie.utils.NavigationHelper;
+import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.view.DetailActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -19,7 +21,7 @@ import java.util.List;
 /**
  * Created by necer on 2017/6/7.
  */
-public class MovieRecycleAdapter extends BaseQuickAdapter<CateVideo, BaseViewHolder> {
+public class MovieRecycleAdapter extends BaseQuickAdapter<AuthorVideo, BaseViewHolder> {
 
     private MovieHeAdapter mAdapter;
 
@@ -28,7 +30,11 @@ public class MovieRecycleAdapter extends BaseQuickAdapter<CateVideo, BaseViewHol
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, CateVideo item) {
+    protected void convert(BaseViewHolder helper, AuthorVideo item) {
+        helper.setText(R.id.tv_num,item.getVideoCount()+"部电影");
+        helper.setText(R.id.tv_name,item.getName());
+        helper.setText(R.id.tv_desc,item.getIntros());
+        ProjectHelper.loadImageUrl(helper.getView(R.id.iv_avatar),item.getIcon());
         RecyclerView recyclerView = helper.getView(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.HORIZONTAL,false));
         mAdapter = new MovieHeAdapter(R.layout.item_movie_h,item.getVideos());

@@ -3,6 +3,7 @@ package com.android.mb.movie.service;
 import android.util.Base64;
 
 import com.android.mb.movie.entity.HomeData;
+import com.android.mb.movie.entity.SpecialData;
 import com.android.mb.movie.entity.UserBean;
 import com.android.mb.movie.retrofit.cache.transformer.CacheTransformer;
 import com.android.mb.movie.retrofit.http.RetrofitHttpClient;
@@ -79,5 +80,10 @@ public class ScheduleMethods extends BaseHttp {
                 .map(new HttpCacheResultFunc<HomeData>());
     }
 
+    public Observable getSpecialData(){
+        return getService().getSpecialData()
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<SpecialData>());
+    }
 
 }

@@ -10,12 +10,16 @@ import android.widget.GridView;
 import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.CateAdapter;
 import com.android.mb.movie.adapter.MovieRecycleAdapter;
+import com.android.mb.movie.adapter.SpecialAdapter;
 import com.android.mb.movie.base.BaseMvpFragment;
 import com.android.mb.movie.entity.HomeData;
+import com.android.mb.movie.entity.SpecialData;
 import com.android.mb.movie.presenter.HomePresenter;
+import com.android.mb.movie.presenter.SpecialPresenter;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.interfaces.IHomeView;
+import com.android.mb.movie.view.interfaces.ISpecialView;
 import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -29,7 +33,7 @@ import java.util.ArrayList;
 /**
  * Created by cgy on 16/7/18.
  */
-public class SpecialFragment extends BaseMvpFragment<HomePresenter,IHomeView> implements IHomeView, View.OnClickListener,BaseQuickAdapter.OnItemClickListener,OnRefreshListener, OnLoadMoreListener {
+public class SpecialFragment extends BaseMvpFragment<SpecialPresenter,ISpecialView> implements ISpecialView, View.OnClickListener,BaseQuickAdapter.OnItemClickListener,OnRefreshListener, OnLoadMoreListener {
 
     private SmartRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -56,7 +60,7 @@ public class SpecialFragment extends BaseMvpFragment<HomePresenter,IHomeView> im
 
     @Override
     protected void processLogic() {
-        mPresenter.getHomeData();
+        mPresenter.getSpecialData();
     }
 
     @Override
@@ -68,7 +72,7 @@ public class SpecialFragment extends BaseMvpFragment<HomePresenter,IHomeView> im
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         if (mAdapter.getItem(position)!=null){
-            ToastHelper.showLongToast(mAdapter.getItem(position).getCateName());
+            ToastHelper.showLongToast(mAdapter.getItem(position).getName());
         }
     }
 
@@ -81,8 +85,8 @@ public class SpecialFragment extends BaseMvpFragment<HomePresenter,IHomeView> im
 
 
     @Override
-    protected HomePresenter createPresenter() {
-        return new HomePresenter();
+    protected SpecialPresenter createPresenter() {
+        return new SpecialPresenter();
     }
 
     @Override
@@ -91,20 +95,20 @@ public class SpecialFragment extends BaseMvpFragment<HomePresenter,IHomeView> im
 
     @Override
     public void onRefresh(RefreshLayout refreshLayout) {
-        mPresenter.getHomeData();
+        mPresenter.getSpecialData();
     }
 
+
     @Override
-    public void getHomeData(HomeData homeData) {
-        if (homeData!=null && homeData.getVideoList()!=null){
+    public void getSpecialData(SpecialData result) {
+        if (result!=null && result.getAuthorList()!=null){
             mRefreshLayout.finishRefresh();
-            mAdapter.setNewData(homeData.getVideoList());
+            mAdapter.setNewData(result.getAuthorList());
             mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
             mRefreshLayout.finishLoadMoreWithNoMoreData();
-            if (mGridCate!=null && Helper.isNotEmpty(homeData.getCateList())){
-                mGridCate.setAdapter(new CateAdapter(getActivity(),homeData.getCateList()));
+            if (mGridCate!=null && Helper.isNotEmpty(result.getSpecialList())){
+                mGridCate.setAdapter(new SpecialAdapter(getActivity(),result.getSpecialList()));
             }
         }
     }
-
 }

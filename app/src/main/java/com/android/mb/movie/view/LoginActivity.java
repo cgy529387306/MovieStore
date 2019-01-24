@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.android.mb.movie.R;
 import com.android.mb.movie.base.BaseMvpActivity;
+import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.UserBean;
 import com.android.mb.movie.presenter.LoginPresenter;
@@ -128,6 +129,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
             AppHelper.hideSoftInputFromWindow(mEtAccount);
             CurrentUser.getInstance().login(result);
             showToastMessage("登录成功");
+            sendMsg(ProjectConstants.EVENT_UPDATE_USER_INFO,null);
             finish();
         }
     }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.mb.movie.R;
 import com.android.mb.movie.rxbus.Events;
 import com.android.mb.movie.rxbus.RxBus;
@@ -57,6 +59,7 @@ public abstract class BaseActivity extends AppCompatActivity{
 
     private FrameLayout mActionbar;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,9 +69,12 @@ public abstract class BaseActivity extends AppCompatActivity{
         initStatusBar();
     }
 
+
     private void initStatusBar(){
         ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.base_theme).statusBarDarkFont(false).init();
     }
+
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -407,5 +413,6 @@ public abstract class BaseActivity extends AppCompatActivity{
     }
 
     /********************************** 隐藏软件操作 end *********************************************/
+
 
 }

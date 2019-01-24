@@ -2,10 +2,13 @@ package com.android.mb.movie.base;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.mb.movie.R;
 import com.android.mb.movie.utils.ToastHelper;
 
 
@@ -20,6 +23,7 @@ public abstract class BaseMvpActivity<P extends Presenter<V>,V extends BaseMvpVi
 
     protected P mPresenter;
 
+    private MaterialDialog mMaterialDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mPresenter = createPresenter();
@@ -53,14 +57,9 @@ public abstract class BaseMvpActivity<P extends Presenter<V>,V extends BaseMvpVi
 
     @Override
     public void showProgressDialog() {
-//        if(mProgressDialog == null) {
-//            mProgressDialog = new CustomProgressDialog(this);
-//            mProgressDialog.setCancelable(false);
-//        }
-//
-//        mProgressDialog.show();
-//        //为进度条添加一个事件.
-//        mProgressDialog.setOnKeyListener(onKeyListener);
+        mMaterialDialog = new MaterialDialog.Builder(this)
+                .content("加载中...")
+                .progress(true, 0).show();
     }
 
     @Override
@@ -68,9 +67,9 @@ public abstract class BaseMvpActivity<P extends Presenter<V>,V extends BaseMvpVi
         if (isFinishing()) {
             return;
         }
-//        if (null != mProgressDialog && mProgressDialog.isShowing()) {
-//            mProgressDialog.dismiss();
-//        }
+        if (mMaterialDialog!=null && mMaterialDialog.isShowing()){
+            mMaterialDialog.dismiss();
+        }
     }
 
     /**
@@ -85,5 +84,6 @@ public abstract class BaseMvpActivity<P extends Presenter<V>,V extends BaseMvpVi
             return false;
         }
     };
+
 
 }

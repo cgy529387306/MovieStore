@@ -73,7 +73,12 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_account){
-            NavigationHelper.startActivity(this, AccountActivity.class,null,false);
+            if (CurrentUser.getInstance().isLogin()){
+                NavigationHelper.startActivity(this, AccountActivity.class,null,false);
+            }else{
+                NavigationHelper.startActivity(this, LoginActivity.class,null,false);
+            }
+
         }else if (id == R.id.btn_agreement){
 
         }

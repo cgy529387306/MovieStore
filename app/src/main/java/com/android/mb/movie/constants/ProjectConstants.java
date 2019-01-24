@@ -10,7 +10,7 @@ public class ProjectConstants {
     //EVENT
     public static final int EVENT_UPDATE_USER_INFO = 10001;
 
-    public static final int EVENT_UPDATE_SCHEDULE_LIST = 10002;
+    public static final int EVENT_GET_USER_INFO = 10002;
 
     public static final int EVENT_UPDATE_SCHEDULE = 10003;
 

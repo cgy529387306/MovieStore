@@ -10,7 +10,8 @@
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
         android:background="@color/base_theme">
-        <ImageView
+        <com.android.mb.movie.widget.CircleImageView
+            android:id="@+id/iv_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"

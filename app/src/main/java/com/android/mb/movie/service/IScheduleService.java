@@ -1,5 +1,6 @@
 package com.android.mb.movie.service;
 
+import com.android.mb.movie.entity.Avatar;
 import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.HomeData;
 import com.android.mb.movie.entity.SpecialData;
@@ -8,7 +9,9 @@ import com.android.mb.movie.retrofit.http.entity.HttpResult;
 
 import java.util.Map;
 
+import okhttp3.MultipartBody;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.QueryMap;
@@ -31,11 +34,11 @@ public interface IScheduleService {
 
     /**
      * avatar:头像文件流
-     * @param requestMap
      * @return
      */
     @POST("/api/1.0/user/uploadAvatar")
-    Observable<HttpResult<UserBean>> uploadAvatar(@Part Map<String,Object> requestMap);
+    @Multipart
+    Observable<HttpResult<Avatar>> uploadAvatar(@Part MultipartBody.Part file);
 
     /**
      * userId:用户id
@@ -43,7 +46,7 @@ public interface IScheduleService {
      * @return
      */
     @GET("/api/1.0/user/getInfo")
-    Observable<HttpResult<UserBean>> getUserInfo(@Part Map<String,Object> requestMap);
+    Observable<HttpResult<UserBean>> getUserInfo(@QueryMap Map<String,Object> requestMap);
 
     /**
      * userId:用户id
@@ -51,7 +54,7 @@ public interface IScheduleService {
      * @return
      */
     @GET("/api/1.0/user/updateInfo")
-    Observable<HttpResult<UserBean>> updateInfo(@Part Map<String,Object> requestMap);
+    Observable<HttpResult<UserBean>> updateInfo(@QueryMap Map<String,Object> requestMap);
 
     /**
      * account:手机号或者用户名  password:密码
@@ -98,4 +101,26 @@ public interface IScheduleService {
      */
     @GET("/api/1.0/common/getSpecialData")
     Observable<HttpResult<SpecialData>> getSpecialData();
+
+    /**
+     * videoId
+     * @return
+     */
+    @GET("/api/1.0/common/praise")
+    Observable<HttpResult<SpecialData>> praise(@QueryMap Map<String,Object> requestMap);
+
+    /**
+     * videoId
+     * content
+     * @return
+     */
+    @GET("/api/1.0/common/comment")
+    Observable<HttpResult<SpecialData>> comment(@QueryMap Map<String,Object> requestMap);
+
+    /**
+     * videoId
+     * @return
+     */
+    @GET("/api/1.0/common/getVideoComments")
+    Observable<HttpResult<SpecialData>> getVideoComments(@QueryMap Map<String,Object> requestMap);
 }

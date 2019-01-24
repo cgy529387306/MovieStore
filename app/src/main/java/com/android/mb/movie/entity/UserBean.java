@@ -1,14 +1,18 @@
 package com.android.mb.movie.entity;
 
+import com.android.mb.movie.utils.Helper;
+
 public class UserBean {
     private String accesstoken;
     private String userid;
     private String phone;
-    private int sex;
+    private int sex;//0：未知  1：男  2：女
     private String sexText;
     private int userType;
     private boolean manager;
     private long create_time;
+    private String avatar_url;
+    private String nickname;
 
     public String getAccesstoken() {
         return accesstoken;
@@ -73,5 +77,21 @@ public class UserBean {
 
     public void setCreate_time(long create_time) {
         this.create_time = create_time;
+    }
+
+    public String getAvatar_url() {
+        return avatar_url;
+    }
+
+    public void setAvatar_url(String avatar_url) {
+        this.avatar_url = avatar_url;
+    }
+
+    public String getNickname() {
+        return Helper.isEmpty(nickname)?phone:nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

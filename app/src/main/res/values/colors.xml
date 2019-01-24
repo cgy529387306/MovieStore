@@ -5,7 +5,7 @@
     <!-- colorPrimaryDark 应用的主要暗色调，statusBarColor默认使用该颜色 -->
     <color name="colorPrimaryDark">#ffffffff</color>
     <!-- colorAccent CheckBox，RadioButton，SwitchCompat等一般控件的选中效果默认采用该颜色 -->
-    <color name="colorAccent">#2aaeff</color>
+    <color name="colorAccent">#BB7522</color>
 
 
     <color name="tab_checked">#3F51B5</color>
@@ -17,6 +17,7 @@
     <color name="black">#ff000000</color>
     <color name="transparent">#00000000</color>
     <color name="translucent">#88000000</color>
+    <color name="base_loading">#80000000</color>
     <color name="base_orange">#fcaa2d</color>
     <color name="base_red">#ff4543</color>
     <color name="base_gray">#a5a5a5</color>

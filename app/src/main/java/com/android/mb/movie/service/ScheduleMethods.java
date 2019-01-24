@@ -2,6 +2,7 @@ package com.android.mb.movie.service;
 
 import android.util.Base64;
 
+import com.android.mb.movie.entity.Avatar;
 import com.android.mb.movie.entity.HomeData;
 import com.android.mb.movie.entity.SpecialData;
 import com.android.mb.movie.entity.UserBean;
@@ -9,9 +10,13 @@ import com.android.mb.movie.retrofit.cache.transformer.CacheTransformer;
 import com.android.mb.movie.retrofit.http.RetrofitHttpClient;
 import com.android.mb.movie.utils.JsonHelper;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import rx.Observable;
 
 /**
@@ -74,6 +79,47 @@ public class ScheduleMethods extends BaseHttp {
                 .map(new HttpCacheResultFunc<UserBean>());
     }
 
+    public Observable getUserInfo(Map<String,Object> requestMap){
+        Map<String,Object> requestParams = new HashMap<>();
+        requestParams.put("params", Base64.encodeToString(JsonHelper.toJson(requestMap).getBytes(),Base64.DEFAULT));
+        return getService().getUserInfo(requestParams)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<UserBean>());
+    }
+
+    public Observable updateInfo(Map<String,Object> requestMap){
+        Map<String,Object> requestParams = new HashMap<>();
+        requestParams.put("params", Base64.encodeToString(JsonHelper.toJson(requestMap).getBytes(),Base64.DEFAULT));
+        return getService().updateInfo(requestParams)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<UserBean>());
+    }
+
+    public Observable forgetPassword(Map<String,Object> requestMap){
+        Map<String,Object> requestParams = new HashMap<>();
+        requestParams.put("params", Base64.encodeToString(JsonHelper.toJson(requestMap).getBytes(),Base64.DEFAULT));
+        return getService().forgetPassword(requestParams)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<UserBean>());
+    }
+
+    public Observable updatePassword(Map<String,Object> requestMap){
+        Map<String,Object> requestParams = new HashMap<>();
+        requestParams.put("params", Base64.encodeToString(JsonHelper.toJson(requestMap).getBytes(),Base64.DEFAULT));
+        return getService().updatePassword(requestParams)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<UserBean>());
+    }
+
+    public Observable uploadAvatar(File file){
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part requestBody =
+                MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
+        return getService().uploadAvatar(requestBody)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Avatar>());
+    }
+
     public Observable getHomeData(){
         return getService().getHomeData()
                 .compose(CacheTransformer.emptyTransformer())
@@ -84,6 +130,30 @@ public class ScheduleMethods extends BaseHttp {
         return getService().getSpecialData()
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<SpecialData>());
+    }
+
+    public Observable comment(Map<String,Object> requestMap){
+        Map<String,Object> requestParams = new HashMap<>();
+        requestParams.put("params", Base64.encodeToString(JsonHelper.toJson(requestMap).getBytes(),Base64.DEFAULT));
+        return getService().comment(requestParams)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<UserBean>());
+    }
+
+    public Observable getVideoComments(Map<String,Object> requestMap){
+        Map<String,Object> requestParams = new HashMap<>();
+        requestParams.put("params", Base64.encodeToString(JsonHelper.toJson(requestMap).getBytes(),Base64.DEFAULT));
+        return getService().getVideoComments(requestParams)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<UserBean>());
+    }
+
+    public Observable praise(Map<String,Object> requestMap){
+        Map<String,Object> requestParams = new HashMap<>();
+        requestParams.put("params", Base64.encodeToString(JsonHelper.toJson(requestMap).getBytes(),Base64.DEFAULT));
+        return getService().praise(requestParams)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<UserBean>());
     }
 
 }

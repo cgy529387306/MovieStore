@@ -51,6 +51,8 @@ public class CurrentUser extends UserBean{
             me.setUserType(entity.getUserType());
             me.setManager(entity.isManager());
             me.setCreate_time(entity.getCreate_time());
+            me.setAvatar_url(entity.getAvatar_url());
+            me.setNickname(entity.getNickname());
             json = JsonHelper.toJson(me);
             born = me != null;
         }
@@ -59,6 +61,7 @@ public class CurrentUser extends UserBean{
             Log.e(TAG, "尼玛，流产了！！！");
         } else {
             PreferencesHelper.getInstance().putString(USER,json);
+
         }
         return born;
     }

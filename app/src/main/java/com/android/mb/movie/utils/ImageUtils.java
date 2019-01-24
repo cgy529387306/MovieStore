@@ -119,8 +119,8 @@ public class ImageUtils {
 
     public static void displayAvatar(Context context, String url, ImageView imageView){
         RequestOptions options = new RequestOptions()
-                .placeholder(R.mipmap.ic_avatar_default)// 正在加载中的图片
-                .error(R.mipmap.ic_avatar_default) // 加载失败的图片
+                .placeholder(R.mipmap.ic_head_s)// 正在加载中的图片
+                .error(R.mipmap.ic_head_s) // 加载失败的图片
                 .diskCacheStrategy(DiskCacheStrategy.ALL); // 磁盘缓存策略
         Glide.with(context).load(url).apply(options).into(imageView);
     }

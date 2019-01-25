@@ -325,6 +325,8 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     private void getComments(){
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("videoId", mVideoInfo.getId());
+        requestMap.put("currentPage",1);
+        requestMap.put("pageSize", ProjectConstants.PAGE_SIZE);
         mPresenter.getVideoComments(requestMap);
     }
 

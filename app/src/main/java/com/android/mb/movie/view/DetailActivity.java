@@ -12,10 +12,17 @@ import android.widget.ImageView;
 
 import com.android.mb.movie.R;
 import com.android.mb.movie.base.BaseActivity;
+import com.android.mb.movie.base.BaseMvpActivity;
+import com.android.mb.movie.constants.ProjectConstants;
+import com.android.mb.movie.entity.CommentListData;
 import com.android.mb.movie.entity.Video;
+import com.android.mb.movie.entity.VideoListData;
+import com.android.mb.movie.presenter.DetailPresenter;
 import com.android.mb.movie.utils.ProjectHelper;
+import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.video.LandLayoutVideo;
 import com.android.mb.movie.video.listener.AppBarStateChangeListener;
+import com.android.mb.movie.view.interfaces.IDetailView;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
@@ -26,11 +33,14 @@ import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * CollapsingToolbarLayout的播放页面
  * 额，有点懒，细节上没处理
  */
-public class DetailActivity extends BaseActivity {
+public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView> implements IDetailView {
 
     private boolean mIsPlay;
     private boolean mIsPause;
@@ -70,6 +80,11 @@ public class DetailActivity extends BaseActivity {
         mAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener);
         super.onResume();
         mIsPause = false;
+    }
+
+    @Override
+    protected DetailPresenter createPresenter() {
+        return new DetailPresenter();
     }
 
     @Override
@@ -215,6 +230,8 @@ public class DetailActivity extends BaseActivity {
         });
 
         mDetailPlayer.setLinkScroll(true);
+        submitComment("test  ddd");
+        submitPraise();
     }
 
     @Override
@@ -276,6 +293,40 @@ public class DetailActivity extends BaseActivity {
         }
     };
 
+
+    @Override
+    public void comment(Object result) {
+        getComments();
+    }
+
+    @Override
+    public void praise(Object result) {
+        ToastHelper.showToast("点赞成功");
+    }
+
+    @Override
+    public void getVideoComments(CommentListData result) {
+
+    }
+
+    private void submitComment(String content){
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("videoId", mVideoInfo.getId());
+        requestMap.put("content", content);
+        mPresenter.comment(requestMap);
+    }
+
+    private void submitPraise(){
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("videoId", mVideoInfo.getId());
+        mPresenter.praise(requestMap);
+    }
+
+    private void getComments(){
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("videoId", mVideoInfo.getId());
+        mPresenter.getVideoComments(requestMap);
+    }
 
 
 }

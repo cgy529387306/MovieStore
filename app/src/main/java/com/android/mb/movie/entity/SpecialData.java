@@ -1,6 +1,7 @@
 package com.android.mb.movie.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SpecialData implements Serializable{
@@ -10,6 +11,9 @@ public class SpecialData implements Serializable{
     private List<Special> specialList;
 
     public List<AuthorVideo> getAuthorList() {
+        if (authorList == null) {
+            return new ArrayList<>();
+        }
         return authorList;
     }
 
@@ -18,6 +22,9 @@ public class SpecialData implements Serializable{
     }
 
     public List<Special> getSpecialList() {
+        if (specialList == null) {
+            return new ArrayList<>();
+        }
         return specialList;
     }
 

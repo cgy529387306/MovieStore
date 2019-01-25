@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.android.mb.movie.R;
+import com.android.mb.movie.db.Search;
+import com.android.mb.movie.entity.Tag;
 import com.android.mb.movie.widget.taglayout.OnInitSelectedPosition;
 
 import java.util.ArrayList;
@@ -46,21 +48,25 @@ public class TagAdapter<T> extends BaseAdapter implements OnInitSelectedPosition
         View view = LayoutInflater.from(mContext).inflate(R.layout.tag_item, null);
         TextView textView = (TextView) view.findViewById(R.id.tv_tag);
         T t = mDataList.get(position);
-
-        if (t instanceof String) {
-            textView.setText((String) t);
+        if (t instanceof Tag){
+            Tag tag = (Tag) t;
+            textView.setText(tag.getName());
+        }
+        if (t instanceof Search){
+            Search search = (Search) t;
+            textView.setText(search.getKeyWord());
         }
         return view;
     }
 
-    public void onlyAddAll(List<T> datas) {
-        mDataList.addAll(datas);
+    public void onlyAddAll(List<T> dataList) {
+        mDataList.addAll(dataList);
         notifyDataSetChanged();
     }
 
-    public void clearAndAddAll(List<T> datas) {
+    public void clearAndAddAll(List<T> dataList) {
         mDataList.clear();
-        onlyAddAll(datas);
+        onlyAddAll(dataList);
     }
 
     @Override

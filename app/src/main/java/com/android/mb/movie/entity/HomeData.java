@@ -1,6 +1,7 @@
 package com.android.mb.movie.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeData implements Serializable{
@@ -12,6 +13,9 @@ public class HomeData implements Serializable{
     private List<Category> cateList;
 
     public List<Advert> getAdvertList() {
+        if (advertList == null) {
+            return new ArrayList<>();
+        }
         return advertList;
     }
 
@@ -20,6 +24,9 @@ public class HomeData implements Serializable{
     }
 
     public List<CateVideo> getVideoList() {
+        if (videoList == null) {
+            return new ArrayList<>();
+        }
         return videoList;
     }
 
@@ -28,6 +35,9 @@ public class HomeData implements Serializable{
     }
 
     public List<Category> getCateList() {
+        if (cateList == null) {
+            return new ArrayList<>();
+        }
         return cateList;
     }
 

@@ -1,6 +1,7 @@
 package com.android.mb.movie.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CateVideo implements Serializable{
@@ -9,7 +10,7 @@ public class CateVideo implements Serializable{
     private List<Video> videos;
 
     public String getCateName() {
-        return cateName;
+        return cateName == null ? "" : cateName;
     }
 
     public void setCateName(String cateName) {
@@ -17,6 +18,9 @@ public class CateVideo implements Serializable{
     }
 
     public List<Video> getVideos() {
+        if (videos == null) {
+            return new ArrayList<>();
+        }
         return videos;
     }
 

@@ -1,6 +1,5 @@
 package com.android.mb.movie.fragment;
 
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,12 +8,14 @@ import android.view.ViewGroup;
 
 import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.FindAdapter;
-import com.android.mb.movie.base.BaseFragment;
+import com.android.mb.movie.base.BaseMvpFragment;
 import com.android.mb.movie.constants.ProjectConstants;
+import com.android.mb.movie.entity.VideoListData;
+import com.android.mb.movie.presenter.FindPresenter;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.NavigationHelper;
-import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.SearchActivity;
+import com.android.mb.movie.view.interfaces.IFindView;
 import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -24,13 +25,14 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
  * Created by cgy on 16/7/18.
  */
-public class FindFragment extends BaseFragment implements View.OnClickListener,BaseQuickAdapter.OnItemClickListener,OnRefreshListener, OnLoadMoreListener {
+public class FindFragment extends BaseMvpFragment<FindPresenter,IFindView> implements IFindView, View.OnClickListener,BaseQuickAdapter.OnItemClickListener,OnRefreshListener, OnLoadMoreListener {
 
     private SmartRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -100,7 +102,6 @@ public class FindFragment extends BaseFragment implements View.OnClickListener,B
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         if (mAdapter.getItem(position)!=null){
-            ToastHelper.showLongToast(mAdapter.getItem(position));
         }
     }
 
@@ -115,36 +116,10 @@ public class FindFragment extends BaseFragment implements View.OnClickListener,B
 
 
     private void getListFormServer(){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                List<String> result = new ArrayList<>();
-                if(mCurrentPage==1){
-                    mAdapter.getData().clear();
-                }
-                int i = mAdapter.getItemCount();
-                int j = mAdapter.getItemCount()+ProjectConstants.PAGE_SIZE;
-                for(;i<j;i++){
-                    result.add("欲望都市第"+i+"集");
-                }
-                if (mCurrentPage == 1){
-                    //首页
-                    mRefreshLayout.finishRefresh();
-                    mAdapter.setNewData(result);
-                    mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
-                    if (result.size()< ProjectConstants.PAGE_SIZE){
-                        mRefreshLayout.finishLoadMoreWithNoMoreData();
-                    }
-                }else{
-                    if (Helper.isEmpty(result)){
-                        mRefreshLayout.finishLoadMoreWithNoMoreData();
-                    }else{
-                        mAdapter.addData(result);
-                        mRefreshLayout.finishLoadMore();
-                    }
-                }
-            }
-        },1500);
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("currentPage",mCurrentPage);
+        requestMap.put("pageSize",ProjectConstants.PAGE_SIZE);
+        mPresenter.getFindData(requestMap);
     }
 
     public boolean onBackPressed() {
@@ -167,6 +142,11 @@ public class FindFragment extends BaseFragment implements View.OnClickListener,B
     }
 
     @Override
+    protected FindPresenter createPresenter() {
+        return new FindPresenter();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         GSYVideoManager.releaseAllVideos();
@@ -182,5 +162,28 @@ public class FindFragment extends BaseFragment implements View.OnClickListener,B
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         mCurrentPage = 1;
         getListFormServer();
+    }
+
+    @Override
+    public void getSuccess(VideoListData result) {
+        if (result!=null){
+            if (mCurrentPage == 1){
+                //首页
+                mRefreshLayout.finishRefresh();
+                mAdapter.setNewData(result.getList());
+                mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
+                if (result.isEnd()){
+                    mRefreshLayout.finishLoadMoreWithNoMoreData();
+                }
+            }else{
+                if (Helper.isEmpty(result)){
+                    mRefreshLayout.finishLoadMoreWithNoMoreData();
+                }else{
+                    mAdapter.addData(result.getList());
+                    mRefreshLayout.finishLoadMore();
+                }
+            }
+        }
+
     }
 }

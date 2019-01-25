@@ -15,13 +15,17 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.mb.movie.R;
 import com.android.mb.movie.base.BaseMvpActivity;
+import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.Avatar;
 import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.UserBean;
 import com.android.mb.movie.presenter.AccountPresenter;
+import com.android.mb.movie.rxbus.Events;
 import com.android.mb.movie.utils.AppHelper;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ImageUtils;
+import com.android.mb.movie.utils.ProjectHelper;
+import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.interfaces.IAccountView;
 import com.android.mb.movie.widget.BottomMenuDialog;
 import com.android.mb.movie.widget.CircleImageView;
@@ -31,6 +35,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import rx.functions.Action1;
 
 /**
  * 登录
@@ -43,9 +49,11 @@ public class AccountActivity extends BaseMvpActivity<AccountPresenter,IAccountVi
     private TextView mTvSex;
     private TextView mTvPhone;
     private CircleImageView mIvAvatar;
-    private BottomMenuDialog pickDialog;
+    private BottomMenuDialog mPickDialog;
     private String mTempFilePath = AppHelper.getBaseCachePath()
             .concat(String.valueOf(System.currentTimeMillis())).concat(".png");
+
+
 
     @Override
     protected void loadIntent() {
@@ -91,8 +99,9 @@ public class AccountActivity extends BaseMvpActivity<AccountPresenter,IAccountVi
         if (id == R.id.btn_head){
             pickPhoto();
         }else if (id == R.id.btn_nickname){
+            String nickName = CurrentUser.getInstance().getNickname();
             new MaterialDialog.Builder(mContext).title("请输入昵称").inputType(InputType.TYPE_CLASS_TEXT)
-                    .inputRangeRes(2, 20, R.color.base_brown).input("请输入昵称", "", new MaterialDialog.InputCallback() {
+                    .inputRangeRes(2, 20, R.color.base_brown).input("请输入昵称", ProjectHelper.getCommonText(nickName), new MaterialDialog.InputCallback() {
                 @Override
                 public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
 
@@ -102,7 +111,6 @@ public class AccountActivity extends BaseMvpActivity<AccountPresenter,IAccountVi
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     if (dialog.getInputEditText()!=null && Helper.isNotEmpty(dialog.getInputEditText().getText().toString())){
                         String nickName = dialog.getInputEditText().getText().toString();
-                        mTvNickname.setText(nickName);
                         Map<String, Object> requestMap = new HashMap<>();
                         requestMap.put("nickname",nickName);
                         requestMap.put("userid",CurrentUser.getInstance().getUserid());
@@ -120,9 +128,9 @@ public class AccountActivity extends BaseMvpActivity<AccountPresenter,IAccountVi
                     .itemsCallback(new MaterialDialog.ListCallback() {
                         @Override
                         public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                            mTvSex.setText(text);
                             Map<String, Object> requestMap = new HashMap<>();
                             requestMap.put("sexText",text);
+                            requestMap.put("sex",which+1);
                             requestMap.put("userid",CurrentUser.getInstance().getUserid());
                             mPresenter.updateInfo(requestMap);
                         }
@@ -168,7 +176,7 @@ public class AccountActivity extends BaseMvpActivity<AccountPresenter,IAccountVi
             mTvNickname.setText(CurrentUser.getInstance().getNickname());
             mTvPhone.setText(CurrentUser.getInstance().getPhone());
             mTvSex.setText(CurrentUser.getInstance().getSexText());
-            ImageUtils.displayAvatar(mContext,CurrentUser.getInstance().getPhone(),mIvAvatar);
+            ImageUtils.displayAvatar(mContext,CurrentUser.getInstance().getAvatar_url(),mIvAvatar);
         }
     }
 
@@ -203,23 +211,23 @@ public class AccountActivity extends BaseMvpActivity<AccountPresenter,IAccountVi
     }
 
     private void pickPhoto() {
-        if (pickDialog == null) {
-            pickDialog = new BottomMenuDialog.Builder(mContext)
+        if (mPickDialog == null) {
+            mPickDialog = new BottomMenuDialog.Builder(mContext)
                     .addMenu("拍照", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             pickImageFromCamera();
-                            pickDialog.dismiss();
+                            mPickDialog.dismiss();
                         }
                     }).addMenu("我的相册选择", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             pickImageFromGallery();
-                            pickDialog.dismiss();
+                            mPickDialog.dismiss();
                         }
                     }).create();
         }
-        pickDialog.show();
+        mPickDialog.show();
     }
 
     /**
@@ -298,12 +306,17 @@ public class AccountActivity extends BaseMvpActivity<AccountPresenter,IAccountVi
 
     @Override
     public void getSuccess(UserBean result) {
-
+        if (result !=null){
+            CurrentUser.getInstance().login(result);
+            initUserInfo();
+            sendMsg(ProjectConstants.EVENT_UPDATE_USER_INFO,null);
+        }
     }
 
     @Override
     public void updateInfo(UserBean result) {
-
+        ToastHelper.showToast("修改成功");
+        getUserInfo();
     }
 
     @Override
@@ -317,4 +330,9 @@ public class AccountActivity extends BaseMvpActivity<AccountPresenter,IAccountVi
     }
 
 
+    private void getUserInfo(){
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("userid",CurrentUser.getInstance().getUserid());
+        mPresenter.getUserInfo(requestMap);
+    }
 }

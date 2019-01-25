@@ -61,7 +61,6 @@ public class CurrentUser extends UserBean{
             Log.e(TAG, "尼玛，流产了！！！");
         } else {
             PreferencesHelper.getInstance().putString(USER,json);
-
         }
         return born;
     }

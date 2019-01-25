@@ -72,7 +72,7 @@ public class AccountPresenter extends BaseMvpPresenter<IAccountView> implements 
             public void onNext(UserBean result) {
                 if (mMvpView!=null){
                     mMvpView.dismissProgressDialog();
-                    mMvpView.getSuccess(result);
+                    mMvpView.updateInfo(result);
                 }
             }
         });

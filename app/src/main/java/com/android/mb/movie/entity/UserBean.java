@@ -15,7 +15,7 @@ public class UserBean {
     private String nickname;
 
     public String getAccesstoken() {
-        return accesstoken;
+        return accesstoken == null ? "" : accesstoken;
     }
 
     public void setAccesstoken(String accesstoken) {
@@ -23,7 +23,7 @@ public class UserBean {
     }
 
     public String getUserid() {
-        return userid;
+        return userid == null ? "" : userid;
     }
 
     public void setUserid(String userid) {
@@ -31,7 +31,7 @@ public class UserBean {
     }
 
     public String getPhone() {
-        return phone;
+        return phone == null ? "" : phone;
     }
 
     public void setPhone(String phone) {
@@ -47,7 +47,7 @@ public class UserBean {
     }
 
     public String getSexText() {
-        return sexText;
+        return sexText == null ? "" : sexText;
     }
 
     public void setSexText(String sexText) {
@@ -61,7 +61,6 @@ public class UserBean {
     public void setUserType(int userType) {
         this.userType = userType;
     }
-
 
     public boolean isManager() {
         return manager;
@@ -80,7 +79,7 @@ public class UserBean {
     }
 
     public String getAvatar_url() {
-        return avatar_url;
+        return avatar_url == null ? "" : avatar_url;
     }
 
     public void setAvatar_url(String avatar_url) {
@@ -88,7 +87,7 @@ public class UserBean {
     }
 
     public String getNickname() {
-        return Helper.isEmpty(nickname)?phone:nickname;
+        return Helper.isEmpty(nickname) ? phone : nickname;
     }
 
     public void setNickname(String nickname) {

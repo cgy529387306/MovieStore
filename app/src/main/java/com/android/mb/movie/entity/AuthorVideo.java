@@ -1,6 +1,7 @@
 package com.android.mb.movie.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorVideo implements Serializable{
@@ -13,7 +14,7 @@ public class AuthorVideo implements Serializable{
     private List<Video> videos;
 
     public String getIcon() {
-        return icon;
+        return icon == null ? "" : icon;
     }
 
     public void setIcon(String icon) {
@@ -21,7 +22,7 @@ public class AuthorVideo implements Serializable{
     }
 
     public String getId() {
-        return id;
+        return id == null ? "" : id;
     }
 
     public void setId(String id) {
@@ -29,7 +30,7 @@ public class AuthorVideo implements Serializable{
     }
 
     public String getIntros() {
-        return intros;
+        return intros == null ? "" : intros;
     }
 
     public void setIntros(String intros) {
@@ -37,7 +38,7 @@ public class AuthorVideo implements Serializable{
     }
 
     public String getName() {
-        return name;
+        return name == null ? "" : name;
     }
 
     public void setName(String name) {
@@ -53,6 +54,9 @@ public class AuthorVideo implements Serializable{
     }
 
     public List<Video> getVideos() {
+        if (videos == null) {
+            return new ArrayList<>();
+        }
         return videos;
     }
 

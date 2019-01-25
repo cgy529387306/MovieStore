@@ -7,31 +7,39 @@ import java.io.Serializable;
  *
  */
 public class Advert implements Serializable{
-	private String aId;
+	private String id;
 	private String coverUrl;
 	private String redirectUrl;
 	private String desc;
-	public String getAId() {
-		return aId;
+
+	public String getId() {
+		return id == null ? "" : id;
 	}
-	public void setAId(String id) {
-		aId = id;
+
+	public void setId(String id) {
+		this.id = id;
 	}
+
 	public String getCoverUrl() {
-		return coverUrl;
+		return coverUrl == null ? "" : coverUrl;
 	}
+
 	public void setCoverUrl(String coverUrl) {
 		this.coverUrl = coverUrl;
 	}
+
 	public String getRedirectUrl() {
-		return redirectUrl;
+		return redirectUrl == null ? "" : redirectUrl;
 	}
+
 	public void setRedirectUrl(String redirectUrl) {
 		this.redirectUrl = redirectUrl;
 	}
+
 	public String getDesc() {
-		return desc;
+		return desc == null ? "" : desc;
 	}
+
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}

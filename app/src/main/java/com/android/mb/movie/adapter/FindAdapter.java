@@ -5,6 +5,7 @@ import android.widget.ImageView;
 
 import com.android.mb.movie.R;
 import com.android.mb.movie.constants.ProjectConstants;
+import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.utils.ProjectHelper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -19,7 +20,7 @@ import java.util.List;
 /**
  * Created by necer on 2017/6/7.
  */
-public class FindAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
+public class FindAdapter extends BaseQuickAdapter<Video, BaseViewHolder> {
     public final static String TAG = "RecyclerViewList";
 
     private GSYVideoOptionBuilder mVideoOptionBuilder;
@@ -30,15 +31,15 @@ public class FindAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, String item) {
+    protected void convert(BaseViewHolder helper, Video item) {
         StandardGSYVideoPlayer videoPlayer = helper.getView(R.id.video_player);
         ImageView imageView = new ImageView(mContext);
-        ProjectHelper.loadImageUrl(imageView, ProjectConstants.TEST_IMAGE_URL);
+        ProjectHelper.loadImageUrl(imageView, item.getCoverUrl());
         mVideoOptionBuilder
                 .setIsTouchWiget(false)
                 .setThumbImageView(imageView)
-                .setUrl("http://39.96.68.92:8080/upload/111.mp4")
-                .setVideoTitle(item)
+                .setUrl(item.getVideoUrl())
+                .setVideoTitle(item.getName())
                 .setCacheWithPlay(false)
                 .setRotateViewAuto(true)
                 .setLockLand(true)

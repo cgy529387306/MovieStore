@@ -41,4 +41,8 @@ public class ProjectHelper {
         return m.matches();
     }
 
+    public static String getCommonText(String data){
+        return data == null?"":data;
+    }
+
 }

@@ -1,12 +1,17 @@
 package com.android.mb.movie.service;
 
 import com.android.mb.movie.entity.Avatar;
+import com.android.mb.movie.entity.CommentListData;
 import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.HomeData;
 import com.android.mb.movie.entity.SpecialData;
+import com.android.mb.movie.entity.Tag;
 import com.android.mb.movie.entity.UserBean;
+import com.android.mb.movie.entity.Video;
+import com.android.mb.movie.entity.VideoListData;
 import com.android.mb.movie.retrofit.http.entity.HttpResult;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
@@ -102,12 +107,31 @@ public interface IScheduleService {
     @GET("/api/1.0/common/getSpecialData")
     Observable<HttpResult<SpecialData>> getSpecialData();
 
+
     /**
-     * videoId
+     * @return
+     */
+    @GET("/api/1.0/common/getTags")
+    Observable<HttpResult<List<Tag>>> getTags();
+
+
+    /**
+     * @return
+     */
+    @GET("/api/1.0/common/getFindData")
+    Observable<HttpResult<VideoListData>> getFindData(@QueryMap Map<String,Object> requestMap);
+
+    /**
+     * @return
+     */
+    @GET("/api/1.0/common/queryVideos")
+    Observable<HttpResult<VideoListData>> queryVideos(@QueryMap Map<String,Object> requestMap);
+
+    /**
      * @return
      */
     @GET("/api/1.0/common/praise")
-    Observable<HttpResult<SpecialData>> praise(@QueryMap Map<String,Object> requestMap);
+    Observable<HttpResult<Object>> praise(@QueryMap Map<String,Object> requestMap);
 
     /**
      * videoId
@@ -115,12 +139,12 @@ public interface IScheduleService {
      * @return
      */
     @GET("/api/1.0/common/comment")
-    Observable<HttpResult<SpecialData>> comment(@QueryMap Map<String,Object> requestMap);
+    Observable<HttpResult<Object>> comment(@QueryMap Map<String,Object> requestMap);
 
     /**
      * videoId
      * @return
      */
     @GET("/api/1.0/common/getVideoComments")
-    Observable<HttpResult<SpecialData>> getVideoComments(@QueryMap Map<String,Object> requestMap);
+    Observable<HttpResult<CommentListData>> getVideoComments(@QueryMap Map<String,Object> requestMap);
 }

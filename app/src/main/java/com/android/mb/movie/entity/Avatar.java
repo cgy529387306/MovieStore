@@ -1,6 +1,8 @@
 package com.android.mb.movie.entity;
 
-public class Avatar {
+import java.io.Serializable;
+
+public class Avatar implements Serializable{
 
     /**
      * avatar_large : http://39.96.68.92:8080/res/file/avatar/2019/01/15/00000001/thumb.400x400.png?nocache=1548320151003
@@ -14,8 +16,9 @@ public class Avatar {
     private String avatar_org;
     private String avatar_small;
 
+
     public String getAvatar_large() {
-        return avatar_large;
+        return avatar_large == null ? "" : avatar_large;
     }
 
     public void setAvatar_large(String avatar_large) {
@@ -23,7 +26,7 @@ public class Avatar {
     }
 
     public String getAvatar_hd() {
-        return avatar_hd;
+        return avatar_hd == null ? "" : avatar_hd;
     }
 
     public void setAvatar_hd(String avatar_hd) {
@@ -31,7 +34,7 @@ public class Avatar {
     }
 
     public String getAvatar_org() {
-        return avatar_org;
+        return avatar_org == null ? "" : avatar_org;
     }
 
     public void setAvatar_org(String avatar_org) {
@@ -39,7 +42,7 @@ public class Avatar {
     }
 
     public String getAvatar_small() {
-        return avatar_small;
+        return avatar_small == null ? "" : avatar_small;
     }
 
     public void setAvatar_small(String avatar_small) {

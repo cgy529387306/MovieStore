@@ -31,6 +31,7 @@ import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.interfaces.ISearchView;
 import com.android.mb.movie.widget.taglayout.FlowTagLayout;
+import com.android.mb.movie.widget.taglayout.OnTagClickListener;
 import com.android.mb.movie.widget.taglayout.OnTagSelectListener;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -87,8 +88,6 @@ public class SearchActivity extends BaseMvpActivity<SearchPresenter,
         mEtSearch = findViewById(R.id.et_search);
         mTagHistory = findViewById(R.id.tagHistory);
         mTagHot = findViewById(R.id.tagHot);
-        mTagHistory.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_SINGLE);
-        mTagHot.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_SINGLE);
 
         mHistoryAdapter = new TagAdapter<>(this);
         mTagHistory.setAdapter(mHistoryAdapter);
@@ -137,33 +136,27 @@ public class SearchActivity extends BaseMvpActivity<SearchPresenter,
                 return false;
             }
         });
-        mTagHistory.setOnTagSelectListener(new OnTagSelectListener() {
+        mTagHistory.setOnTagClickListener(new OnTagClickListener() {
             @Override
-            public void onItemSelect(FlowTagLayout parent, List<Integer> selectedList) {
-                if (Helper.isNotEmpty(selectedList)){
-                    int position = selectedList.get(0);
-                    Search search = (Search) mTagHistory.getAdapter().getItem(position);
-                    if (search!=null && Helper.isNotEmpty(search.getKeyWord())){
-                        mEtSearch.setText(search.getKeyWord());
-                        mEtSearch.setSelection(search.getKeyWord().length());
-                        mCurrentPage = 1;
-                        getListFormServer();
-                    }
+            public void onItemClick(FlowTagLayout parent, View view, int position) {
+                Search search = (Search) mTagHistory.getAdapter().getItem(position);
+                if (search!=null && Helper.isNotEmpty(search.getKeyWord())){
+                    mEtSearch.setText(search.getKeyWord());
+                    mEtSearch.setSelection(search.getKeyWord().length());
+                    mCurrentPage = 1;
+                    getListFormServer();
                 }
             }
         });
-        mTagHot.setOnTagSelectListener(new OnTagSelectListener() {
+        mTagHot.setOnTagClickListener(new OnTagClickListener() {
             @Override
-            public void onItemSelect(FlowTagLayout parent, List<Integer> selectedList) {
-                if (Helper.isNotEmpty(selectedList)){
-                    int position = selectedList.get(0);
-                    String keyword = (String) mTagHistory.getAdapter().getItem(position);
-                    if (Helper.isNotEmpty(keyword)){
-                        mEtSearch.setText(keyword);
-                        mEtSearch.setSelection(keyword.length());
-                        mCurrentPage = 1;
-                        getListFormServer();
-                    }
+            public void onItemClick(FlowTagLayout parent, View view, int position) {
+                String keyword = (String) mTagHot.getAdapter().getItem(position);
+                if (Helper.isNotEmpty(keyword)){
+                    mEtSearch.setText(keyword);
+                    mEtSearch.setSelection(keyword.length());
+                    mCurrentPage = 1;
+                    getListFormServer();
                 }
             }
         });
@@ -216,12 +209,14 @@ public class SearchActivity extends BaseMvpActivity<SearchPresenter,
         dataSource.add("彩虹色");
         dataSource.add("牡丹色");
         mHotAdapter.onlyAddAll(dataSource);
+        mTagHot.clearAllOption();
     }
 
     private void getKeyword(){
         List<Search> searchList = mSearchDao.loadAll();
         Collections.reverse(searchList); // 倒序排列
         mHistoryAdapter.clearAndAddAll(searchList);
+        mTagHistory.clearAllOption();
     }
 
     private void addKeyword(){

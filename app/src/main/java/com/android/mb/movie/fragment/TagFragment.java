@@ -63,6 +63,7 @@ public class TagFragment extends BaseMvpFragment<TagPresenter,ITagView> implemen
         mHotAdapter = new TagAdapter<>(getActivity());
         mTagHot.setAdapter(mHotAdapter);
         mTagHot.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_MULTI);
+        mTagHot.clearAllOption();
 
         mRefreshLayout =  mRootView.findViewById(R.id.refreshLayout);
         mRecyclerView =  mRootView.findViewById(R.id.recyclerView);
@@ -112,6 +113,7 @@ public class TagFragment extends BaseMvpFragment<TagPresenter,ITagView> implemen
     @Override
     public void getSuccess(List<Tag> result) {
         mHotAdapter.onlyAddAll(result);
+        mTagHot.clearAllOption();
     }
 
     @Override

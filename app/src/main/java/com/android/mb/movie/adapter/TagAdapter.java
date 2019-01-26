@@ -23,6 +23,7 @@ public class TagAdapter<T> extends BaseAdapter implements OnInitSelectedPosition
     private final Context mContext;
     private final List<T> mDataList;
 
+
     public TagAdapter(Context context) {
         this.mContext = context;
         mDataList = new ArrayList<>();
@@ -48,6 +49,10 @@ public class TagAdapter<T> extends BaseAdapter implements OnInitSelectedPosition
         View view = LayoutInflater.from(mContext).inflate(R.layout.tag_item, null);
         TextView textView = (TextView) view.findViewById(R.id.tv_tag);
         T t = mDataList.get(position);
+        if (t instanceof String){
+            String tag = (String) t;
+            textView.setText(tag);
+        }
         if (t instanceof Tag){
             Tag tag = (Tag) t;
             textView.setText(tag.getName());

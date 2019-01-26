@@ -11,4 +11,6 @@ import java.util.List;
  */
 public interface ITagView extends BaseMvpView {
     void getSuccess(List<Tag> result);
+
+    void querySuccess(VideoListData result);
 }

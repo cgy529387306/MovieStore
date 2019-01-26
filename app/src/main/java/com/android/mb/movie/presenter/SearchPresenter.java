@@ -33,8 +33,11 @@ public class SearchPresenter extends BaseMvpPresenter<ISearchView> implements IS
 
             @Override
             public void onError(Throwable e) {
-                if(mMvpView!=null && !TextUtils.isEmpty(e.getMessage())){
-                    mMvpView.showToastMessage(e.getMessage());
+                if(mMvpView!=null){
+                    mMvpView.dismissProgressDialog();
+                    if (!TextUtils.isEmpty(e.getMessage())){
+                        mMvpView.showToastMessage(e.getMessage());
+                    }
                 }
             }
 
@@ -42,6 +45,7 @@ public class SearchPresenter extends BaseMvpPresenter<ISearchView> implements IS
             public void onNext(VideoListData result) {
                 if (mMvpView!=null){
                     mMvpView.getSuccess(result);
+                    mMvpView.dismissProgressDialog();
                 }
             }
         });

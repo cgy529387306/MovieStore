@@ -137,25 +137,7 @@ public class AccountActivity extends BaseMvpActivity<AccountPresenter,IAccountVi
                     })
                     .show();
         }else if (id == R.id.btn_phone){
-            new MaterialDialog.Builder(mContext).title("请输入手机号").inputType(InputType.TYPE_CLASS_TEXT)
-                    .inputRangeRes(11, 11, R.color.base_brown).input("请输入手机号", "", new MaterialDialog.InputCallback() {
-                @Override
-                public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
 
-                }
-            }).positiveText("确定").negativeText("取消").onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    if (dialog.getInputEditText()!=null && Helper.isNotEmpty(dialog.getInputEditText().getText().toString())){
-                        String phone = dialog.getInputEditText().getText().toString();
-                        mTvPhone.setText(phone);
-                        Map<String, Object> requestMap = new HashMap<>();
-                        requestMap.put("phone",phone);
-                        requestMap.put("userid",CurrentUser.getInstance().getUserid());
-                        mPresenter.updateInfo(requestMap);
-                    }
-                }
-            }).show();
         }else if (id == R.id.btn_change_pwd){
 
         }else if (id == R.id.tv_exit){

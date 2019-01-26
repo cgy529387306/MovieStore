@@ -18,7 +18,7 @@ public class Video implements Serializable{
 	private float score; //评分
 	private int playCount; //播放数
 	private int praiseCount; //点赞数
-	private String tag; //标签
+//	private String tag; //标签
 
 	public String getId() {
 		return id == null ? "" : id;
@@ -108,11 +108,11 @@ public class Video implements Serializable{
 		this.praiseCount = praiseCount;
 	}
 
-	public String getTag() {
-		return tag == null ? "" : tag;
-	}
-
-	public void setTag(String tag) {
-		this.tag = tag;
-	}
+//	public String getTag() {
+//		return tag == null ? "" : tag;
+//	}
+//
+//	public void setTag(String tag) {
+//		this.tag = tag;
+//	}
 }

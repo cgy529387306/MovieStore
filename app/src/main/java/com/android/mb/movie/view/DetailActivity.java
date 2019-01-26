@@ -3,14 +3,20 @@ package com.android.mb.movie.view;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.android.mb.movie.R;
+import com.android.mb.movie.adapter.CommentAdapter;
+import com.android.mb.movie.adapter.MovieListAdapter;
 import com.android.mb.movie.base.BaseActivity;
 import com.android.mb.movie.base.BaseMvpActivity;
 import com.android.mb.movie.constants.ProjectConstants;
@@ -18,11 +24,17 @@ import com.android.mb.movie.entity.CommentListData;
 import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.entity.VideoListData;
 import com.android.mb.movie.presenter.DetailPresenter;
+import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.video.LandLayoutVideo;
 import com.android.mb.movie.video.listener.AppBarStateChangeListener;
 import com.android.mb.movie.view.interfaces.IDetailView;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
@@ -33,6 +45,7 @@ import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +53,7 @@ import java.util.Map;
  * CollapsingToolbarLayout的播放页面
  * 额，有点懒，细节上没处理
  */
-public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView> implements IDetailView {
+public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView> implements IDetailView , View.OnClickListener,BaseQuickAdapter.OnItemClickListener,OnRefreshListener, OnLoadMoreListener {
 
     private boolean mIsPlay;
     private boolean mIsPause;
@@ -53,6 +66,13 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     private CollapsingToolbarLayout mToolbarLayout;
     private AppBarStateChangeListener.State curState;
     private Video mVideoInfo;
+
+    private SmartRefreshLayout mRefreshLayout;
+    private RecyclerView mRecyclerView;
+    private CommentAdapter mAdapter;
+    private int mCurrentPage = 1;
+
+    private ImageView mBtnFavor,mBtnDownload,mBtnShare;
     @Override
     public void onBackPressed() {
 
@@ -136,11 +156,34 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         mToolbarLayout.setTitle(mVideoInfo.getName());
         mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
         mAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener);
+        mRefreshLayout = findViewById(R.id.refreshLayout);
+        mRefreshLayout.setEnableRefresh(false);
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new CommentAdapter(R.layout.item_comment, new ArrayList());
+        mRecyclerView.setAdapter(mAdapter);
+        mBtnFavor = findViewById(R.id.btn_favor);
+        mBtnDownload = findViewById(R.id.btn_download);
+        mBtnShare = findViewById(R.id.btn_share);
     }
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        initData();
+        getComments();
+    }
 
+    @Override
+    protected void setListener() {
+//        mRefreshLayout.setOnRefreshListener(this);
+        mRefreshLayout.setOnLoadMoreListener(this);
+        mAdapter.setOnItemClickListener(this);
+        mBtnFavor.setOnClickListener(this);
+        mBtnDownload.setOnClickListener(this);
+        mBtnShare.setOnClickListener(this);
+    }
+
+    private void initData(){
         //增加封面
         ImageView imageView = new ImageView(this);
         ProjectHelper.loadImageUrl(imageView,mVideoInfo.getCoverUrl());
@@ -230,13 +273,6 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         });
 
         mDetailPlayer.setLinkScroll(true);
-        submitComment("test  ddd");
-        submitPraise();
-    }
-
-    @Override
-    protected void setListener() {
-
     }
 
     private void resolveNormalVideoUI() {
@@ -306,7 +342,24 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
 
     @Override
     public void getVideoComments(CommentListData result) {
-
+        if (result!=null){
+            if (mCurrentPage == 1){
+                //首页
+                mRefreshLayout.finishRefresh();
+                mAdapter.setNewData(result.getList());
+                mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
+                if (result.isEnd()){
+                    mRefreshLayout.finishLoadMoreWithNoMoreData();
+                }
+            }else{
+                if (Helper.isEmpty(result)){
+                    mRefreshLayout.finishLoadMoreWithNoMoreData();
+                }else{
+                    mAdapter.addData(result.getList());
+                    mRefreshLayout.finishLoadMore();
+                }
+            }
+        }
     }
 
     private void submitComment(String content){
@@ -325,10 +378,35 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     private void getComments(){
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("videoId", mVideoInfo.getId());
-        requestMap.put("currentPage",1);
+        requestMap.put("currentPage",mCurrentPage);
         requestMap.put("pageSize", ProjectConstants.PAGE_SIZE);
         mPresenter.getVideoComments(requestMap);
     }
 
 
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+    }
+
+    @Override
+    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+        mCurrentPage = 1;
+        getComments();
+
+    }
+
+    @Override
+    public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+        mCurrentPage++;
+        getComments();
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        if (id == R.id.btn_favor){
+            submitPraise();
+        }
+    }
 }

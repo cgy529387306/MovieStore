@@ -48,4 +48,33 @@ public class TagPresenter extends BaseMvpPresenter<ITagView> implements ITagPres
             }
         });
     }
+
+    @Override
+    public void queryVideos(Map<String, Object> requestMap) {
+        Observable observable = ScheduleMethods.getInstance().queryVideos(requestMap);
+        toSubscribe(observable,  new Subscriber<VideoListData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if(mMvpView!=null){
+                    mMvpView.dismissProgressDialog();
+                    if (!TextUtils.isEmpty(e.getMessage())){
+                        mMvpView.showToastMessage(e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onNext(VideoListData result) {
+                if (mMvpView!=null){
+                    mMvpView.querySuccess(result);
+                    mMvpView.dismissProgressDialog();
+                }
+            }
+        });
+    }
 }

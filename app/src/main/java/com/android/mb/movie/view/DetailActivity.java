@@ -10,10 +10,13 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.CommentAdapter;
 import com.android.mb.movie.adapter.MovieListAdapter;
@@ -21,6 +24,7 @@ import com.android.mb.movie.base.BaseActivity;
 import com.android.mb.movie.base.BaseMvpActivity;
 import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.CommentListData;
+import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.entity.VideoListData;
 import com.android.mb.movie.presenter.DetailPresenter;
@@ -332,6 +336,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
 
     @Override
     public void comment(Object result) {
+        ToastHelper.showToast("评论成功");
         getComments();
     }
 
@@ -407,6 +412,22 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         int id = view.getId();
         if (id == R.id.btn_favor){
             submitPraise();
+        }else if (id == R.id.btn_share){
+            new MaterialDialog.Builder(mContext).title("请输入评论内容").inputType(InputType.TYPE_CLASS_TEXT)
+                    .inputRangeRes(2, 100, R.color.base_brown).input("请输入评论内容", "", new MaterialDialog.InputCallback() {
+                @Override
+                public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+
+                }
+            }).positiveText("确定").negativeText("取消").onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    if (dialog.getInputEditText()!=null && Helper.isNotEmpty(dialog.getInputEditText().getText().toString())){
+                        String content = dialog.getInputEditText().getText().toString();
+                        submitComment(content);
+                    }
+                }
+            }).show();
         }
     }
 }

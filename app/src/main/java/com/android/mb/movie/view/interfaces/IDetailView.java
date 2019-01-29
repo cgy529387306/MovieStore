@@ -13,5 +13,7 @@ public interface IDetailView extends BaseMvpView {
 
     void praise(Object result);
 
+    void watch(Object result);
+
     void getVideoComments(CommentListData result);
 }

@@ -10,5 +10,7 @@ public interface IDetailPresenter {
 
     void praise(Map<String, Object> requestMap);
 
+    void watch(Map<String, Object> requestMap);
+
     void getVideoComments(Map<String, Object> requestMap);
 }

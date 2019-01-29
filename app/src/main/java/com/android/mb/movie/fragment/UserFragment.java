@@ -10,6 +10,8 @@ import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.rxbus.Events;
 import com.android.mb.movie.utils.ImageUtils;
 import com.android.mb.movie.utils.NavigationHelper;
+import com.android.mb.movie.view.HistoryActivity;
+import com.android.mb.movie.view.LikeActivity;
 import com.android.mb.movie.view.LoginActivity;
 import com.android.mb.movie.view.SettingActivity;
 import com.android.mb.movie.widget.CircleImageView;
@@ -83,7 +85,7 @@ public class UserFragment extends BaseFragment implements View.OnClickListener{
             }
         }else if (id == R.id.rl_history){
             if (CurrentUser.getInstance().isLogin()){
-
+                NavigationHelper.startActivity(getActivity(), HistoryActivity.class,null,false);
             }else{
                 NavigationHelper.startActivity(getActivity(), LoginActivity.class,null,false);
             }
@@ -95,7 +97,7 @@ public class UserFragment extends BaseFragment implements View.OnClickListener{
             }
         }else if (id == R.id.rl_favor){
             if (CurrentUser.getInstance().isLogin()){
-
+                NavigationHelper.startActivity(getActivity(), LikeActivity.class,null,false);
             }else{
                 NavigationHelper.startActivity(getActivity(), LoginActivity.class,null,false);
             }

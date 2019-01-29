@@ -219,6 +219,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
                         //开始播放了才能旋转和全屏
                         mOrientationUtils.setEnable(true);
                         mIsPlay = true;
+                        submitWatch();
                     }
 
                     @Override
@@ -346,6 +347,11 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     }
 
     @Override
+    public void watch(Object result) {
+
+    }
+
+    @Override
     public void getVideoComments(CommentListData result) {
         if (result!=null){
             if (mCurrentPage == 1){
@@ -378,6 +384,12 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("videoId", mVideoInfo.getId());
         mPresenter.praise(requestMap);
+    }
+
+    private void submitWatch(){
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("videoId", mVideoInfo.getId());
+        mPresenter.watch(requestMap);
     }
 
     private void getComments(){

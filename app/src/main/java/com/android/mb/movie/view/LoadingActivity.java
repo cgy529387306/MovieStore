@@ -16,7 +16,7 @@ import com.android.mb.movie.utils.NavigationHelper;
  */
 
 public class LoadingActivity extends AppCompatActivity {
-    private static final int LOADING_TIME_OUT = 0;
+    private static final int LOADING_TIME_OUT = 1500;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // 去除信号栏

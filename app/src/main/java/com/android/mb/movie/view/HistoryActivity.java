@@ -32,6 +32,7 @@ import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.interfaces.IHistoryView;
 import com.android.mb.movie.view.interfaces.ISearchView;
+import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.android.mb.movie.widget.taglayout.FlowTagLayout;
 import com.android.mb.movie.widget.taglayout.OnTagClickListener;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -58,7 +59,7 @@ public class HistoryActivity extends BaseMvpActivity<HistoryPresenter,
     private MovieListAdapter mAdapter;
     private int mCurrentPage = 1;
     private LinearLayoutManager mLinearLayoutManager;
-
+    private boolean mIsEdit;
     @Override
     protected void loadIntent() {
 
@@ -75,11 +76,28 @@ public class HistoryActivity extends BaseMvpActivity<HistoryPresenter,
     }
 
     @Override
+    protected void onRightAction() {
+        super.onRightAction();
+        if (mIsEdit){
+            if (Helper.isEmpty(getVideoIds())){
+                ToastHelper.showToast("请选择删除项");
+            }else{
+                deleteHistory();
+            }
+        }else{
+            mIsEdit = true;
+            setRightText("删除");
+            mAdapter.setCanEdit(true);
+        }
+    }
+
+    @Override
     protected void bindViews() {
         mRefreshLayout = findViewById(R.id.refreshLayout);
         mRecyclerView = findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.addItemDecoration(new MyDividerItemDecoration(this,MyDividerItemDecoration.VERTICAL_LIST));
         mAdapter = new MovieListAdapter(R.layout.item_movie_list, new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -112,6 +130,7 @@ public class HistoryActivity extends BaseMvpActivity<HistoryPresenter,
         if (result!=null){
             if (mCurrentPage == 1){
                 //首页
+                setRightText(result.getRowCount()==0?"":"编辑");
                 mRefreshLayout.finishRefresh();
                 mAdapter.setNewData(result.getList());
                 mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
@@ -129,6 +148,16 @@ public class HistoryActivity extends BaseMvpActivity<HistoryPresenter,
         }
     }
 
+    @Override
+    public void deleteSuccess(Object result) {
+        mCurrentPage = 1;
+        getListFormServer();
+        setRightText("编辑");
+        mIsEdit = false;
+        mAdapter.setCanEdit(false);
+        ToastHelper.showToast("删除成功");
+    }
+
     private void getListFormServer(){
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("currentPage",mCurrentPage);
@@ -136,12 +165,18 @@ public class HistoryActivity extends BaseMvpActivity<HistoryPresenter,
         mPresenter.getHistory(requestMap);
     }
 
+    private void deleteHistory(){
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("videoIds",getVideoIds());
+        mPresenter.delHistory(requestMap);
+    }
+
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         Video video = mAdapter.getItem(position);
         Bundle bundle = new Bundle();
         bundle.putSerializable("videoInfo",video);
-        NavigationHelper.startActivity((Activity) mContext, DetailActivity.class,bundle,false);
+        NavigationHelper.startActivity( mContext, DetailActivity.class,bundle,false);
     }
 
     @Override
@@ -154,5 +189,16 @@ public class HistoryActivity extends BaseMvpActivity<HistoryPresenter,
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         mCurrentPage = 1;
         getListFormServer();
+    }
+
+    private String getVideoIds(){
+        StringBuilder sb = new StringBuilder();
+        List<Video> dataList = mAdapter.getData();
+        for (Video video:dataList){
+            if (video.isSelect()){
+                sb.append(video.getId()).append(",");
+            }
+        }
+        return sb.toString();
     }
 }

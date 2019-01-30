@@ -49,4 +49,32 @@ public class HistoryPresenter extends BaseMvpPresenter<IHistoryView> implements 
             }
         });
     }
+
+    @Override
+    public void delHistory(Map<String, Object> requestMap) {
+        Observable observable = ScheduleMethods.getInstance().delHistory(requestMap);
+        toSubscribe(observable,  new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if(mMvpView!=null){
+                    mMvpView.dismissProgressDialog();
+                    if (!TextUtils.isEmpty(e.getMessage())){
+                        mMvpView.showToastMessage(e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onNext(Object result) {
+                if (mMvpView!=null){
+                    mMvpView.deleteSuccess(result);
+                }
+            }
+        });
+    }
 }

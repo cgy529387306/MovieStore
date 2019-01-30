@@ -7,4 +7,6 @@ import java.util.Map;
  */
 public interface ILikePresenter {
     void getLike(Map<String, Object> requestMap);
+
+    void delLike(Map<String, Object> requestMap);
 }

@@ -12,4 +12,8 @@ import java.util.List;
  */
 public interface IFindView extends BaseMvpView {
     void getSuccess(VideoListData result);
+
+    void praise(Object result);
+
+    void watch(Object result);
 }

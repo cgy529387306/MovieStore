@@ -49,4 +49,55 @@ public class FindPresenter extends BaseMvpPresenter<IFindView> implements IFindP
             }
         });
     }
+
+    @Override
+    public void praise(Map<String, Object> requestMap) {
+        Observable observable = ScheduleMethods.getInstance().praise(requestMap);
+        toSubscribe(observable,  new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if(mMvpView!=null && !TextUtils.isEmpty(e.getMessage())){
+                    mMvpView.showToastMessage(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onNext(Object result) {
+                if (mMvpView!=null){
+                    mMvpView.praise(result);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void watch(Map<String, Object> requestMap) {
+        Observable observable = ScheduleMethods.getInstance().watch(requestMap);
+        toSubscribe(observable,  new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if(mMvpView!=null && !TextUtils.isEmpty(e.getMessage())){
+                    mMvpView.showToastMessage(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onNext(Object result) {
+                if (mMvpView!=null){
+                    mMvpView.watch(result);
+                }
+            }
+        });
+    }
+
 }

@@ -59,7 +59,9 @@
         <activity android:name=".view.LikeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
-
+        <activity android:name=".base.BaseWebViewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
         <meta-data
             android:name="android.max_aspect"
             android:value="2.4" />

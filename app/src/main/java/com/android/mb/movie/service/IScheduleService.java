@@ -145,7 +145,7 @@ public interface IScheduleService {
     /**
      * @return
      */
-    @GET("/api/1.0/common/getHistory")
+    @GET("/api/1.0/common/getHistorys")
     Observable<HttpResult<VideoListData>> getHistory(@QueryMap Map<String,Object> requestMap);
 
     /**
@@ -153,6 +153,18 @@ public interface IScheduleService {
      */
     @GET("/api/1.0/common/getLikeVideos")
     Observable<HttpResult<VideoListData>> getLike(@QueryMap Map<String,Object> requestMap);
+
+    /**
+     * @return
+     */
+    @GET("/api/1.0/common/delHistorys")
+    Observable<HttpResult<Object>> delHistory(@QueryMap Map<String,Object> requestMap);
+
+    /**
+     * @return
+     */
+    @GET("/api/1.0/common/delLikeVideos")
+    Observable<HttpResult<Object>> delLike(@QueryMap Map<String,Object> requestMap);
 
     /**
      * videoId

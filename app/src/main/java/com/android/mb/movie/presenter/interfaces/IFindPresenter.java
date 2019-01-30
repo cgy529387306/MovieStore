@@ -7,4 +7,8 @@ import java.util.Map;
  */
 public interface IFindPresenter {
     void getFindData(Map<String,Object> requestMap);
+
+    void praise(Map<String, Object> requestMap);
+
+    void watch(Map<String, Object> requestMap);
 }

@@ -201,12 +201,12 @@
                        android:id="@+id/rl_history"
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
-                       android:gravity="center_vertical"
                        android:padding="15dp">
                        <ImageView
                            android:id="@+id/iv_my_history"
                            android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
+                           android:layout_centerVertical="true"
                            android:src="@mipmap/ic_my_history"/>
                        <TextView
                            android:id="@+id/tv_my_history"
@@ -214,7 +214,6 @@
                            android:layout_height="wrap_content"
                            android:layout_toRightOf="@id/iv_my_history"
                            android:layout_marginLeft="10dp"
-                           android:layout_marginTop="10dp"
                            android:textStyle="bold"
                            android:singleLine="true"
                            android:gravity="center"
@@ -227,7 +226,7 @@
                            android:layout_toRightOf="@id/iv_my_history"
                            android:layout_below="@id/tv_my_history"
                            android:layout_marginLeft="10dp"
-                           android:layout_marginTop="10dp"
+                           android:layout_marginTop="6dp"
                            android:singleLine="true"
                            android:gravity="center"
                            android:textColor="@color/base_gray"
@@ -248,12 +247,12 @@
                        android:id="@+id/rl_cache"
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
-                       android:gravity="center_vertical"
                        android:padding="15dp">
                        <ImageView
                            android:id="@+id/iv_my_cache"
                            android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
+                           android:layout_centerVertical="true"
                            android:src="@mipmap/ic_my_download"/>
                        <TextView
                            android:id="@+id/tv_my_cache"
@@ -261,7 +260,6 @@
                            android:layout_height="wrap_content"
                            android:layout_toRightOf="@id/iv_my_cache"
                            android:layout_marginLeft="10dp"
-                           android:layout_marginTop="10dp"
                            android:textStyle="bold"
                            android:singleLine="true"
                            android:gravity="center"
@@ -274,7 +272,7 @@
                            android:layout_toRightOf="@id/iv_my_cache"
                            android:layout_below="@id/tv_my_cache"
                            android:layout_marginLeft="10dp"
-                           android:layout_marginTop="10dp"
+                           android:layout_marginTop="6dp"
                            android:singleLine="true"
                            android:gravity="center"
                            android:textColor="@color/base_gray"
@@ -295,12 +293,12 @@
                        android:id="@+id/rl_favor"
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
-                       android:gravity="center_vertical"
                        android:padding="15dp">
                        <ImageView
                            android:id="@+id/iv_my_favor"
                            android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
+                           android:layout_centerVertical="true"
                            android:src="@mipmap/ic_my_favor"/>
                        <TextView
                            android:id="@+id/tv_my_favor"
@@ -308,7 +306,6 @@
                            android:layout_height="wrap_content"
                            android:layout_toRightOf="@id/iv_my_favor"
                            android:layout_marginLeft="10dp"
-                           android:layout_marginTop="10dp"
                            android:textStyle="bold"
                            android:singleLine="true"
                            android:gravity="center"
@@ -321,7 +318,7 @@
                            android:layout_toRightOf="@id/iv_my_favor"
                            android:layout_below="@id/tv_my_favor"
                            android:layout_marginLeft="10dp"
-                           android:layout_marginTop="10dp"
+                           android:layout_marginTop="6dp"
                            android:singleLine="true"
                            android:gravity="center"
                            android:textColor="@color/base_gray"
@@ -337,8 +334,8 @@
                </LinearLayout>
                <com.android.mb.movie.widget.CircleImageView
                    android:id="@+id/iv_avatar"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
+                   android:layout_width="88dp"
+                   android:layout_height="88dp"
                    android:layout_gravity="center_horizontal"
                    android:src="@mipmap/ic_head_s"/>
            </FrameLayout>

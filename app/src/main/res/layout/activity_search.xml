@@ -7,7 +7,7 @@
         android:layout_height="50dp"
         android:background="@color/base_theme"
         android:gravity="center_vertical">
-        <com.android.mb.movie.widget.ClearEditText
+        <com.android.mb.movie.widget.ContainsEmojiEditText
             android:id="@+id/et_search"
             android:layout_width="0dp"
             android:layout_weight="1"

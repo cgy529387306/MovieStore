@@ -64,4 +64,11 @@ public class ProjectConstants {
     public static final String KEY_HAS_NEW_NOTIFY = "KEY_HAS_NEW_NOTIFY";
 
     public static final String KEY_SCHEDULE_DRAFT = "KEY_SCHEDULE_DRAFT";
+
+
+    //BUNDLE
+    public static final String KEY_WEB_DETAIL_TITLE = "KEY_WEB_DETAIL_TITLE";
+
+    public static final String KEY_WEB_DETAIL_URL = "KEY_WEB_DETAIL_URL";
+
 }

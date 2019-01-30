@@ -26,10 +26,12 @@ import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.entity.VideoListData;
 import com.android.mb.movie.greendao.SearchDao;
 import com.android.mb.movie.presenter.SearchPresenter;
+import com.android.mb.movie.utils.AppHelper;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.interfaces.ISearchView;
+import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.android.mb.movie.widget.taglayout.FlowTagLayout;
 import com.android.mb.movie.widget.taglayout.OnTagClickListener;
 import com.android.mb.movie.widget.taglayout.OnTagSelectListener;
@@ -99,6 +101,7 @@ public class SearchActivity extends BaseMvpActivity<SearchPresenter,
         mRecyclerView = findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.addItemDecoration(new MyDividerItemDecoration(this,MyDividerItemDecoration.VERTICAL_LIST));
         mAdapter = new MovieListAdapter(R.layout.item_movie_list, new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -294,5 +297,11 @@ public class SearchActivity extends BaseMvpActivity<SearchPresenter,
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         mCurrentPage = 1;
         getListFormServer();
+    }
+
+    @Override
+    protected void onDestroy() {
+        AppHelper.hideSoftInputFromWindow(mEtSearch);
+        super.onDestroy();
     }
 }

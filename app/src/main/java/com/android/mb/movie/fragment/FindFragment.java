@@ -1,5 +1,6 @@
 package com.android.mb.movie.fragment;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,10 +11,13 @@ import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.FindAdapter;
 import com.android.mb.movie.base.BaseMvpFragment;
 import com.android.mb.movie.constants.ProjectConstants;
+import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.entity.VideoListData;
 import com.android.mb.movie.presenter.FindPresenter;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.NavigationHelper;
+import com.android.mb.movie.utils.ToastHelper;
+import com.android.mb.movie.view.DetailActivity;
 import com.android.mb.movie.view.SearchActivity;
 import com.android.mb.movie.view.interfaces.IFindView;
 import com.android.mb.movie.widget.MyDividerItemDecoration;
@@ -32,7 +36,7 @@ import java.util.Map;
 /**
  * Created by cgy on 16/7/18.
  */
-public class FindFragment extends BaseMvpFragment<FindPresenter,IFindView> implements IFindView, View.OnClickListener,BaseQuickAdapter.OnItemClickListener,OnRefreshListener, OnLoadMoreListener {
+public class FindFragment extends BaseMvpFragment<FindPresenter,IFindView> implements IFindView, View.OnClickListener,BaseQuickAdapter.OnItemClickListener,OnRefreshListener, OnLoadMoreListener,FindAdapter.OnOperateListener {
 
     private SmartRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -52,7 +56,7 @@ public class FindFragment extends BaseMvpFragment<FindPresenter,IFindView> imple
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
-        mAdapter = new FindAdapter(R.layout.item_test, new ArrayList());
+        mAdapter = new FindAdapter(R.layout.item_find, new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -63,6 +67,7 @@ public class FindFragment extends BaseMvpFragment<FindPresenter,IFindView> imple
 
     @Override
     protected void setListener() {
+        mAdapter.setOperateListener(this);
         mRootView.findViewById(R.id.iv_search).setOnClickListener(this);
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setOnLoadMoreListener(this);
@@ -101,8 +106,10 @@ public class FindFragment extends BaseMvpFragment<FindPresenter,IFindView> imple
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        if (mAdapter.getItem(position)!=null){
-        }
+        Video video = mAdapter.getItem(position);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("videoInfo",video);
+        NavigationHelper.startActivity(mContext, DetailActivity.class,bundle,false);
     }
 
 
@@ -184,6 +191,47 @@ public class FindFragment extends BaseMvpFragment<FindPresenter,IFindView> imple
                 }
             }
         }
+    }
 
+    @Override
+    public void praise(Object result) {
+        ToastHelper.showToast("收藏成功");
+    }
+
+    @Override
+    public void watch(Object result) {
+
+    }
+
+    @Override
+    public void onPlayListener(Video video) {
+        submitWatch(video);
+    }
+
+    @Override
+    public void onFavor(Video video) {
+        submitPraise(video);
+    }
+
+    @Override
+    public void onDownload(Video video) {
+
+    }
+
+    @Override
+    public void onShare(Video video) {
+
+    }
+
+    private void submitPraise(Video video){
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("videoId", video.getId());
+        mPresenter.praise(requestMap);
+    }
+
+    private void submitWatch(Video video){
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("videoId", video.getId());
+        mPresenter.watch(requestMap);
     }
 }

@@ -1,6 +1,7 @@
 package com.android.mb.movie.fragment;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,8 @@ import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.CateAdapter;
 import com.android.mb.movie.adapter.MovieGridAdapter;
 import com.android.mb.movie.base.BaseMvpFragment;
+import com.android.mb.movie.base.BaseWebViewActivity;
+import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.Advert;
 import com.android.mb.movie.entity.HomeData;
 import com.android.mb.movie.presenter.HomePresenter;
@@ -30,21 +33,24 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.youth.banner.Banner;
+import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * Created by cgy on 16/7/18.
  */
-public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> implements IHomeView, View.OnClickListener,BaseQuickAdapter.OnItemClickListener,OnRefreshListener, OnLoadMoreListener {
+public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> implements IHomeView, OnBannerListener,View.OnClickListener,BaseQuickAdapter.OnItemClickListener,OnRefreshListener, OnLoadMoreListener {
 
     private SmartRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
     private MovieGridAdapter mAdapter;
     private Banner mBanner;
     private GridView mGridCate;
+    private List<Advert> mAdvertList;
     @Override
     protected int getLayoutId() {
         return  R.layout.frg_main;
@@ -77,6 +83,7 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
         mRootView.findViewById(R.id.btn_history).setOnClickListener(this);
         mRefreshLayout.setOnRefreshListener(this);
         mAdapter.setOnItemClickListener(this);
+        mBanner.setOnBannerListener(this);
     }
 
     @Override
@@ -121,13 +128,24 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
             mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
             mRefreshLayout.finishLoadMoreWithNoMoreData();
             if (mBanner!=null && Helper.isNotEmpty(homeData.getAdvertList())){
+                mAdvertList = homeData.getAdvertList();
                 mBanner.setImageLoader(new GlideImageLoader());
-                mBanner.setImages(homeData.getAdvertList());
+                mBanner.setImages(mAdvertList);
                 mBanner.start();
             }
             if (mGridCate!=null && Helper.isNotEmpty(homeData.getCateList())){
                 mGridCate.setAdapter(new CateAdapter(getActivity(),homeData.getCateList()));
             }
+        }
+    }
+
+    @Override
+    public void OnBannerClick(int position) {
+        if (Helper.isNotEmpty(mAdvertList) && mAdvertList.size()>position){
+            Advert advert = mAdvertList.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putString(ProjectConstants.KEY_WEB_DETAIL_URL,advert.getRedirectUrl());
+            NavigationHelper.startActivity(mContext, BaseWebViewActivity.class,bundle,false);
         }
     }
 

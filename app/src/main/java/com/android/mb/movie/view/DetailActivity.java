@@ -13,27 +13,27 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.CommentAdapter;
-import com.android.mb.movie.adapter.MovieListAdapter;
-import com.android.mb.movie.base.BaseActivity;
 import com.android.mb.movie.base.BaseMvpActivity;
 import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.CommentListData;
-import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.Video;
-import com.android.mb.movie.entity.VideoListData;
 import com.android.mb.movie.presenter.DetailPresenter;
+import com.android.mb.movie.utils.AppHelper;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.video.LandLayoutVideo;
 import com.android.mb.movie.video.listener.AppBarStateChangeListener;
 import com.android.mb.movie.view.interfaces.IDetailView;
+import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -70,13 +70,15 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     private CollapsingToolbarLayout mToolbarLayout;
     private AppBarStateChangeListener.State curState;
     private Video mVideoInfo;
+    private TextView mTvPlayTimes;
 
     private SmartRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
     private CommentAdapter mAdapter;
     private int mCurrentPage = 1;
-
     private ImageView mBtnFavor,mBtnDownload,mBtnShare;
+    private EditText mEtContent;
+
     @Override
     public void onBackPressed() {
 
@@ -113,12 +115,13 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        AppHelper.hideSoftInputFromWindow(mEtContent);
         if (mIsPlay) {
             getCurPlay().release();
         }
         if (mOrientationUtils != null)
             mOrientationUtils.releaseListener();
+        super.onDestroy();
     }
 
 
@@ -139,7 +142,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_scrolling;
+        return R.layout.activity_detail;
     }
 
     @Override
@@ -149,26 +152,35 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
 
     @Override
     protected void bindViews() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mDetailPlayer = (LandLayoutVideo) findViewById(R.id.detail_player);
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.root_layout);
-        toolbar.setNavigationIcon(R.mipmap.ic_back_brown);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        mDetailPlayer = findViewById(R.id.detail_player);
+        mCoordinatorLayout = findViewById(R.id.root_layout);
+        toolbar.setNavigationIcon(R.mipmap.ic_video_back);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//左侧添加一个默认的返回图标
         getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
-        mToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        mToolbarLayout = findViewById(R.id.toolbar_layout);
         mToolbarLayout.setTitle(mVideoInfo.getName());
-        mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+        mAppBarLayout = findViewById(R.id.app_bar);
         mAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener);
         mRefreshLayout = findViewById(R.id.refreshLayout);
         mRefreshLayout.setEnableRefresh(false);
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new MyDividerItemDecoration(this,MyDividerItemDecoration.VERTICAL_LIST));
         mAdapter = new CommentAdapter(R.layout.item_comment, new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
         mBtnFavor = findViewById(R.id.btn_favor);
         mBtnDownload = findViewById(R.id.btn_download);
         mBtnShare = findViewById(R.id.btn_share);
+        mEtContent = findViewById(R.id.et_content);
+        mTvPlayTimes = findViewById(R.id.tv_times);
     }
 
     @Override
@@ -185,6 +197,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         mBtnFavor.setOnClickListener(this);
         mBtnDownload.setOnClickListener(this);
         mBtnShare.setOnClickListener(this);
+        findViewById(R.id.tv_confirm).setOnClickListener(this);
     }
 
     private void initData(){
@@ -192,7 +205,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         ImageView imageView = new ImageView(this);
         ProjectHelper.loadImageUrl(imageView,mVideoInfo.getCoverUrl());
         resolveNormalVideoUI();
-
+        mTvPlayTimes.setText(String.format(getString(R.string.play_times_pre), mVideoInfo.getPlayCount()));
         //外部辅助的旋转，帮助全屏
         mOrientationUtils = new OrientationUtils(this, mDetailPlayer);
         //初始化不打开外部的旋转
@@ -337,13 +350,15 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
 
     @Override
     public void comment(Object result) {
+        mEtContent.setText("");
+        AppHelper.hideSoftInputFromWindow(mEtContent);
         ToastHelper.showToast("评论成功");
         getComments();
     }
 
     @Override
     public void praise(Object result) {
-        ToastHelper.showToast("点赞成功");
+        ToastHelper.showToast("收藏成功");
     }
 
     @Override
@@ -425,21 +440,16 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         if (id == R.id.btn_favor){
             submitPraise();
         }else if (id == R.id.btn_share){
-            new MaterialDialog.Builder(mContext).title("请输入评论内容").inputType(InputType.TYPE_CLASS_TEXT)
-                    .inputRangeRes(2, 100, R.color.base_brown).input("请输入评论内容", "", new MaterialDialog.InputCallback() {
-                @Override
-                public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+            //TODO
 
-                }
-            }).positiveText("确定").negativeText("取消").onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    if (dialog.getInputEditText()!=null && Helper.isNotEmpty(dialog.getInputEditText().getText().toString())){
-                        String content = dialog.getInputEditText().getText().toString();
-                        submitComment(content);
-                    }
-                }
-            }).show();
+        }else if (id == R.id.tv_confirm){
+            String content = mEtContent.getText().toString().trim();
+            if (Helper.isEmpty(content)){
+               ToastHelper.showToast("请输入评论内容");
+            }else{
+                submitComment(content);
+            }
         }
     }
+
 }

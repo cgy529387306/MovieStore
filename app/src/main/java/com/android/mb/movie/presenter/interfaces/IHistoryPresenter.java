@@ -7,4 +7,6 @@ import java.util.Map;
  */
 public interface IHistoryPresenter {
     void getHistory(Map<String, Object> requestMap);
+
+    void delHistory(Map<String, Object> requestMap);
 }

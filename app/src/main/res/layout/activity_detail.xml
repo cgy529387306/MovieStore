@@ -46,5 +46,39 @@
 
     <include layout="@layout/content_scrolling" />
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/base_theme"
+        android:layout_gravity="bottom"
+        app:layout_behavior="@string/behavior_footer">
+        <com.android.mb.movie.widget.ContainsEmojiEditText
+            android:id="@+id/et_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="34dp"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:gravity="center_vertical"
+            android:hint="输入评论内容"
+            android:textColorHint="@color/base_gray"
+            android:background="@drawable/shape_put"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:textColor="@color/base_orange"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:gravity="center"
+            android:text="提交"
+            android:padding="10dp"
+            android:textColor="@color/base_orange"
+            android:textSize="14sp" />
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

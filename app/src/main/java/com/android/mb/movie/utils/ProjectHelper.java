@@ -17,14 +17,14 @@ public class ProjectHelper {
 
     public static void loadImageUrl(ImageView imageView, String url) {
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageResource(R.mipmap.bg_defaults);
+        imageView.setImageResource(R.mipmap.bg_image_defaults);
         Glide.with(imageView.getContext())
                 .setDefaultRequestOptions(
                         new RequestOptions()
                                 .frame(3000000)
                                 .centerCrop()
-                                .error(R.mipmap.bg_defaults)
-                                .placeholder(R.mipmap.bg_defaults))
+                                .error(R.mipmap.bg_image_defaults)
+                                .placeholder(R.mipmap.bg_image_defaults))
                 .load(url)
                 .into(imageView);
     }

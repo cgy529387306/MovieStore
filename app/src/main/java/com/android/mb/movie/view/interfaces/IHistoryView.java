@@ -8,4 +8,6 @@ import com.android.mb.movie.entity.VideoListData;
  */
 public interface IHistoryView extends BaseMvpView {
     void getSuccess(VideoListData result);
+
+    void deleteSuccess(Object result);
 }

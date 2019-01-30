@@ -15,6 +15,7 @@ import com.android.mb.movie.fragment.ChannelFragment;
 import com.android.mb.movie.fragment.FindFragment;
 import com.android.mb.movie.fragment.MainFragment;
 import com.android.mb.movie.fragment.UserFragment;
+import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.widget.FragmentViewPager;
 
@@ -107,6 +108,13 @@ public class MainActivity extends BaseActivity {
     private long mLastClickTimeMills = 0;
     @Override
     public void onBackPressed() {
+        Fragment currentFragment = mFragmentList.get(mFragmentViewPager.getCurrentItem());
+        if (currentFragment instanceof FindFragment){
+            boolean isPlaying = ((FindFragment)currentFragment).onBackPressed();
+            if (isPlaying){
+                return;
+            }
+        }
         if (System.currentTimeMillis() - mLastClickTimeMills > DOUBLE_CLICK_INTERVAL) {
             ToastHelper.showToast("再按一次返回退出");
             mLastClickTimeMills = System.currentTimeMillis();

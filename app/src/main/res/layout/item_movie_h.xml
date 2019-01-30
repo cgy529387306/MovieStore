@@ -9,7 +9,7 @@
         android:layout_height="140dp"
         android:layout_gravity="center_horizontal"
         android:scaleType="centerCrop"
-        android:src="@mipmap/bg_defaults"/>
+        android:src="@mipmap/bg_image_defaults"/>
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="100dp"

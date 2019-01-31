@@ -4,6 +4,7 @@ import android.util.Base64;
 
 import com.android.mb.movie.entity.Avatar;
 import com.android.mb.movie.entity.CommentListData;
+import com.android.mb.movie.entity.CountData;
 import com.android.mb.movie.entity.HomeData;
 import com.android.mb.movie.entity.SpecialData;
 import com.android.mb.movie.entity.Tag;
@@ -222,6 +223,12 @@ public class ScheduleMethods extends BaseHttp {
         return getService().delLike(requestParams)
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<Object>());
+    }
+
+    public Observable getCountData(){
+        return getService().getCountData()
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<CountData>());
     }
 
 }

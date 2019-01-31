@@ -2,6 +2,7 @@ package com.android.mb.movie.service;
 
 import com.android.mb.movie.entity.Avatar;
 import com.android.mb.movie.entity.CommentListData;
+import com.android.mb.movie.entity.CountData;
 import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.HomeData;
 import com.android.mb.movie.entity.SpecialData;
@@ -180,4 +181,11 @@ public interface IScheduleService {
      */
     @GET("/api/1.0/common/getVideoComments")
     Observable<HttpResult<CommentListData>> getVideoComments(@QueryMap Map<String,Object> requestMap);
+
+    /**
+     * videoId
+     * @return
+     */
+    @GET("/api/1.0/common/getCountData")
+    Observable<HttpResult<CountData>> getCountData();
 }

@@ -200,7 +200,7 @@ public class FindFragment extends BaseMvpFragment<FindPresenter,IFindView> imple
 
     @Override
     public void watch(Object result) {
-
+        sendMsg(ProjectConstants.EVENT_GET_EXTRA_DATA,null);
     }
 
     @Override

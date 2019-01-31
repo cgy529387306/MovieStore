@@ -10,7 +10,7 @@ public class ProjectConstants {
     //EVENT
     public static final int EVENT_UPDATE_USER_INFO = 10001;
 
-    public static final int EVENT_GET_USER_INFO = 10002;
+    public static final int EVENT_GET_EXTRA_DATA = 10002;
 
     public static final int EVENT_UPDATE_SCHEDULE = 10003;
 
@@ -41,6 +41,8 @@ public class ProjectConstants {
 
 
     //SharedPreferences
+    public static final String KEY_REMAIN_COUNT = "KEY_REMAIN_COUNT";
+
     public static final String KEY_REGISTRATION_ID = "KEY_REGISTRATION_ID";
 
     public static final String KEY_PERSON_LIST = "KEY_PERSON_LIST";

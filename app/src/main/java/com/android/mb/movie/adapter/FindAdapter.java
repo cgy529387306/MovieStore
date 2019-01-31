@@ -4,8 +4,11 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.android.mb.movie.R;
+import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.Video;
+import com.android.mb.movie.utils.PreferencesHelper;
 import com.android.mb.movie.utils.ProjectHelper;
+import com.android.mb.movie.utils.ToastHelper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -69,13 +72,18 @@ public class FindAdapter extends BaseQuickAdapter<Video, BaseViewHolder>{
                 .setVideoAllCallBack(new GSYSampleCallBack() {
                     @Override
                     public void onPrepared(String url, Object... objects) {
-                        super.onPrepared(url, objects);
-                        if (!videoPlayer.isIfCurrentIsFullscreen()) {
-                            //静音
-                            GSYVideoManager.instance().setNeedMute(true);
-                        }
-                        if (mOperateListener != null){
-                            mOperateListener.onPlayListener(item);
+                        int remainCount = PreferencesHelper.getInstance().getInt(ProjectConstants.KEY_REMAIN_COUNT,0);
+                        if(remainCount == 0){
+                            ToastHelper.showToast("今日观影次数已经用完，分享好友可增加观影次数");
+                        }else{
+                            super.onPrepared(url, objects);
+                            if (!videoPlayer.isIfCurrentIsFullscreen()) {
+                                //静音
+                                GSYVideoManager.instance().setNeedMute(true);
+                            }
+                            if (mOperateListener != null){
+                                mOperateListener.onPlayListener(item);
+                            }
                         }
                     }
 

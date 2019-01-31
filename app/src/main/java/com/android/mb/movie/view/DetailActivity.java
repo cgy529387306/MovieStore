@@ -28,6 +28,7 @@ import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.presenter.DetailPresenter;
 import com.android.mb.movie.utils.AppHelper;
 import com.android.mb.movie.utils.Helper;
+import com.android.mb.movie.utils.PreferencesHelper;
 import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.video.LandLayoutVideo;
@@ -228,11 +229,16 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
                     public void onPrepared(String url, Object... objects) {
                         Debuger.printfError("***** onPrepared **** " + objects[0]);
                         Debuger.printfError("***** onPrepared **** " + objects[1]);
-                        super.onPrepared(url, objects);
-                        //开始播放了才能旋转和全屏
-                        mOrientationUtils.setEnable(true);
-                        mIsPlay = true;
-                        submitWatch();
+                        int remainCount = PreferencesHelper.getInstance().getInt(ProjectConstants.KEY_REMAIN_COUNT,0);
+                        if(remainCount == 0){
+                            ToastHelper.showToast("今日观影次数已经用完，分享好友可增加观影次数");
+                        }else{
+                            super.onPrepared(url, objects);
+                            //开始播放了才能旋转和全屏
+                            mOrientationUtils.setEnable(true);
+                            mIsPlay = true;
+                            submitWatch();
+                        }
                     }
 
                     @Override
@@ -363,7 +369,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
 
     @Override
     public void watch(Object result) {
-
+        sendMsg(ProjectConstants.EVENT_GET_EXTRA_DATA,null);
     }
 
     @Override

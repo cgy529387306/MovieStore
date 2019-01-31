@@ -98,6 +98,7 @@
                            android:layout_height="wrap_content"
                            android:orientation="vertical">
                            <TextView
+                               android:id="@+id/tv_count_play"
                                android:layout_width="wrap_content"
                                android:layout_height="wrap_content"
                                android:singleLine="true"
@@ -221,6 +222,7 @@
                            android:textSize="16sp"
                            android:text="历史记录"/>
                        <TextView
+                           android:id="@+id/tv_count_history"
                            android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
                            android:layout_toRightOf="@id/iv_my_history"
@@ -267,6 +269,7 @@
                            android:textSize="16sp"
                            android:text="我的缓存"/>
                        <TextView
+                           android:id="@+id/tv_count_cache"
                            android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
                            android:layout_toRightOf="@id/iv_my_cache"
@@ -313,6 +316,7 @@
                            android:textSize="16sp"
                            android:text="我的喜欢"/>
                        <TextView
+                           android:id="@+id/tv_count_favor"
                            android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
                            android:layout_toRightOf="@id/iv_my_favor"

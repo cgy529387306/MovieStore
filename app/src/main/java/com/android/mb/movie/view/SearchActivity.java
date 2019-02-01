@@ -189,6 +189,7 @@ public class SearchActivity extends BaseMvpActivity<SearchPresenter,
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.tv_cancel){
+            AppHelper.hideSoftInputFromWindow(mEtSearch);
             finish();
         }else if (id == R.id.iv_delete){
             deleteKeyword();

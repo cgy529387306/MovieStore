@@ -1,6 +1,8 @@
 package com.android.mb.movie.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +12,11 @@ import android.widget.TextView;
 
 import com.android.mb.movie.R;
 import com.android.mb.movie.entity.Category;
+import com.android.mb.movie.utils.ImageUtils;
+import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.ToastHelper;
+import com.android.mb.movie.view.VideoListActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +26,7 @@ import java.util.List;
  */
 public class CateAdapter extends BaseAdapter{
     private Context mContext;
-    public List<Category> mData = new ArrayList<Category>();
+    private List<Category> mData = new ArrayList<Category>();
     public CateAdapter(Context context, List<Category> htList) {
         mContext = context;
         mData = htList;
@@ -56,20 +61,23 @@ public class CateAdapter extends BaseAdapter{
         }
         final Category category = mData.get(position);
         viewHolder.tvTitle.setText(category.getCateName());
-        ProjectHelper.loadImageUrl(viewHolder.ivCover,category.getCoverUrl());
+        ImageUtils.loadCircleImageUrl(viewHolder.ivCover,category.getCoverUrl());
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               //TODO
-                ToastHelper.showLongToast(category.getCateName());
+                String name = category.getCateName();
+                Bundle bundle = new Bundle();
+                bundle.putString("name",name);
+                bundle.putString("cateId",category.getCateId());
+                NavigationHelper.startActivity((Activity) mContext, VideoListActivity.class,bundle,false);
             }
         });
         return convertView;
     }
 
     private class ViewHolder {
-        public ImageView ivCover;
-        public TextView tvTitle;
+        private ImageView ivCover;
+        private TextView tvTitle;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.android.mb.movie.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.FindAdapter;
 import com.android.mb.movie.base.BaseMvpFragment;
 import com.android.mb.movie.constants.ProjectConstants;
+import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.entity.VideoListData;
 import com.android.mb.movie.presenter.FindPresenter;
@@ -18,6 +20,7 @@ import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.DetailActivity;
+import com.android.mb.movie.view.LoginActivity;
 import com.android.mb.movie.view.SearchActivity;
 import com.android.mb.movie.view.interfaces.IFindView;
 import com.android.mb.movie.widget.MyDividerItemDecoration;
@@ -196,6 +199,7 @@ public class FindFragment extends BaseMvpFragment<FindPresenter,IFindView> imple
     @Override
     public void praise(Object result) {
         ToastHelper.showToast("收藏成功");
+        sendMsg(ProjectConstants.EVENT_GET_EXTRA_DATA,null);
     }
 
     @Override
@@ -220,18 +224,31 @@ public class FindFragment extends BaseMvpFragment<FindPresenter,IFindView> imple
 
     @Override
     public void onShare(Video video) {
-
+        doShare(video);
     }
 
     private void submitPraise(Video video){
-        Map<String,Object> requestMap = new HashMap<>();
-        requestMap.put("videoId", video.getId());
-        mPresenter.praise(requestMap);
+        if (CurrentUser.getInstance().isLogin()){
+            Map<String,Object> requestMap = new HashMap<>();
+            requestMap.put("videoId", video.getId());
+            mPresenter.praise(requestMap);
+        }else{
+            NavigationHelper.startActivity(getActivity(), LoginActivity.class,null,false);
+        }
     }
 
     private void submitWatch(Video video){
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("videoId", video.getId());
         mPresenter.watch(requestMap);
+    }
+
+    private void doShare(Video video){
+        Intent share_intent = new Intent();
+        share_intent.setAction(Intent.ACTION_SEND);//设置分享行为
+        share_intent.setType("text/plain");//设置分享内容的类型
+        share_intent.putExtra(Intent.EXTRA_SUBJECT, "分享");//添加分享内容标题
+        share_intent.putExtra(Intent.EXTRA_TEXT, video.getName()+":https://www.baidu.com");//添加分享内容
+        startActivity(share_intent);
     }
 }

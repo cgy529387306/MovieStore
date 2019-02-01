@@ -1,5 +1,7 @@
 package com.android.mb.movie.view;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -10,26 +12,25 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.CommentAdapter;
 import com.android.mb.movie.base.BaseMvpActivity;
 import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.CommentListData;
+import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.presenter.DetailPresenter;
 import com.android.mb.movie.utils.AppHelper;
 import com.android.mb.movie.utils.Helper;
+import com.android.mb.movie.utils.ImageUtils;
+import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.PreferencesHelper;
-import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.video.LandLayoutVideo;
 import com.android.mb.movie.video.listener.AppBarStateChangeListener;
@@ -204,7 +205,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     private void initData(){
         //增加封面
         ImageView imageView = new ImageView(this);
-        ProjectHelper.loadImageUrl(imageView,mVideoInfo.getCoverUrl());
+        ImageUtils.loadImageUrl(imageView,mVideoInfo.getCoverUrl());
         resolveNormalVideoUI();
         mTvPlayTimes.setText(String.format(getString(R.string.play_times_pre), mVideoInfo.getPlayCount()));
         //外部辅助的旋转，帮助全屏
@@ -229,14 +230,16 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
                     public void onPrepared(String url, Object... objects) {
                         Debuger.printfError("***** onPrepared **** " + objects[0]);
                         Debuger.printfError("***** onPrepared **** " + objects[1]);
+                        super.onPrepared(url, objects);
+                        //开始播放了才能旋转和全屏
+                        mOrientationUtils.setEnable(true);
+                        mIsPlay = true;
                         int remainCount = PreferencesHelper.getInstance().getInt(ProjectConstants.KEY_REMAIN_COUNT,0);
-                        if(remainCount == 0){
-                            ToastHelper.showToast("今日观影次数已经用完，分享好友可增加观影次数");
+                        if(remainCount <= 0){
+                            GSYVideoManager.instance().stop();
+                            ToastHelper.showToast("今日观影次数已经用完，邀请好友可增加观影次数");
+                            NavigationHelper.startActivity((Activity) mContext, InviteActivity.class,null,false);
                         }else{
-                            super.onPrepared(url, objects);
-                            //开始播放了才能旋转和全屏
-                            mOrientationUtils.setEnable(true);
-                            mIsPlay = true;
                             submitWatch();
                         }
                     }
@@ -365,6 +368,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     @Override
     public void praise(Object result) {
         ToastHelper.showToast("收藏成功");
+        sendMsg(ProjectConstants.EVENT_GET_EXTRA_DATA,null);
     }
 
     @Override
@@ -379,7 +383,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
                 //首页
                 mRefreshLayout.finishRefresh();
                 mAdapter.setNewData(result.getList());
-                mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
+                mAdapter.setEmptyView(R.layout.empty_comment, (ViewGroup) mRecyclerView.getParent());
                 if (result.isEnd()){
                     mRefreshLayout.finishLoadMoreWithNoMoreData();
                 }
@@ -444,18 +448,34 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_favor){
-            submitPraise();
-        }else if (id == R.id.btn_share){
-            //TODO
-
-        }else if (id == R.id.tv_confirm){
-            String content = mEtContent.getText().toString().trim();
-            if (Helper.isEmpty(content)){
-               ToastHelper.showToast("请输入评论内容");
+            if (CurrentUser.getInstance().isLogin()){
+                submitPraise();
             }else{
-                submitComment(content);
+                NavigationHelper.startActivity(mContext, LoginActivity.class,null,false);
+            }
+        }else if (id == R.id.btn_share){
+            doShare(mVideoInfo);
+        }else if (id == R.id.tv_confirm){
+            if (CurrentUser.getInstance().isLogin()){
+                String content = mEtContent.getText().toString().trim();
+                if (Helper.isEmpty(content)){
+                    ToastHelper.showToast("请输入评论内容");
+                }else{
+                    submitComment(content);
+                }
+            }else{
+                NavigationHelper.startActivity(mContext, LoginActivity.class,null,false);
             }
         }
+    }
+
+    private void doShare(Video video){
+        Intent share_intent = new Intent();
+        share_intent.setAction(Intent.ACTION_SEND);//设置分享行为
+        share_intent.setType("text/plain");//设置分享内容的类型
+        share_intent.putExtra(Intent.EXTRA_SUBJECT, "分享");//添加分享内容标题
+        share_intent.putExtra(Intent.EXTRA_TEXT, video.getName()+":https://www.baidu.com");//添加分享内容
+        startActivity(share_intent);
     }
 
 }

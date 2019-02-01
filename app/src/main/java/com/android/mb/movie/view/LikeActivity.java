@@ -1,6 +1,5 @@
 package com.android.mb.movie.view;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,12 +13,10 @@ import com.android.mb.movie.base.BaseMvpActivity;
 import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.entity.VideoListData;
-import com.android.mb.movie.presenter.HistoryPresenter;
 import com.android.mb.movie.presenter.LikePresenter;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ToastHelper;
-import com.android.mb.movie.view.interfaces.IHistoryView;
 import com.android.mb.movie.view.interfaces.ILikeView;
 import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;

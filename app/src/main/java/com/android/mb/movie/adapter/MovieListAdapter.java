@@ -8,7 +8,7 @@ import android.widget.CompoundButton;
 import com.android.mb.movie.R;
 import com.android.mb.movie.entity.Tag;
 import com.android.mb.movie.entity.Video;
-import com.android.mb.movie.utils.ProjectHelper;
+import com.android.mb.movie.utils.ImageUtils;
 import com.android.mb.movie.widget.taglayout.FlowTagLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -32,10 +32,11 @@ public class MovieListAdapter extends BaseQuickAdapter<Video, BaseViewHolder> {
         helper.setText(R.id.tv_play_count,String.format(mContext.getString(R.string.play_times_pre), item.getPlayCount()));
         CheckBox checkBox = helper.getView(R.id.checkBox);
         checkBox.setVisibility(mIsCanEdit? View.VISIBLE:View.GONE);
-        ProjectHelper.loadImageUrl(helper.getView(R.id.iv_cover), item.getCoverUrl());
+        ImageUtils.loadImageUrl(helper.getView(R.id.iv_cover), item.getCoverUrl());
         FlowTagLayout flowTagLayout = helper.getView(R.id.tagLayout);
         TagSmallAdapter<Tag> tagAdapter = new TagSmallAdapter<>(mContext);
         flowTagLayout.setAdapter(tagAdapter);
+        flowTagLayout.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_NONE);
         tagAdapter.clearAndAddAll(item.getTagList());
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

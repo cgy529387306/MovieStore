@@ -107,7 +107,7 @@ public class ScheduleMethods extends BaseHttp {
         requestParams.put("params", Base64.encodeToString(JsonHelper.toJson(requestMap).getBytes(),Base64.DEFAULT));
         return getService().forgetPassword(requestParams)
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<UserBean>());
+                .map(new HttpCacheResultFunc<Object>());
     }
 
     public Observable updatePassword(Map<String,Object> requestMap){
@@ -115,7 +115,7 @@ public class ScheduleMethods extends BaseHttp {
         requestParams.put("params", Base64.encodeToString(JsonHelper.toJson(requestMap).getBytes(),Base64.DEFAULT));
         return getService().updatePassword(requestParams)
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<UserBean>());
+                .map(new HttpCacheResultFunc<Object>());
     }
 
     public Observable uploadAvatar(File file){
@@ -229,6 +229,12 @@ public class ScheduleMethods extends BaseHttp {
         return getService().getCountData()
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<CountData>());
+    }
+
+    public Observable getPromoCode(){
+        return getService().getPromoCode()
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<String>());
     }
 
 }

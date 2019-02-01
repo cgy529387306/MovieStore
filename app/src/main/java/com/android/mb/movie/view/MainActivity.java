@@ -15,6 +15,7 @@ import com.android.mb.movie.fragment.ChannelFragment;
 import com.android.mb.movie.fragment.FindFragment;
 import com.android.mb.movie.fragment.MainFragment;
 import com.android.mb.movie.fragment.UserFragment;
+import com.android.mb.movie.utils.AppHelper;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.widget.FragmentViewPager;

@@ -117,12 +117,28 @@ public class ImageUtils {
     }
 
 
-    public static void displayAvatar(Context context, String url, ImageView imageView){
+    public static void displayAvatar(ImageView imageView,String url){
         RequestOptions options = new RequestOptions()
                 .placeholder(R.mipmap.ic_head_s)// 正在加载中的图片
                 .error(R.mipmap.ic_head_s) // 加载失败的图片
                 .diskCacheStrategy(DiskCacheStrategy.ALL); // 磁盘缓存策略
-        Glide.with(context).load(url).apply(options).into(imageView);
+        Glide.with(imageView.getContext()).load(url).apply(options).into(imageView);
+    }
+
+    public static void loadImageUrl(ImageView imageView, String url) {
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.mipmap.bg_image_defaults)// 正在加载中的图片
+                .error(R.mipmap.bg_image_defaults) // 加载失败的图片
+                .diskCacheStrategy(DiskCacheStrategy.ALL); // 磁盘缓存策略
+        Glide.with(imageView.getContext()).load(url).apply(options).into(imageView);
+    }
+
+    public static void loadCircleImageUrl(ImageView imageView, String url) {
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.mipmap.bg_image)// 正在加载中的图片
+                .error(R.mipmap.bg_image) // 加载失败的图片
+                .diskCacheStrategy(DiskCacheStrategy.ALL); // 磁盘缓存策略
+        Glide.with(imageView.getContext()).load(url).apply(options).into(imageView);
     }
 
 }

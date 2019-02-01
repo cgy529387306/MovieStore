@@ -1,14 +1,17 @@
 package com.android.mb.movie.adapter;
 
+import android.app.Activity;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.android.mb.movie.R;
 import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.Video;
+import com.android.mb.movie.utils.ImageUtils;
+import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.PreferencesHelper;
-import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.ToastHelper;
+import com.android.mb.movie.view.InviteActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -56,7 +59,7 @@ public class FindAdapter extends BaseQuickAdapter<Video, BaseViewHolder>{
         helper.setText(R.id.tv_times,String.format(mContext.getString(R.string.play_times_pre), item.getPlayCount()));
         StandardGSYVideoPlayer videoPlayer = helper.getView(R.id.video_player);
         ImageView imageView = new ImageView(mContext);
-        ProjectHelper.loadImageUrl(imageView, item.getCoverUrl());
+        ImageUtils.loadImageUrl(imageView, item.getCoverUrl());
         mVideoOptionBuilder
                 .setIsTouchWiget(false)
                 .setThumbImageView(imageView)
@@ -72,15 +75,17 @@ public class FindAdapter extends BaseQuickAdapter<Video, BaseViewHolder>{
                 .setVideoAllCallBack(new GSYSampleCallBack() {
                     @Override
                     public void onPrepared(String url, Object... objects) {
+                        super.onPrepared(url, objects);
+                        if (!videoPlayer.isIfCurrentIsFullscreen()) {
+                            //静音
+                            GSYVideoManager.instance().setNeedMute(true);
+                        }
                         int remainCount = PreferencesHelper.getInstance().getInt(ProjectConstants.KEY_REMAIN_COUNT,0);
-                        if(remainCount == 0){
-                            ToastHelper.showToast("今日观影次数已经用完，分享好友可增加观影次数");
+                        if(remainCount <= 0){
+                            GSYVideoManager.instance().stop();
+                            ToastHelper.showToast("今日观影次数已经用完，邀请好友可增加观影次数");
+                            NavigationHelper.startActivity((Activity) mContext, InviteActivity.class,null,false);
                         }else{
-                            super.onPrepared(url, objects);
-                            if (!videoPlayer.isIfCurrentIsFullscreen()) {
-                                //静音
-                                GSYVideoManager.instance().setNeedMute(true);
-                            }
                             if (mOperateListener != null){
                                 mOperateListener.onPlayListener(item);
                             }

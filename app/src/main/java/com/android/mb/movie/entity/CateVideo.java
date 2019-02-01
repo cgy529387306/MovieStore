@@ -5,12 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CateVideo implements Serializable{
+
+    private String cateId;
+
     private String cateName;
 
     private List<Video> videos;
 
+    public String getCateId() {
+        return cateId == null ? "" : cateId;
+    }
+
+    public void setCateId(String cateId) {
+        this.cateId = cateId;
+    }
+
     public String getCateName() {
         return cateName == null ? "" : cateName;
+
     }
 
     public void setCateName(String cateName) {

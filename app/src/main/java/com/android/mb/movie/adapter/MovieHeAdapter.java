@@ -1,13 +1,8 @@
 package com.android.mb.movie.adapter;
 
-import android.view.View;
-import android.widget.GridView;
-
 import com.android.mb.movie.R;
-import com.android.mb.movie.entity.CateVideo;
 import com.android.mb.movie.entity.Video;
-import com.android.mb.movie.utils.ProjectHelper;
-import com.android.mb.movie.utils.ToastHelper;
+import com.android.mb.movie.utils.ImageUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -26,7 +21,7 @@ public class MovieHeAdapter extends BaseQuickAdapter<Video, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, Video video) {
         helper.setText(R.id.tv_title,video.getName());
-        ProjectHelper.loadImageUrl(helper.getView(R.id.iv_cover),video.getCoverUrl());
+        ImageUtils.loadImageUrl(helper.getView(R.id.iv_cover),video.getCoverUrl());
     }
 
 

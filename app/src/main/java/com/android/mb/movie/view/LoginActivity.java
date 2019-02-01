@@ -78,7 +78,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter,ILoginView> im
         }else if (id == R.id.btn_back){
             finish();
         }else if (id == R.id.tv_forget_pwd){
-            //TODO
+            NavigationHelper.startActivity(mContext,ForgetPwdActivity.class,null,false);
         }else if (id == R.id.tv_register){
             NavigationHelper.startActivity(mContext,RegisterActivity.class,null,false);
         }

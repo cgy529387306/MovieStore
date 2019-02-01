@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 登录
+ * 注册
  * Created by cgy on 2018\8\20 0020.
  */
 
@@ -34,6 +34,7 @@ public class RegisterActivity extends BaseMvpActivity<RegisterPresenter,IRegiste
     private EditText mEtAccount;
     private EditText mEtPwd;
     private EditText mEtCode;
+    private EditText mEtInviteCode;
     private Button mBtnGetCode;
     @Override
     protected void loadIntent() {
@@ -56,6 +57,7 @@ public class RegisterActivity extends BaseMvpActivity<RegisterPresenter,IRegiste
         mEtAccount = findViewById(R.id.et_account);
         mEtPwd = findViewById(R.id.et_pwd);
         mEtCode = findViewById(R.id.et_code);
+        mEtInviteCode = findViewById(R.id.et_invite_code);
         mBtnGetCode = findViewById(R.id.btn_get_code);
     }
 
@@ -105,7 +107,7 @@ public class RegisterActivity extends BaseMvpActivity<RegisterPresenter,IRegiste
             String account = mEtAccount.getText().toString().trim();
             String password = mEtPwd.getText().toString().trim();
             String code = mEtPwd.getText().toString().trim();
-            if (Helper.isNotEmpty(account) && Helper.isNotEmpty(password) && Helper.isNotEmpty(code)){
+            if (Helper.isNotEmpty(account) && Helper.isNotEmpty(password)){
                 mTvRegister.setEnabled(true);
                 mTvRegister.setBackgroundColor(mContext.getResources().getColor(R.color.base_brown));
             }else{
@@ -133,29 +135,20 @@ public class RegisterActivity extends BaseMvpActivity<RegisterPresenter,IRegiste
         String account = mEtAccount.getText().toString().trim();
         String pwd = mEtPwd.getText().toString().trim();
         String code = mEtCode.getText().toString().trim();
+        String inviteCode = mEtInviteCode.getText().toString().trim();
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("account",account);
         requestMap.put("password",pwd);
-        requestMap.put("code",code);
+        requestMap.put("code","111111");
+        if (Helper.isNotEmpty(inviteCode)){
+            requestMap.put("promoCode",inviteCode);
+        }
         mPresenter.userRegister(requestMap);
     }
 
     @Override
     protected RegisterPresenter createPresenter() {
         return new RegisterPresenter();
-    }
-
-    private static final long DOUBLE_CLICK_INTERVAL = 2000;
-    private long mLastClickTimeMills = 0;
-
-    @Override
-    public void onBackPressed() {
-        if (System.currentTimeMillis() - mLastClickTimeMills > DOUBLE_CLICK_INTERVAL) {
-            ToastHelper.showToast("再按一次返回退出");
-            mLastClickTimeMills = System.currentTimeMillis();
-            return;
-        }
-        finish();
     }
 
 

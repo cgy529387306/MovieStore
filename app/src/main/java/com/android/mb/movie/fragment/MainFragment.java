@@ -17,14 +17,19 @@ import com.android.mb.movie.base.BaseMvpFragment;
 import com.android.mb.movie.base.BaseWebViewActivity;
 import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.Advert;
+import com.android.mb.movie.entity.CateVideo;
+import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.HomeData;
 import com.android.mb.movie.presenter.HomePresenter;
 import com.android.mb.movie.utils.Helper;
+import com.android.mb.movie.utils.ImageUtils;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.ToastHelper;
+import com.android.mb.movie.view.HistoryActivity;
 import com.android.mb.movie.view.LoginActivity;
 import com.android.mb.movie.view.SearchActivity;
+import com.android.mb.movie.view.VideoListActivity;
 import com.android.mb.movie.view.interfaces.IHomeView;
 import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -88,8 +93,13 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        if (mAdapter.getItem(position)!=null){
-            ToastHelper.showLongToast(mAdapter.getItem(position).getCateName());
+        CateVideo cateVideo = mAdapter.getItem(position);
+        if (cateVideo!=null){
+            String name = cateVideo.getCateName();
+            Bundle bundle = new Bundle();
+            bundle.putString("name",name);
+            bundle.putString("cateId",cateVideo.getCateId());
+            NavigationHelper.startActivity(getActivity(), VideoListActivity.class,bundle,false);
         }
     }
 
@@ -98,7 +108,11 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_history){
-            NavigationHelper.startActivity(getActivity(), LoginActivity.class,null,false);
+            if (CurrentUser.getInstance().isLogin()){
+                NavigationHelper.startActivity(getActivity(), HistoryActivity.class,null,false);
+            }else{
+                NavigationHelper.startActivity(getActivity(), LoginActivity.class,null,false);
+            }
         }else if (id == R.id.tv_search){
             NavigationHelper.startActivity(getActivity(), SearchActivity.class,null,false);
         }
@@ -152,7 +166,7 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
     public class GlideImageLoader extends ImageLoader {
         @Override
         public void displayImage(Context context, Object path, ImageView imageView) {
-            ProjectHelper.loadImageUrl(imageView,((Advert)path).getCoverUrl());
+            ImageUtils.loadImageUrl(imageView,((Advert)path).getCoverUrl());
         }
     }
 

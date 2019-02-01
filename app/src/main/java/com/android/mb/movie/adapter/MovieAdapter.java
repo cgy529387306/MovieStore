@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import com.android.mb.movie.R;
 import com.android.mb.movie.entity.Video;
+import com.android.mb.movie.utils.ImageUtils;
 import com.android.mb.movie.utils.NavigationHelper;
-import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.view.DetailActivity;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class MovieAdapter extends BaseAdapter{
         }
         final Video video = mData.get(position);
         viewHolder.tvTitle.setText(video.getName());
-        ProjectHelper.loadImageUrl(viewHolder.ivCover,video.getCoverUrl());
+        ImageUtils.loadImageUrl(viewHolder.ivCover,video.getCoverUrl());
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

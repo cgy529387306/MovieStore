@@ -16,6 +16,7 @@ import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.PreferencesHelper;
 import com.android.mb.movie.utils.ProgressDialogHelper;
 import com.android.mb.movie.view.HistoryActivity;
+import com.android.mb.movie.view.InviteActivity;
 import com.android.mb.movie.view.LikeActivity;
 import com.android.mb.movie.view.LoginActivity;
 import com.android.mb.movie.view.SettingActivity;
@@ -34,7 +35,7 @@ public class UserFragment extends BaseMvpFragment<ExtraPresenter,IExtraView> imp
     private TextView mTvName;
     private CircleImageView mIvAvatar;
     private TextView mTvCountHistory,mTvCountCache,mTvCountFavor,mTvCountPlay;
-
+    private TextView mTvVip;
 
     @Override
     protected int getLayoutId() {
@@ -50,6 +51,7 @@ public class UserFragment extends BaseMvpFragment<ExtraPresenter,IExtraView> imp
         mTvCountCache = view.findViewById(R.id.tv_count_cache);
         mTvCountFavor = view.findViewById(R.id.tv_count_favor);
         mTvCountPlay = view.findViewById(R.id.tv_count_play);
+        mTvVip = view.findViewById(R.id.tv_vip);
     }
 
     @Override
@@ -60,6 +62,7 @@ public class UserFragment extends BaseMvpFragment<ExtraPresenter,IExtraView> imp
             @Override
             public void call(Events<?> events) {
                 initUserInfo();
+                mPresenter.getCountData();
             }
         });
         regiestEvent(ProjectConstants.EVENT_GET_EXTRA_DATA, new Action1<Events<?>>() {
@@ -72,6 +75,7 @@ public class UserFragment extends BaseMvpFragment<ExtraPresenter,IExtraView> imp
 
     @Override
     protected void setListener() {
+        mTvVip.setOnClickListener(this);
         mTvLogin.setOnClickListener(this);
         mRootView.findViewById(R.id.tv_promote).setOnClickListener(this);
         mRootView.findViewById(R.id.tv_feedback).setOnClickListener(this);
@@ -80,29 +84,18 @@ public class UserFragment extends BaseMvpFragment<ExtraPresenter,IExtraView> imp
         mRootView.findViewById(R.id.rl_cache).setOnClickListener(this);
         mRootView.findViewById(R.id.rl_favor).setOnClickListener(this);
         mRootView.findViewById(R.id.btn_setting).setOnClickListener(this);
+        mRootView.findViewById(R.id.btn_invite).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.tv_promote){
-            if (CurrentUser.getInstance().isLogin()){
-
-            }else{
-                NavigationHelper.startActivity(getActivity(), LoginActivity.class,null,false);
-            }
+            NavigationHelper.startActivity(getActivity(), InviteActivity.class,null,false);
         }else if (id == R.id.tv_feedback){
-            if (CurrentUser.getInstance().isLogin()){
 
-            }else{
-                NavigationHelper.startActivity(getActivity(), LoginActivity.class,null,false);
-            }
         }else if (id == R.id.tv_potato){
-            if (CurrentUser.getInstance().isLogin()){
-
-            }else{
-                NavigationHelper.startActivity(getActivity(), LoginActivity.class,null,false);
-            }
+            NavigationHelper.startActivity(getActivity(), InviteActivity.class,null,false);
         }else if (id == R.id.rl_history){
             if (CurrentUser.getInstance().isLogin()){
                 NavigationHelper.startActivity(getActivity(), HistoryActivity.class,null,false);
@@ -128,6 +121,10 @@ public class UserFragment extends BaseMvpFragment<ExtraPresenter,IExtraView> imp
             if (!CurrentUser.getInstance().isLogin()){
                 NavigationHelper.startActivity(getActivity(), LoginActivity.class,null,false);
             }
+        }else if (id == R.id.btn_invite){
+            NavigationHelper.startActivity(getActivity(), InviteActivity.class,null,false);
+        }else if (id == R.id.tv_vip){
+            NavigationHelper.startActivity(getActivity(), InviteActivity.class,null,false);
         }
     }
 
@@ -135,9 +132,10 @@ public class UserFragment extends BaseMvpFragment<ExtraPresenter,IExtraView> imp
         if (CurrentUser.getInstance()!=null && CurrentUser.getInstance().isLogin()){
             mTvLogin.setText("Lv0小白");
             mTvName.setText(CurrentUser.getInstance().getNickname());
-            ImageUtils.displayAvatar(getActivity(),CurrentUser.getInstance().getAvatar_url(),mIvAvatar);
+            ImageUtils.displayAvatar(mIvAvatar,CurrentUser.getInstance().getAvatar_url());
         }else{
             mTvName.setText("看官大人请登录");
+            mIvAvatar.setImageResource(R.mipmap.ic_head_s);
         }
     }
 

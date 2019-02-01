@@ -24,6 +24,7 @@ import com.android.mb.movie.rxbus.Events;
 import com.android.mb.movie.utils.AppHelper;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ImageUtils;
+import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.interfaces.IAccountView;
@@ -139,13 +140,14 @@ public class AccountActivity extends BaseMvpActivity<AccountPresenter,IAccountVi
         }else if (id == R.id.btn_phone){
 
         }else if (id == R.id.btn_change_pwd){
-
+            NavigationHelper.startActivity(mContext,ChangePwdActivity.class,null,false);
         }else if (id == R.id.tv_exit){
             new MaterialDialog.Builder(mContext).title("提示").content("确定要退出当前账号?")
                     .positiveText("确定").negativeText("取消").onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     CurrentUser.getInstance().loginOut();
+                    sendMsg(ProjectConstants.EVENT_UPDATE_USER_INFO,null);
                     finish();
                 }
             }).show();
@@ -158,7 +160,7 @@ public class AccountActivity extends BaseMvpActivity<AccountPresenter,IAccountVi
             mTvNickname.setText(CurrentUser.getInstance().getNickname());
             mTvPhone.setText(CurrentUser.getInstance().getPhone());
             mTvSex.setText(CurrentUser.getInstance().getSexText());
-            ImageUtils.displayAvatar(mContext,CurrentUser.getInstance().getAvatar_url(),mIvAvatar);
+            ImageUtils.displayAvatar(mIvAvatar,CurrentUser.getInstance().getAvatar_url());
         }
     }
 

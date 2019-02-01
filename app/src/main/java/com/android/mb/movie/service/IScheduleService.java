@@ -85,7 +85,7 @@ public interface IScheduleService {
      * @return
      */
     @GET("/api/1.0/user/forgetPassword")
-    Observable<HttpResult<UserBean>> forgetPassword(@QueryMap Map<String,Object> requestMap);
+    Observable<HttpResult<Object>> forgetPassword(@QueryMap Map<String,Object> requestMap);
 
     /**
      * newPassword:新密码 newPassword:旧密码
@@ -93,7 +93,7 @@ public interface IScheduleService {
      * @return
      */
     @GET("/api/1.0/user/updatePassword")
-    Observable<HttpResult<UserBean>> updatePassword(@QueryMap Map<String,Object> requestMap);
+    Observable<HttpResult<Object>> updatePassword(@QueryMap Map<String,Object> requestMap);
 
 
     /**
@@ -188,4 +188,12 @@ public interface IScheduleService {
      */
     @GET("/api/1.0/common/getCountData")
     Observable<HttpResult<CountData>> getCountData();
+
+
+    /**
+     * videoId
+     * @return
+     */
+    @GET("/api/1.0/common/getPromoCode")
+    Observable<HttpResult<String>> getPromoCode();
 }

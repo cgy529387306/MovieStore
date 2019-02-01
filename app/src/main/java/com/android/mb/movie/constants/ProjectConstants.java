@@ -43,6 +43,8 @@ public class ProjectConstants {
     //SharedPreferences
     public static final String KEY_REMAIN_COUNT = "KEY_REMAIN_COUNT";
 
+    public static final String KEY_INVITE_CODE = "KEY_INVITE_CODE";
+
     public static final String KEY_REGISTRATION_ID = "KEY_REGISTRATION_ID";
 
     public static final String KEY_PERSON_LIST = "KEY_PERSON_LIST";

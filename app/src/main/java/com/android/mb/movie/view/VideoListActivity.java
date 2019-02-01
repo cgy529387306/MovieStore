@@ -14,10 +14,12 @@ import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.entity.VideoListData;
 import com.android.mb.movie.presenter.HistoryPresenter;
+import com.android.mb.movie.presenter.SearchPresenter;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.interfaces.IHistoryView;
+import com.android.mb.movie.view.interfaces.ISearchView;
 import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -34,18 +36,24 @@ import java.util.Map;
  * Created by cgy on 2018\8\20 0020.
  */
 
-public class HistoryActivity extends BaseMvpActivity<HistoryPresenter,
-        IHistoryView> implements IHistoryView,View.OnClickListener,BaseQuickAdapter.OnItemClickListener,OnRefreshListener, OnLoadMoreListener {
+public class VideoListActivity extends BaseMvpActivity<SearchPresenter,
+        ISearchView> implements ISearchView,View.OnClickListener,BaseQuickAdapter.OnItemClickListener,OnRefreshListener, OnLoadMoreListener {
 
     private SmartRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
     private MovieListAdapter mAdapter;
     private int mCurrentPage = 1;
     private LinearLayoutManager mLinearLayoutManager;
-    private boolean mIsEdit;
+    private String mTitle;
+    private String mCateId;
+    private String mAuthorId;
+    private String mSpecialId;
     @Override
     protected void loadIntent() {
-
+        mTitle = getIntent().getStringExtra("name");
+        mCateId = getIntent().getStringExtra("cateId");
+        mAuthorId = getIntent().getStringExtra("authorId");
+        mSpecialId = getIntent().getStringExtra("specialId");
     }
 
     @Override
@@ -55,24 +63,9 @@ public class HistoryActivity extends BaseMvpActivity<HistoryPresenter,
 
     @Override
     protected void initTitle() {
-        setTitleText("历史记录");
+        setTitleText(Helper.isEmpty(mTitle)?"所有":mTitle);
     }
 
-    @Override
-    protected void onRightAction() {
-        super.onRightAction();
-        if (mIsEdit){
-            if (Helper.isEmpty(getVideoIds())){
-                ToastHelper.showToast("请选择删除项");
-            }else{
-                deleteHistory();
-            }
-        }else{
-            mIsEdit = true;
-            setRightText("删除");
-            mAdapter.setCanEdit(true);
-        }
-    }
 
     @Override
     protected void bindViews() {
@@ -104,8 +97,8 @@ public class HistoryActivity extends BaseMvpActivity<HistoryPresenter,
 
 
     @Override
-    protected HistoryPresenter createPresenter() {
-        return new HistoryPresenter();
+    protected SearchPresenter createPresenter() {
+        return new SearchPresenter();
     }
 
     @Override
@@ -113,7 +106,6 @@ public class HistoryActivity extends BaseMvpActivity<HistoryPresenter,
         if (result!=null){
             if (mCurrentPage == 1){
                 //首页
-                setRightText(result.getRowCount()==0?"":"编辑");
                 mRefreshLayout.finishRefresh();
                 mAdapter.setNewData(result.getList());
                 mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
@@ -131,28 +123,23 @@ public class HistoryActivity extends BaseMvpActivity<HistoryPresenter,
         }
     }
 
-    @Override
-    public void deleteSuccess(Object result) {
-        mCurrentPage = 1;
-        getListFormServer();
-        setRightText("编辑");
-        mIsEdit = false;
-        mAdapter.setCanEdit(false);
-        ToastHelper.showToast("删除成功");
-    }
 
     private void getListFormServer(){
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("currentPage",mCurrentPage);
         requestMap.put("pageSize", ProjectConstants.PAGE_SIZE);
-        mPresenter.getHistory(requestMap);
+        if (Helper.isNotEmpty(mCateId) && !"11111".equals(mCateId) && !"22222".equals(mCateId)){
+            requestMap.put("cateId", mCateId);
+        }
+        if (Helper.isNotEmpty(mAuthorId)){
+            requestMap.put("authorId", mAuthorId);
+        }
+        if (Helper.isNotEmpty(mSpecialId)){
+            requestMap.put("specialId", mSpecialId);
+        }
+        mPresenter.queryVideos(requestMap);
     }
 
-    private void deleteHistory(){
-        Map<String,Object> requestMap = new HashMap<>();
-        requestMap.put("videoIds",getVideoIds());
-        mPresenter.delHistory(requestMap);
-    }
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -174,14 +161,4 @@ public class HistoryActivity extends BaseMvpActivity<HistoryPresenter,
         getListFormServer();
     }
 
-    private String getVideoIds(){
-        StringBuilder sb = new StringBuilder();
-        List<Video> dataList = mAdapter.getData();
-        for (Video video:dataList){
-            if (video.isSelect()){
-                sb.append(video.getId()).append(",");
-            }
-        }
-        return sb.toString();
-    }
 }

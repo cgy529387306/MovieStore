@@ -13,22 +13,24 @@ import com.android.mb.movie.R;
 import com.android.mb.movie.base.BaseMvpActivity;
 import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.UserBean;
+import com.android.mb.movie.presenter.ForgetPwdPresenter;
 import com.android.mb.movie.presenter.RegisterPresenter;
 import com.android.mb.movie.utils.AppHelper;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.ToastHelper;
+import com.android.mb.movie.view.interfaces.IForgetPwdView;
 import com.android.mb.movie.view.interfaces.IRegisterView;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 登录
+ * 忘记密码
  * Created by cgy on 2018\8\20 0020.
  */
 
-public class ForgetPwdActivity extends BaseMvpActivity<RegisterPresenter,IRegisterView> implements IRegisterView, View.OnClickListener{
+public class ForgetPwdActivity extends BaseMvpActivity<ForgetPwdPresenter,IForgetPwdView> implements IForgetPwdView, View.OnClickListener{
 
     private TextView mTvRegister;
     private EditText mEtAccount;
@@ -42,7 +44,7 @@ public class ForgetPwdActivity extends BaseMvpActivity<RegisterPresenter,IRegist
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_register;
+        return R.layout.activity_forget_pwd;
     }
 
     @Override
@@ -67,7 +69,6 @@ public class ForgetPwdActivity extends BaseMvpActivity<RegisterPresenter,IRegist
     @Override
     protected void setListener() {
         findViewById(R.id.btn_back).setOnClickListener(this);
-        findViewById(R.id.tv_login).setOnClickListener(this);
         mTvRegister.setOnClickListener(this);
         mBtnGetCode.setOnClickListener(this);
         mEtAccount.addTextChangedListener(myTextWatcher);
@@ -81,8 +82,6 @@ public class ForgetPwdActivity extends BaseMvpActivity<RegisterPresenter,IRegist
         if (id == R.id.tv_register){
             doRegister();
         }else if (id == R.id.btn_back){
-            finish();
-        }else if (id == R.id.tv_login){
             finish();
         }else if (id == R.id.btn_get_code){
             doGetCode();
@@ -105,7 +104,7 @@ public class ForgetPwdActivity extends BaseMvpActivity<RegisterPresenter,IRegist
             String account = mEtAccount.getText().toString().trim();
             String password = mEtPwd.getText().toString().trim();
             String code = mEtPwd.getText().toString().trim();
-            if (Helper.isNotEmpty(account) && Helper.isNotEmpty(password) && Helper.isNotEmpty(code)){
+            if (Helper.isNotEmpty(account) && Helper.isNotEmpty(password)){
                 mTvRegister.setEnabled(true);
                 mTvRegister.setBackgroundColor(mContext.getResources().getColor(R.color.base_brown));
             }else{
@@ -134,38 +133,22 @@ public class ForgetPwdActivity extends BaseMvpActivity<RegisterPresenter,IRegist
         String pwd = mEtPwd.getText().toString().trim();
         String code = mEtCode.getText().toString().trim();
         Map<String,Object> requestMap = new HashMap<>();
-        requestMap.put("account",account);
-        requestMap.put("password",pwd);
-        requestMap.put("code",code);
-        mPresenter.userRegister(requestMap);
+        requestMap.put("phone",account);
+        requestMap.put("newPassword",pwd);
+        requestMap.put("valcode","111111");
+        mPresenter.forgetPassword(requestMap);
     }
 
     @Override
-    protected RegisterPresenter createPresenter() {
-        return new RegisterPresenter();
+    protected ForgetPwdPresenter createPresenter() {
+        return new ForgetPwdPresenter();
     }
 
-    private static final long DOUBLE_CLICK_INTERVAL = 2000;
-    private long mLastClickTimeMills = 0;
-
     @Override
-    public void onBackPressed() {
-        if (System.currentTimeMillis() - mLastClickTimeMills > DOUBLE_CLICK_INTERVAL) {
-            ToastHelper.showToast("再按一次返回退出");
-            mLastClickTimeMills = System.currentTimeMillis();
-            return;
-        }
+    public void changeSuccess(Object result) {
+        AppHelper.hideSoftInputFromWindow(mEtAccount);
+        showToastMessage("修改成功");
         finish();
-    }
-
-
-    @Override
-    public void registerSuccess(UserBean result) {
-        if (result!=null){
-            AppHelper.hideSoftInputFromWindow(mEtAccount);
-            CurrentUser.getInstance().login(result);
-            showToastMessage("注册成功");
-        }
     }
 
     @Override

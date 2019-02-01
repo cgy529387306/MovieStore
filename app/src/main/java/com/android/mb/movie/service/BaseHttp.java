@@ -1,10 +1,13 @@
 package com.android.mb.movie.service;
 
 
+import com.android.mb.movie.app.MBApplication;
 import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.retrofit.http.RetrofitHttpClient;
 import com.android.mb.movie.retrofit.http.entity.HttpResult;
 import com.android.mb.movie.retrofit.http.exception.ApiException;
+import com.android.mb.movie.utils.AppHelper;
+import com.android.mb.movie.utils.DeviceHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +54,7 @@ public class BaseHttp {
      */
     Map<String, String> getHead() {
         Map<String, String> cloudOfficeHeader = new HashMap<String, String>();
+        cloudOfficeHeader.put("openId", DeviceHelper.getDeviceId(MBApplication.getInstance()));
         if (CurrentUser.getInstance().isLogin()){
             cloudOfficeHeader.put("accessToken",CurrentUser.getInstance().getAccesstoken());
         }

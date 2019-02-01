@@ -1,5 +1,6 @@
 package com.android.mb.movie.fragment;
 
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,12 +13,16 @@ import com.android.mb.movie.adapter.CateAdapter;
 import com.android.mb.movie.adapter.MovieRecycleAdapter;
 import com.android.mb.movie.adapter.SpecialAdapter;
 import com.android.mb.movie.base.BaseMvpFragment;
+import com.android.mb.movie.entity.AuthorVideo;
+import com.android.mb.movie.entity.CateVideo;
 import com.android.mb.movie.entity.HomeData;
 import com.android.mb.movie.entity.SpecialData;
 import com.android.mb.movie.presenter.HomePresenter;
 import com.android.mb.movie.presenter.SpecialPresenter;
 import com.android.mb.movie.utils.Helper;
+import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ToastHelper;
+import com.android.mb.movie.view.VideoListActivity;
 import com.android.mb.movie.view.interfaces.IHomeView;
 import com.android.mb.movie.view.interfaces.ISpecialView;
 import com.android.mb.movie.widget.MyDividerItemDecoration;
@@ -71,8 +76,13 @@ public class SpecialFragment extends BaseMvpFragment<SpecialPresenter,ISpecialVi
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        if (mAdapter.getItem(position)!=null){
-            ToastHelper.showLongToast(mAdapter.getItem(position).getName());
+        AuthorVideo authorVideo = mAdapter.getItem(position);
+        if (authorVideo!=null){
+            String name = authorVideo.getName();
+            Bundle bundle = new Bundle();
+            bundle.putString("name",name);
+            bundle.putString("authorId",authorVideo.getId());
+            NavigationHelper.startActivity(getActivity(), VideoListActivity.class,bundle,false);
         }
     }
 

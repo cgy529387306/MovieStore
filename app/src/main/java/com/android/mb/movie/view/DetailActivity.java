@@ -379,14 +379,13 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     @Override
     public void getVideoComments(CommentListData result) {
         if (result!=null){
+            if (result.isEnd()){
+                mRefreshLayout.finishLoadMoreWithNoMoreData();
+            }
             if (mCurrentPage == 1){
-                //首页
                 mRefreshLayout.finishRefresh();
                 mAdapter.setNewData(result.getList());
                 mAdapter.setEmptyView(R.layout.empty_comment, (ViewGroup) mRecyclerView.getParent());
-                if (result.isEnd()){
-                    mRefreshLayout.finishLoadMoreWithNoMoreData();
-                }
             }else{
                 if (Helper.isEmpty(result)){
                     mRefreshLayout.finishLoadMoreWithNoMoreData();

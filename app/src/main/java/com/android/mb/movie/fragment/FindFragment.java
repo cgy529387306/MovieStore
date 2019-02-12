@@ -177,14 +177,13 @@ public class FindFragment extends BaseMvpFragment<FindPresenter,IFindView> imple
     @Override
     public void getSuccess(VideoListData result) {
         if (result!=null){
+            if (result.isEnd()){
+                mRefreshLayout.finishLoadMoreWithNoMoreData();
+            }
             if (mCurrentPage == 1){
-                //首页
                 mRefreshLayout.finishRefresh();
                 mAdapter.setNewData(result.getList());
                 mAdapter.setEmptyView(R.layout.empty_data, (ViewGroup) mRecyclerView.getParent());
-                if (result.isEnd()){
-                    mRefreshLayout.finishLoadMoreWithNoMoreData();
-                }
             }else{
                 if (Helper.isEmpty(result)){
                     mRefreshLayout.finishLoadMoreWithNoMoreData();

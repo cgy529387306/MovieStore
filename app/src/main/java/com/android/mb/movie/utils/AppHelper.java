@@ -87,6 +87,31 @@ public class AppHelper {
     }
 
     /**
+     * 获取状态栏高度
+     */
+    public static int getStatusHeight() {
+        int statusHeight = -1;
+        int resourceId = MBApplication.getInstance().getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            statusHeight = MBApplication.getInstance().getResources().getDimensionPixelSize(resourceId);
+        }
+        return statusHeight;
+
+    }
+
+    /**
+     * 获取标题栏高度
+     */
+    public static int getNavigationBarHeight() {
+        int navigationBarHeight = -1;
+        int resourceId = MBApplication.getInstance().getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            navigationBarHeight = MBApplication.getInstance().getResources().getDimensionPixelSize(resourceId);
+        }
+        return navigationBarHeight;
+    }
+
+    /**
      * 获取正在使用的launcher的包名
      * <p>存在多个桌面时且未指定默认桌面时，该方法返回空字串，使用时需处理这个情况</p>
      */
@@ -428,6 +453,8 @@ public class AppHelper {
             }
         }
     }
+
+
 
 
 }

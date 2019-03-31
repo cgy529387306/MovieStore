@@ -24,6 +24,8 @@ public class MovieRecycleAdapter extends BaseQuickAdapter<AuthorVideo, BaseViewH
 
     private MovieHeAdapter mAdapter;
 
+    private RecyclerView.RecycledViewPool mSharedPool = new RecyclerView.RecycledViewPool();
+
     public MovieRecycleAdapter(int layoutResId, List data) {
         super(layoutResId, data);
     }
@@ -34,8 +36,11 @@ public class MovieRecycleAdapter extends BaseQuickAdapter<AuthorVideo, BaseViewH
         helper.setText(R.id.tv_name,item.getName());
         helper.setText(R.id.tv_desc,item.getIntros());
         ImageUtils.displayAvatar(helper.getView(R.id.iv_avatar),item.getIcon());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext,LinearLayoutManager.HORIZONTAL,false);
+        linearLayoutManager.setInitialPrefetchItemCount(4);//优化嵌套时预加载性能
         RecyclerView recyclerView = helper.getView(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.HORIZONTAL,false));
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setRecycledViewPool(mSharedPool);//共享对象池
         mAdapter = new MovieHeAdapter(R.layout.item_movie_h,item.getVideos());
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new OnItemClickListener() {

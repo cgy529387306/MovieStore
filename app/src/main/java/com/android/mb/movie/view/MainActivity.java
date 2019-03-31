@@ -20,14 +20,26 @@ import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.widget.FragmentViewPager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 public class MainActivity extends BaseActivity {
 
     private TabLayout mTabLayout;
     private FragmentViewPager mFragmentViewPager;
     private List<Fragment> mFragmentList = new ArrayList<>();
+
+    OkHttpClient mOkHttpClient = new OkHttpClient();
+
+    private void okhttpTest() throws IOException{
+        //通过builder 模式构建出Request
+        Request request = new Request.Builder().url("http://www.baidu.com").build();
+        mOkHttpClient.newCall(request).execute();
+    }
 
     @Override
     protected void loadIntent() {

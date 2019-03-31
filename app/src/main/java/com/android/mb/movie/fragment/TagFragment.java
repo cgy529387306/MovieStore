@@ -1,21 +1,17 @@
 package com.android.mb.movie.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.MovieListAdapter;
 import com.android.mb.movie.adapter.TagAdapter;
 import com.android.mb.movie.base.BaseMvpFragment;
 import com.android.mb.movie.constants.ProjectConstants;
-import com.android.mb.movie.db.Search;
 import com.android.mb.movie.entity.Tag;
 import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.entity.VideoListData;
@@ -25,7 +21,6 @@ import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.view.DetailActivity;
 import com.android.mb.movie.view.interfaces.ITagView;
 import com.android.mb.movie.widget.taglayout.FlowTagLayout;
-import com.android.mb.movie.widget.taglayout.OnTagClickListener;
 import com.android.mb.movie.widget.taglayout.OnTagSelectListener;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;

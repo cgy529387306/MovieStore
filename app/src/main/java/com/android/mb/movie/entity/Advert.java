@@ -11,6 +11,8 @@ public class Advert implements Serializable{
 	private String coverUrl;
 	private String redirectUrl;
 	private String desc;
+	private int type;
+	private String resId;
 
 	public String getId() {
 		return id == null ? "" : id;
@@ -42,5 +44,21 @@ public class Advert implements Serializable{
 
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public String getResId() {
+		return resId == null ? "" : resId;
+	}
+
+	public void setResId(String resId) {
+		this.resId = resId;
 	}
 }

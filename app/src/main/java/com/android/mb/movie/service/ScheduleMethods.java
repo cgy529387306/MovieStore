@@ -10,6 +10,7 @@ import com.android.mb.movie.entity.SpecialData;
 import com.android.mb.movie.entity.Tag;
 import com.android.mb.movie.entity.UserBean;
 import com.android.mb.movie.entity.Video;
+import com.android.mb.movie.entity.VideoData;
 import com.android.mb.movie.entity.VideoListData;
 import com.android.mb.movie.retrofit.cache.transformer.CacheTransformer;
 import com.android.mb.movie.retrofit.http.RetrofitHttpClient;
@@ -167,6 +168,14 @@ public class ScheduleMethods extends BaseHttp {
         return getService().comment(requestParams)
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<Object>());
+    }
+
+    public Observable getVideoDetail(Map<String,Object> requestMap){
+        Map<String,Object> requestParams = new HashMap<>();
+        requestParams.put("params", Base64.encodeToString(JsonHelper.toJson(requestMap).getBytes(),Base64.DEFAULT));
+        return getService().getVideoDetail(requestParams)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<VideoData>());
     }
 
     public Observable getVideoComments(Map<String,Object> requestMap){

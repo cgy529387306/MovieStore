@@ -23,6 +23,8 @@ public class Video implements Serializable{
 	private String tag; //标签
 	private List<Tag> tagList;
 	private boolean isSelect;
+	private String coverUrl1; //横屏封面地址
+	private String coverUrl2; //竖屏封面地址
 
 	public String getId() {
 		return id == null ? "" : id;
@@ -137,5 +139,21 @@ public class Video implements Serializable{
 
 	public void setSelect(boolean select) {
 		isSelect = select;
+	}
+
+	public String getCoverUrl1() {
+		return coverUrl1 == null ? coverUrl2==null?"":coverUrl2 : coverUrl1;
+	}
+
+	public void setCoverUrl1(String coverUrl1) {
+		this.coverUrl1 = coverUrl1;
+	}
+
+	public String getCoverUrl2() {
+		return coverUrl2 == null ? coverUrl1==null?"":coverUrl1 : coverUrl2;
+	}
+
+	public void setCoverUrl2(String coverUrl2) {
+		this.coverUrl2 = coverUrl2;
 	}
 }

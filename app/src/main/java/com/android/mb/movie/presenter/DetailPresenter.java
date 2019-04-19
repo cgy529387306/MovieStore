@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.android.mb.movie.base.BaseMvpPresenter;
 import com.android.mb.movie.entity.CommentListData;
+import com.android.mb.movie.entity.VideoData;
 import com.android.mb.movie.entity.VideoListData;
 import com.android.mb.movie.presenter.interfaces.IDetailPresenter;
 import com.android.mb.movie.presenter.interfaces.IFindPresenter;
@@ -22,6 +23,31 @@ import rx.Subscriber;
 
 public class DetailPresenter extends BaseMvpPresenter<IDetailView> implements IDetailPresenter {
 
+
+    @Override
+    public void getVideoDetail(Map<String, Object> requestMap) {
+        Observable observable = ScheduleMethods.getInstance().getVideoDetail(requestMap);
+        toSubscribe(observable,  new Subscriber<VideoData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if(mMvpView!=null && !TextUtils.isEmpty(e.getMessage())){
+                    mMvpView.showToastMessage(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onNext(VideoData result) {
+                if (mMvpView!=null){
+                    mMvpView.getVideoDetail(result);
+                }
+            }
+        });
+    }
 
     @Override
     public void comment(Map<String, Object> requestMap) {

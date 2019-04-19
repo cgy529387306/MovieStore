@@ -25,6 +25,7 @@ import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.CommentListData;
 import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.Video;
+import com.android.mb.movie.entity.VideoData;
 import com.android.mb.movie.presenter.DetailPresenter;
 import com.android.mb.movie.utils.AppHelper;
 import com.android.mb.movie.utils.Helper;
@@ -72,6 +73,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     private CollapsingToolbarLayout mToolbarLayout;
     private AppBarStateChangeListener.State curState;
     private Video mVideoInfo;
+    private String mVideoId;
     private TextView mTvPlayTimes;
 
     private SmartRefreshLayout mRefreshLayout;
@@ -139,6 +141,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
 
     @Override
     protected void loadIntent() {
+        mVideoId = getIntent().getStringExtra("videoId");
         mVideoInfo = (Video) getIntent().getSerializableExtra("videoInfo");
     }
 
@@ -168,7 +171,6 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
             }
         });
         mToolbarLayout = findViewById(R.id.toolbar_layout);
-        mToolbarLayout.setTitle(mVideoInfo.getName());
         mAppBarLayout = findViewById(R.id.app_bar);
         mAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener);
         mRefreshLayout = findViewById(R.id.refreshLayout);
@@ -187,7 +189,11 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-        initData();
+        if (Helper.isNotEmpty(mVideoId)){
+            getVideoDetail();
+        }else if (Helper.isNotEmpty(mVideoInfo)){
+            initData();
+        }
         getComments();
     }
 
@@ -203,9 +209,13 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     }
 
     private void initData(){
+        if (mVideoInfo==null){
+            return;
+        }
+        mToolbarLayout.setTitle(mVideoInfo.getName());
         //增加封面
         ImageView imageView = new ImageView(this);
-        ImageUtils.loadImageUrl(imageView,mVideoInfo.getCoverUrl());
+        ImageUtils.loadImageUrl(imageView,mVideoInfo.getCoverUrl1());
         resolveNormalVideoUI();
         mTvPlayTimes.setText(String.format(getString(R.string.play_times_pre), mVideoInfo.getPlayCount()));
         //外部辅助的旋转，帮助全屏
@@ -326,7 +336,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
             } else if (state == AppBarStateChangeListener.State.COLLAPSED) {
                 //折叠状态
                 //如果是小窗口就不需要处理
-                mToolbarLayout.setTitle(mVideoInfo.getName());
+                mToolbarLayout.setTitle(mVideoInfo==null?"":mVideoInfo.getName());
                 if (!mIsSmall && mIsPlay) {
                     mIsSmall = true;
                     int size = CommonUtil.dip2px(DetailActivity.this, 150);
@@ -356,6 +366,14 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         }
     };
 
+
+    @Override
+    public void getVideoDetail(VideoData result) {
+        if (result!=null && result.getVideo()!=null){
+            mVideoInfo = result.getVideo();
+            initData();
+        }
+    }
 
     @Override
     public void comment(Object result) {
@@ -404,21 +422,35 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         mPresenter.comment(requestMap);
     }
 
-    private void submitPraise(){
+    private void getVideoDetail(){
         Map<String,Object> requestMap = new HashMap<>();
-        requestMap.put("videoId", mVideoInfo.getId());
-        mPresenter.praise(requestMap);
+        requestMap.put("videoId", mVideoId);
+        mPresenter.getVideoDetail(requestMap);
+    }
+
+    private void submitPraise(){
+        if (mVideoInfo!=null){
+            Map<String,Object> requestMap = new HashMap<>();
+            requestMap.put("videoId", mVideoInfo.getId());
+            mPresenter.praise(requestMap);
+        }
     }
 
     private void submitWatch(){
-        Map<String,Object> requestMap = new HashMap<>();
-        requestMap.put("videoId", mVideoInfo.getId());
-        mPresenter.watch(requestMap);
+        if (mVideoInfo!=null){
+            Map<String,Object> requestMap = new HashMap<>();
+            requestMap.put("videoId", mVideoInfo.getId());
+            mPresenter.watch(requestMap);
+        }
     }
 
     private void getComments(){
         Map<String,Object> requestMap = new HashMap<>();
-        requestMap.put("videoId", mVideoInfo.getId());
+        if (Helper.isNotEmpty(mVideoId)){
+            requestMap.put("videoId", mVideoId);
+        }else if (Helper.isNotEmpty(mVideoInfo)){
+            requestMap.put("videoId", mVideoInfo.getId());
+        }
         requestMap.put("currentPage",mCurrentPage);
         requestMap.put("pageSize", ProjectConstants.PAGE_SIZE);
         mPresenter.getVideoComments(requestMap);

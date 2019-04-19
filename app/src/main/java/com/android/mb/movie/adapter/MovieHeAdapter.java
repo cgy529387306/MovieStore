@@ -21,7 +21,7 @@ public class MovieHeAdapter extends BaseQuickAdapter<Video, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, Video video) {
         helper.setText(R.id.tv_title,video.getName());
-        ImageUtils.loadImageUrl(helper.getView(R.id.iv_cover),video.getCoverUrl());
+        ImageUtils.loadImageUrl(helper.getView(R.id.iv_cover),video.getCoverUrl1());
     }
 
 

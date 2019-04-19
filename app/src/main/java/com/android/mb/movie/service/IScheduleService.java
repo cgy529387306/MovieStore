@@ -9,6 +9,7 @@ import com.android.mb.movie.entity.SpecialData;
 import com.android.mb.movie.entity.Tag;
 import com.android.mb.movie.entity.UserBean;
 import com.android.mb.movie.entity.Video;
+import com.android.mb.movie.entity.VideoData;
 import com.android.mb.movie.entity.VideoListData;
 import com.android.mb.movie.retrofit.http.entity.HttpResult;
 
@@ -166,6 +167,14 @@ public interface IScheduleService {
      */
     @GET("/api/1.0/common/delLikeVideos")
     Observable<HttpResult<Object>> delLike(@QueryMap Map<String,Object> requestMap);
+
+    /**
+     * videoId
+     * content
+     * @return
+     */
+    @GET("/api/1.0/common/getVideoDetail")
+    Observable<HttpResult<VideoData>> getVideoDetail(@QueryMap Map<String,Object> requestMap);
 
     /**
      * videoId

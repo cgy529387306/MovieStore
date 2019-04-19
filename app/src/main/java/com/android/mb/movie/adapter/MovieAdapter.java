@@ -59,7 +59,7 @@ public class MovieAdapter extends BaseAdapter{
         }
         final Video video = mData.get(position);
         viewHolder.tvTitle.setText(video.getName());
-        ImageUtils.loadImageUrl(viewHolder.ivCover,video.getCoverUrl());
+        ImageUtils.loadImageUrl(viewHolder.ivCover,video.getCoverUrl1());
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

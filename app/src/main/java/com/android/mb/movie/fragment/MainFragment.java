@@ -1,5 +1,6 @@
 package com.android.mb.movie.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +27,7 @@ import com.android.mb.movie.utils.ImageUtils;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.ToastHelper;
+import com.android.mb.movie.view.DetailActivity;
 import com.android.mb.movie.view.HistoryActivity;
 import com.android.mb.movie.view.LoginActivity;
 import com.android.mb.movie.view.SearchActivity;
@@ -157,9 +159,15 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
     public void OnBannerClick(int position) {
         if (Helper.isNotEmpty(mAdvertList) && mAdvertList.size()>position){
             Advert advert = mAdvertList.get(position);
-            Bundle bundle = new Bundle();
-            bundle.putString(ProjectConstants.KEY_WEB_DETAIL_URL,advert.getRedirectUrl());
-            NavigationHelper.startActivity(mContext, BaseWebViewActivity.class,bundle,false);
+            if (advert.getType()==1){
+                Bundle bundle = new Bundle();
+                bundle.putString("videoId",advert.getResId());
+                NavigationHelper.startActivity(mContext, DetailActivity.class,bundle,false);
+            }else{
+                Bundle bundle = new Bundle();
+                bundle.putString(ProjectConstants.KEY_WEB_DETAIL_URL,advert.getRedirectUrl());
+                NavigationHelper.startActivity(mContext, BaseWebViewActivity.class,bundle,false);
+            }
         }
     }
 

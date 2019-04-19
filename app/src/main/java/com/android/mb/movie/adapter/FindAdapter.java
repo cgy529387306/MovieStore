@@ -59,7 +59,7 @@ public class FindAdapter extends BaseQuickAdapter<Video, BaseViewHolder>{
         helper.setText(R.id.tv_times,String.format(mContext.getString(R.string.play_times_pre), item.getPlayCount()));
         StandardGSYVideoPlayer videoPlayer = helper.getView(R.id.video_player);
         ImageView imageView = new ImageView(mContext);
-        ImageUtils.loadImageUrl(imageView, item.getCoverUrl());
+        ImageUtils.loadImageUrl(imageView, item.getCoverUrl1());
         mVideoOptionBuilder
                 .setIsTouchWiget(false)
                 .setThumbImageView(imageView)

@@ -1,5 +1,10 @@
 package com.android.mb.movie.utils;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.widget.Toast;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,4 +30,14 @@ public class ProjectHelper {
         return data == null?"":data;
     }
 
+
+    public static void openQQ(Context context,String qq){
+        try {
+            String url = "mqqwpa://im/chat?chat_type=wpa&uin="+qq;//uin是发送过去的qq号码
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(context,"请检查是否安装QQ",Toast.LENGTH_LONG).show();
+        }
+    }
 }

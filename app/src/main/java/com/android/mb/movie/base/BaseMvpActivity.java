@@ -57,9 +57,12 @@ public abstract class BaseMvpActivity<P extends Presenter<V>,V extends BaseMvpVi
 
     @Override
     public void showProgressDialog() {
-        mMaterialDialog = new MaterialDialog.Builder(this)
-                .content("加载中...")
-                .progress(true, 0).show();
+        if (mMaterialDialog == null){
+            mMaterialDialog = new MaterialDialog.Builder(mContext)
+                    .content("加载中...")
+                    .progress(true, 0).build();
+        }
+        mMaterialDialog.show();
     }
 
     @Override

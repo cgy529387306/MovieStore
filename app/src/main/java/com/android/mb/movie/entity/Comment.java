@@ -1,5 +1,7 @@
 package com.android.mb.movie.entity;
 
+import com.android.mb.movie.utils.Helper;
+
 import java.io.Serializable;
 
 public class Comment implements Serializable{
@@ -9,6 +11,8 @@ public class Comment implements Serializable{
     private String id;
     private String userId;
     private String videoId;
+    private String userNickName;
+    private String userAvatarUrl;
 
 
     public String getContent() {
@@ -49,5 +53,21 @@ public class Comment implements Serializable{
 
     public void setVideoId(String videoId) {
         this.videoId = videoId;
+    }
+
+    public String getUserNickName() {
+        return userNickName == null ? "" : userNickName;
+    }
+
+    public void setUserNickName(String userNickName) {
+        this.userNickName = userNickName;
+    }
+
+    public String getUserAvatarUrl() {
+        return Helper.isEmpty(userAvatarUrl) ? Helper.isEmpty(userId)? userId:"" : userAvatarUrl;
+    }
+
+    public void setUserAvatarUrl(String userAvatarUrl) {
+        this.userAvatarUrl = userAvatarUrl;
     }
 }

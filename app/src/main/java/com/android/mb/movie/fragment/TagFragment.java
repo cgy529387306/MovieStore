@@ -18,8 +18,10 @@ import com.android.mb.movie.entity.VideoListData;
 import com.android.mb.movie.presenter.TagPresenter;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.NavigationHelper;
+import com.android.mb.movie.utils.ProgressDialogHelper;
 import com.android.mb.movie.view.DetailActivity;
 import com.android.mb.movie.view.interfaces.ITagView;
+import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.android.mb.movie.widget.taglayout.FlowTagLayout;
 import com.android.mb.movie.widget.taglayout.OnTagSelectListener;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -64,6 +66,7 @@ public class TagFragment extends BaseMvpFragment<TagPresenter,ITagView> implemen
         mRecyclerView =  mRootView.findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.addItemDecoration(new MyDividerItemDecoration(mContext,MyDividerItemDecoration.VERTICAL_LIST));
         mAdapter = new MovieListAdapter(R.layout.item_movie_list, new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
         mRefreshLayout.setEnableRefresh(false);
@@ -92,8 +95,7 @@ public class TagFragment extends BaseMvpFragment<TagPresenter,ITagView> implemen
                         }
                     }
                     mTags = sb.toString();
-                    mCurrentPage = 1;
-                    getListFormServer();
+                    onRefresh(null);
                 }
             }
         });
@@ -133,7 +135,6 @@ public class TagFragment extends BaseMvpFragment<TagPresenter,ITagView> implemen
     }
 
     private void getListFormServer(){
-        showProgressDialog();
         Map<String,Object> requestMap = new HashMap<>();
         requestMap.put("currentPage",1);
         requestMap.put("pageSize", ProjectConstants.PAGE_SIZE);
@@ -158,6 +159,7 @@ public class TagFragment extends BaseMvpFragment<TagPresenter,ITagView> implemen
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         mCurrentPage = 1;
+        showProgressDialog();
         getListFormServer();
     }
 

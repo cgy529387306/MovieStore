@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.mb.movie.utils.ToastHelper;
 
 
@@ -24,7 +25,7 @@ public abstract class BaseMvpFragment<P extends Presenter<V>,V extends BaseMvpVi
 
     protected P mPresenter;
 
-//    private CustomProgressDialog mProgressDialog;
+    private MaterialDialog mMaterialDialog;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -58,24 +59,22 @@ public abstract class BaseMvpFragment<P extends Presenter<V>,V extends BaseMvpVi
 
     @Override
     public void showProgressDialog() {
-//        if(mProgressDialog == null) {
-//            mProgressDialog = new CustomProgressDialog(mContext);
-//            mProgressDialog.setCancelable(false);
-//        }else {
-//            mProgressDialog.show();
-//        }
-//        //为进度条添加一个事件.
-//        mProgressDialog.setOnKeyListener(onKeyListener);
+        if (mMaterialDialog == null){
+            mMaterialDialog = new MaterialDialog.Builder(mContext)
+                    .content("加载中...")
+                    .progress(true, 0).build();
+        }
+        mMaterialDialog.show();
     }
 
     @Override
     public void dismissProgressDialog() {
-//        if (mContext.isFinishing()) {
-//            return;
-//        }
-//        if (null != mProgressDialog && mProgressDialog.isShowing()) {
-//            mProgressDialog.dismiss();
-//        }
+        if (mContext==null || mContext.isFinishing()) {
+            return;
+        }
+        if (mMaterialDialog!=null && mMaterialDialog.isShowing()){
+            mMaterialDialog.dismiss();
+        }
     }
 
     /**

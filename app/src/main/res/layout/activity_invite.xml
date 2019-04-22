@@ -44,9 +44,9 @@
             android:textColor="@color/white"
             android:textSize="16sp"/>
         <ImageView
+            android:id="@+id/iv_qrCode"
             android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:src="@mipmap/ic_qrcode" />
+            android:layout_height="160dp" />
         <TextView
             android:id="@+id/tv_invite_code"
             android:layout_width="match_parent"
@@ -64,5 +64,36 @@
             android:text="您的推广码"
             android:textColor="@color/white"
             android:textSize="14sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_download"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:padding="12dp"
+            android:background="@drawable/shape_btn_orange"
+            android:text="保存二维码"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/tv_copy"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:padding="12dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_btn_blue"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:text="复制"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
     </LinearLayout>
 </LinearLayout>

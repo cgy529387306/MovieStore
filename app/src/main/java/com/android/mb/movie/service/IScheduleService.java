@@ -5,9 +5,12 @@ import com.android.mb.movie.entity.CommentListData;
 import com.android.mb.movie.entity.CountData;
 import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.HomeData;
+import com.android.mb.movie.entity.InviteBean;
+import com.android.mb.movie.entity.QQBean;
 import com.android.mb.movie.entity.SpecialData;
 import com.android.mb.movie.entity.Tag;
 import com.android.mb.movie.entity.UserBean;
+import com.android.mb.movie.entity.VersionBean;
 import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.entity.VideoData;
 import com.android.mb.movie.entity.VideoListData;
@@ -204,5 +207,24 @@ public interface IScheduleService {
      * @return
      */
     @GET("/api/1.0/common/getPromoCode")
-    Observable<HttpResult<String>> getPromoCode();
+    Observable<HttpResult<InviteBean>> getPromoCode();
+
+    /**
+     * @param requestMap
+     * @return
+     */
+    @GET("/api/1.0/common/feedback")
+    Observable<HttpResult<Object>> feedback(@QueryMap Map<String,Object> requestMap);
+
+    /**
+     * @return
+     */
+    @GET("/api/1.0/common/getQQGroupNo")
+    Observable<HttpResult<QQBean>> getQQGroupNo();
+
+    /**
+     * @return
+     */
+    @GET("/api/1.0/common/getAppVersion")
+    Observable<HttpResult<VersionBean>> getAppVersion();
 }

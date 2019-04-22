@@ -110,4 +110,8 @@ dependencies {
     implementation 'com.shuyu:gsyVideoPlayer-arm64:6.0.2'
     implementation 'com.shuyu:gsyVideoPlayer-x64:6.0.2'
     implementation 'com.shuyu:gsyVideoPlayer-x86:6.0.2'
+
+    //版本更新
+    implementation 'com.allenliu.versionchecklib:library:2.1.9'
+
 }

@@ -6,9 +6,12 @@ import com.android.mb.movie.entity.Avatar;
 import com.android.mb.movie.entity.CommentListData;
 import com.android.mb.movie.entity.CountData;
 import com.android.mb.movie.entity.HomeData;
+import com.android.mb.movie.entity.InviteBean;
+import com.android.mb.movie.entity.QQBean;
 import com.android.mb.movie.entity.SpecialData;
 import com.android.mb.movie.entity.Tag;
 import com.android.mb.movie.entity.UserBean;
+import com.android.mb.movie.entity.VersionBean;
 import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.entity.VideoData;
 import com.android.mb.movie.entity.VideoListData;
@@ -118,6 +121,7 @@ public class ScheduleMethods extends BaseHttp {
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<Object>());
     }
+
 
     public Observable uploadAvatar(File file){
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -243,7 +247,27 @@ public class ScheduleMethods extends BaseHttp {
     public Observable getPromoCode(){
         return getService().getPromoCode()
                 .compose(CacheTransformer.emptyTransformer())
-                .map(new HttpCacheResultFunc<String>());
+                .map(new HttpCacheResultFunc<InviteBean>());
+    }
+
+    public Observable feedback(Map<String,Object> requestMap){
+        Map<String,Object> requestParams = new HashMap<>();
+        requestParams.put("params", Base64.encodeToString(JsonHelper.toJson(requestMap).getBytes(),Base64.DEFAULT));
+        return getService().feedback(requestParams)
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<Object>());
+    }
+
+    public Observable getQQGroupNo(){
+        return getService().getQQGroupNo()
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<QQBean>());
+    }
+
+    public Observable getAppVersion(){
+        return getService().getAppVersion()
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<VersionBean>());
     }
 
 }

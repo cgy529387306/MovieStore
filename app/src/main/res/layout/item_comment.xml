@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp">
-    <ImageView
+    <com.android.mb.movie.widget.CircleImageView
         android:id="@+id/iv_avatar"
         android:layout_width="56dp"
         android:layout_height="56dp"

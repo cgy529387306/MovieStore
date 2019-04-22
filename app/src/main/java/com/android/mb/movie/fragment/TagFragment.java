@@ -90,6 +90,7 @@ public class TagFragment extends BaseMvpFragment<TagPresenter,ITagView> implemen
                 if (selectedList != null && selectedList.size() > 0) {
                     Tag tag = (Tag) mTagHot.getAdapter().getItem(0);
                     mTags = tag.getId();
+                    showProgressDialog();
                     onRefresh(null);
                 }
             }
@@ -154,7 +155,6 @@ public class TagFragment extends BaseMvpFragment<TagPresenter,ITagView> implemen
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         mCurrentPage = 1;
-        showProgressDialog();
         getListFormServer();
     }
 

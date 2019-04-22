@@ -61,7 +61,7 @@ public class CateAdapter extends BaseAdapter{
         }
         final Category category = mData.get(position);
         viewHolder.tvTitle.setText(category.getCateName());
-        ImageUtils.loadCircleImageUrl(viewHolder.ivCover,category.getCoverUrl());
+        ImageUtils.loadImageUrlDark(viewHolder.ivCover,category.getCoverUrl());
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

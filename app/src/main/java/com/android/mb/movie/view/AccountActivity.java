@@ -3,8 +3,10 @@ package com.android.mb.movie.view;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.InputType;
@@ -54,7 +56,15 @@ public class AccountActivity extends BaseMvpActivity<AccountPresenter,IAccountVi
     private String mTempFilePath = AppHelper.getBaseCachePath()
             .concat(String.valueOf(System.currentTimeMillis())).concat(".png");
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 
     @Override
     protected void loadIntent() {

@@ -2,6 +2,8 @@ package com.android.mb.movie.adapter;
 
 import android.app.Activity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.android.mb.movie.R;
@@ -12,6 +14,7 @@ import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.PreferencesHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.InviteActivity;
+import com.android.mb.movie.widget.MyImageView1;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -58,8 +61,12 @@ public class FindAdapter extends BaseQuickAdapter<Video, BaseViewHolder>{
         helper.setOnClickListener(R.id.btn_share,new MyOnClickListener(item));
         helper.setText(R.id.tv_times,String.format(mContext.getString(R.string.play_times_pre), item.getPlayCount()));
         StandardGSYVideoPlayer videoPlayer = helper.getView(R.id.video_player);
-        ImageView imageView = new ImageView(mContext);
-        ImageUtils.loadImageUrl(imageView, item.getCoverUrl1());
+        MyImageView1 imageView = new MyImageView1(mContext);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.WRAP_CONTENT);
+        imageView.setLayoutParams(params);
+
+        ImageUtils.loadImageUrlDark(imageView, item.getCoverUrl1());
         mVideoOptionBuilder
                 .setIsTouchWiget(false)
                 .setThumbImageView(imageView)

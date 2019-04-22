@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ import com.android.mb.movie.video.LandLayoutVideo;
 import com.android.mb.movie.video.listener.AppBarStateChangeListener;
 import com.android.mb.movie.view.interfaces.IDetailView;
 import com.android.mb.movie.widget.MyDividerItemDecoration;
+import com.android.mb.movie.widget.MyImageView1;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -214,8 +216,11 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         }
         mToolbarLayout.setTitle(mVideoInfo.getName());
         //增加封面
-        ImageView imageView = new ImageView(this);
-        ImageUtils.loadImageUrl(imageView,mVideoInfo.getCoverUrl1());
+        MyImageView1 imageView = new MyImageView1(mContext);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.WRAP_CONTENT);
+        imageView.setLayoutParams(params);
+        ImageUtils.loadImageUrlDark(imageView,mVideoInfo.getCoverUrl1());
         resolveNormalVideoUI();
         mTvPlayTimes.setText(String.format(getString(R.string.play_times_pre), mVideoInfo.getPlayCount()));
         //外部辅助的旋转，帮助全屏

@@ -23,6 +23,7 @@ import com.android.mb.movie.view.DetailActivity;
 import com.android.mb.movie.view.interfaces.ITagView;
 import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.android.mb.movie.widget.taglayout.FlowTagLayout;
+import com.android.mb.movie.widget.taglayout.OnTagClickListener;
 import com.android.mb.movie.widget.taglayout.OnTagSelectListener;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -59,7 +60,7 @@ public class TagFragment extends BaseMvpFragment<TagPresenter,ITagView> implemen
         mTagHot = mRootView.findViewById(R.id.tagLayout);
         mHotAdapter = new TagAdapter<>(getActivity());
         mTagHot.setAdapter(mHotAdapter);
-        mTagHot.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_MULTI);
+        mTagHot.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_SINGLE);
         mTagHot.clearAllOption();
 
         mRefreshLayout =  mRootView.findViewById(R.id.refreshLayout);
@@ -75,6 +76,7 @@ public class TagFragment extends BaseMvpFragment<TagPresenter,ITagView> implemen
     @Override
     protected void processLogic() {
         mPresenter.getTags();
+        onRefresh(null);
     }
 
     @Override
@@ -86,15 +88,8 @@ public class TagFragment extends BaseMvpFragment<TagPresenter,ITagView> implemen
             @Override
             public void onItemSelect(FlowTagLayout parent, List<Integer> selectedList) {
                 if (selectedList != null && selectedList.size() > 0) {
-                    StringBuilder sb = new StringBuilder();
-                    for (int i : selectedList) {
-                        Tag tag = (Tag) mTagHot.getAdapter().getItem(i);
-                        sb.append(tag.getId());
-                        if (i<selectedList.size()){
-                            sb.append(",");
-                        }
-                    }
-                    mTags = sb.toString();
+                    Tag tag = (Tag) mTagHot.getAdapter().getItem(0);
+                    mTags = tag.getId();
                     onRefresh(null);
                 }
             }

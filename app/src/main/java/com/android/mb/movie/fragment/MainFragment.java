@@ -174,7 +174,7 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
     public class GlideImageLoader extends ImageLoader {
         @Override
         public void displayImage(Context context, Object path, ImageView imageView) {
-            ImageUtils.loadImageUrl(imageView,((Advert)path).getCoverUrl());
+            ImageUtils.loadImageUrlDark(imageView,((Advert)path).getCoverUrl());
         }
     }
 

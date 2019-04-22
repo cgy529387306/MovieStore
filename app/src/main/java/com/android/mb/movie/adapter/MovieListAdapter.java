@@ -32,7 +32,7 @@ public class MovieListAdapter extends BaseQuickAdapter<Video, BaseViewHolder> {
         helper.setText(R.id.tv_play_count,String.format(mContext.getString(R.string.play_times_pre), item.getPlayCount()));
         CheckBox checkBox = helper.getView(R.id.checkBox);
         checkBox.setVisibility(mIsCanEdit? View.VISIBLE:View.GONE);
-        ImageUtils.loadImageUrl(helper.getView(R.id.iv_cover), item.getCoverUrl1());
+        ImageUtils.loadImageUrlLight(helper.getView(R.id.iv_cover), item.getCoverUrl1());
         FlowTagLayout flowTagLayout = helper.getView(R.id.tagLayout);
         TagSmallAdapter<Tag> tagAdapter = new TagSmallAdapter<>(mContext);
         flowTagLayout.setAdapter(tagAdapter);

@@ -59,7 +59,7 @@ public class SpecialAdapter extends BaseAdapter{
         }
         final Special special = mData.get(position);
         viewHolder.tvTitle.setText(special.getName());
-        ImageUtils.loadCircleImageUrl(viewHolder.ivCover,special.getIcon());
+        ImageUtils.loadImageUrlDark(viewHolder.ivCover,special.getIcon());
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

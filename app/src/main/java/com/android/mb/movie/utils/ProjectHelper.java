@@ -1,5 +1,6 @@
 package com.android.mb.movie.utils;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -38,6 +39,26 @@ public class ProjectHelper {
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(context,"请检查是否安装QQ",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * 用Intent打开url(即处理外部链接地址)
+     *
+     * @param context
+     * @param url
+     */
+    public static void openUrlWithIntent(Context context, String url) {
+        if (Helper.isNull(context) || Helper.isEmpty(url)) {
+            return;
+        }
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(uri);
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

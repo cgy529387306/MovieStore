@@ -106,7 +106,7 @@ public class UserFragment extends BaseMvpFragment<ExtraPresenter,IExtraView> imp
             NavigationHelper.startActivity(getActivity(), FeedbackActivity.class,null,false);
         }else if (id == R.id.tv_potato){
             if (Helper.isNotEmpty(mQQGroup)){
-                ProjectHelper.openQQ(getActivity(),mQQGroup);
+                ProjectHelper.openUrlWithIntent(getActivity(),mQQGroup);
             }
         }else if (id == R.id.rl_history){
             if (CurrentUser.getInstance().isLogin()){

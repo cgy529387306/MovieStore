@@ -216,6 +216,15 @@ public interface IScheduleService {
     @GET("/api/1.0/common/feedback")
     Observable<HttpResult<Object>> feedback(@QueryMap Map<String,Object> requestMap);
 
+
+    /**
+     * avatar:头像文件流
+     * @return
+     */
+    @POST("/api/1.0/common/feedback")
+    @Multipart
+    Observable<HttpResult<Avatar>> feedback1(@Part MultipartBody.Part file,@QueryMap Map<String,Object> requestMap);
+
     /**
      * @return
      */

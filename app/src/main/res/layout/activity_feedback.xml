@@ -6,7 +6,7 @@
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="240dp"
         android:layout_margin="15dp"
         android:background="@drawable/shape_bg_gray">
         <EditText
@@ -19,6 +19,15 @@
             android:textSize="14sp"
             android:background="@null"
             android:hint="请详尽描述遇到的问题，以便我们及时为您解决！"/>
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            android:layout_alignParentBottom="true"
+            android:background="@color/base_gray"
+            android:padding="10dp"
+            android:src="@mipmap/icon_add_card"/>
         <TextView
             android:id="@+id/tv_rest"
             android:layout_width="wrap_content"

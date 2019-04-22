@@ -1,6 +1,7 @@
 package com.android.mb.movie.view;
 
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,7 +32,6 @@ public class InviteActivity extends BaseMvpActivity<InvitePresenter,IInviteView>
     private ImageView mIvQrCode;
     private String mInviteText;
     private String mQrCode;
-    private RequestOptions mRequestOptions;
 
     @Override
     protected void loadIntent() {
@@ -50,13 +50,13 @@ public class InviteActivity extends BaseMvpActivity<InvitePresenter,IInviteView>
 
     @Override
     protected void bindViews() {
-        mRequestOptions = new RequestOptions()
-                .placeholder(R.mipmap.ic_qrcode)// 正在加载中的图片
-                .error(R.mipmap.ic_qrcode);
         mTvInviteCode = findViewById(R.id.tv_invite_code);
         mIvQrCode = findViewById(R.id.iv_qrCode);
         if (Helper.isNotEmpty(mQrCode)){
-            Glide.with(InviteActivity.this).load(mQrCode).apply(mRequestOptions).into(mIvQrCode);
+            Bitmap bitmap = ImageUtils.createQRImage(mQrCode,AppHelper.calDpi2px(160),AppHelper.calDpi2px(160));
+            if (Helper.isNotEmpty(bitmap)){
+                mIvQrCode.setImageBitmap(bitmap);
+            }
         }
     }
 
@@ -102,13 +102,16 @@ public class InviteActivity extends BaseMvpActivity<InvitePresenter,IInviteView>
     @Override
     public void getSuccess(InviteBean result) {
         if (Helper.isNotEmpty(result)){
-            if (Helper.isEmpty(mQrCode) || !mQrCode.equals(result.getQrCodeUrl())){
-                PreferencesHelper.getInstance().putString("qrCode",result.getQrCodeUrl());
-                Glide.with(InviteActivity.this).load(result.getQrCodeUrl()).apply(mRequestOptions).into(mIvQrCode);
-            }
             mTvInviteCode.setText(result.getPromoCode());
             String downloadUrl = result.getDownloadUrl()+"?promoCode="+result.getPromoCode();
             mInviteText = result.getShareText().replace("{main}",downloadUrl);
+            if (Helper.isEmpty(mQrCode) || !mQrCode.equals(downloadUrl)){
+                PreferencesHelper.getInstance().putString("qrCode",downloadUrl);
+                Bitmap bitmap = ImageUtils.createQRImage(downloadUrl,AppHelper.calDpi2px(160),AppHelper.calDpi2px(160));
+                if (Helper.isNotEmpty(bitmap)){
+                    mIvQrCode.setImageBitmap(bitmap);
+                }
+            }
         }
     }
 

@@ -9,6 +9,7 @@ import com.android.mb.movie.service.ScheduleMethods;
 import com.android.mb.movie.view.interfaces.IChangePwdView;
 import com.android.mb.movie.view.interfaces.IFeedbackView;
 
+import java.io.File;
 import java.util.Map;
 
 import rx.Observable;
@@ -21,8 +22,13 @@ import rx.Subscriber;
 public class FeedbackPresenter extends BaseMvpPresenter<IFeedbackView> implements IFeedbackPresenter {
 
     @Override
-    public void feedback(Map<String, Object> requestMap) {
-        Observable observable = ScheduleMethods.getInstance().feedback(requestMap);
+    public void feedback(File file, Map<String, Object> requestMap) {
+        Observable observable;
+        if (file==null || !file.exists()){
+            observable = ScheduleMethods.getInstance().feedback(requestMap);
+        }else{
+            observable = ScheduleMethods.getInstance().feedback1(file,requestMap);
+        }
         toSubscribe(observable,  new Subscriber<Object>() {
             @Override
             public void onCompleted() {

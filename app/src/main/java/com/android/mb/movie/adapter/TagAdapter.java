@@ -22,6 +22,7 @@ public class TagAdapter<T> extends BaseAdapter implements OnInitSelectedPosition
 
     private final Context mContext;
     private final List<T> mDataList;
+    private int mSelectPos;
 
 
     public TagAdapter(Context context) {
@@ -56,6 +57,7 @@ public class TagAdapter<T> extends BaseAdapter implements OnInitSelectedPosition
         if (t instanceof Tag){
             Tag tag = (Tag) t;
             textView.setText(tag.getName());
+
         }
         if (t instanceof Search){
             Search search = (Search) t;

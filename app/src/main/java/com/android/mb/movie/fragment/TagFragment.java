@@ -50,6 +50,8 @@ public class TagFragment extends BaseMvpFragment<TagPresenter,ITagView> implemen
     private int mCurrentPage = 1;
     private LinearLayoutManager mLinearLayoutManager;
     private String mTags;
+    private boolean mIsFisrt;
+
     @Override
     protected int getLayoutId() {
         return  R.layout.frg_tag;
@@ -76,7 +78,6 @@ public class TagFragment extends BaseMvpFragment<TagPresenter,ITagView> implemen
     @Override
     protected void processLogic() {
         mPresenter.getTags();
-        onRefresh(null);
     }
 
     @Override
@@ -88,9 +89,14 @@ public class TagFragment extends BaseMvpFragment<TagPresenter,ITagView> implemen
             @Override
             public void onItemSelect(FlowTagLayout parent, List<Integer> selectedList) {
                 if (selectedList != null && selectedList.size() > 0) {
-                    Tag tag = (Tag) mTagHot.getAdapter().getItem(0);
+                    int position = selectedList.get(0);
+                    Tag tag = (Tag) mTagHot.getAdapter().getItem(position);
                     mTags = tag.getId();
-                    showProgressDialog();
+                    if (mIsFisrt){
+                        mIsFisrt = false;
+                    }else{
+                        showProgressDialog();
+                    }
                     onRefresh(null);
                 }
             }
@@ -105,8 +111,12 @@ public class TagFragment extends BaseMvpFragment<TagPresenter,ITagView> implemen
 
     @Override
     public void getSuccess(List<Tag> result) {
-        mHotAdapter.onlyAddAll(result);
+        mHotAdapter.clearAndAddAll(result);
         mTagHot.clearAllOption();
+        if (Helper.isNotEmpty(result)){
+            mIsFisrt = true;
+            mTagHot.setSelected(0);
+        }
     }
 
     @Override

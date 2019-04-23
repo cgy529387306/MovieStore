@@ -1,7 +1,6 @@
 package com.android.mb.movie.view;
 
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,9 +16,6 @@ import com.android.mb.movie.utils.ImageUtils;
 import com.android.mb.movie.utils.PreferencesHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.interfaces.IInviteView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 
 /**
  * 登录

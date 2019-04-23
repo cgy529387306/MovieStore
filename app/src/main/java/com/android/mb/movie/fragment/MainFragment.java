@@ -25,8 +25,6 @@ import com.android.mb.movie.presenter.HomePresenter;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ImageUtils;
 import com.android.mb.movie.utils.NavigationHelper;
-import com.android.mb.movie.utils.ProjectHelper;
-import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.DetailActivity;
 import com.android.mb.movie.view.HistoryActivity;
 import com.android.mb.movie.view.LoginActivity;
@@ -163,6 +161,12 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
                 Bundle bundle = new Bundle();
                 bundle.putString("videoId",advert.getResId());
                 NavigationHelper.startActivity(mContext, DetailActivity.class,bundle,false);
+            }else if (advert.getType()==2){
+                String name = advert.getDesc();
+                Bundle bundle = new Bundle();
+                bundle.putString("name",name);
+                bundle.putString("cateId",advert.getResId());
+                NavigationHelper.startActivity(mContext, VideoListActivity.class,bundle,false);
             }else{
                 Bundle bundle = new Bundle();
                 bundle.putString(ProjectConstants.KEY_WEB_DETAIL_URL,advert.getRedirectUrl());

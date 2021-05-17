@@ -8,6 +8,7 @@ import com.android.mb.movie.retrofit.http.entity.HttpResult;
 import com.android.mb.movie.retrofit.http.exception.ApiException;
 import com.android.mb.movie.utils.AppHelper;
 import com.android.mb.movie.utils.DeviceHelper;
+import com.android.mb.movie.utils.WifiMacUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,7 @@ import rx.functions.Func1;
 
 public class BaseHttp {
 
-    public static final String BASE_URL = "http://211.149.168.217:58080";
+    public static final String BASE_URL = "http://139.129.101.7:8082";
 
     public String getServerHost() {
         return BASE_URL;
@@ -54,7 +55,7 @@ public class BaseHttp {
      */
     Map<String, String> getHead() {
         Map<String, String> cloudOfficeHeader = new HashMap<String, String>();
-        cloudOfficeHeader.put("openId", DeviceHelper.getDeviceId(MBApplication.getInstance()));
+        cloudOfficeHeader.put("openId", WifiMacUtils.getMac(MBApplication.getInstance()));
         if (CurrentUser.getInstance().isLogin()){
             cloudOfficeHeader.put("accessToken",CurrentUser.getInstance().getAccesstoken());
         }

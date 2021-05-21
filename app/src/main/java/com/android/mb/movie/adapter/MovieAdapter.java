@@ -64,7 +64,7 @@ public class MovieAdapter extends BaseAdapter{
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("videoInfo",video);
+                bundle.putString("videoId",video.getId());
                 NavigationHelper.startActivity((Activity) mContext, DetailActivity.class,bundle,false);
             }
         });

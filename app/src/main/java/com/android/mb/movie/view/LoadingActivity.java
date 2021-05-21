@@ -44,12 +44,12 @@ public class LoadingActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
-        findViewById(R.id.ll_content).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProjectHelper.openUrlWithIntent(LoadingActivity.this,"http://www.xf3838.com");
-            }
-        });
+//        findViewById(R.id.ll_content).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ProjectHelper.openUrlWithIntent(LoadingActivity.this,"http://www.xf3838.com");
+//            }
+//        });
         doRegister();
     }
 

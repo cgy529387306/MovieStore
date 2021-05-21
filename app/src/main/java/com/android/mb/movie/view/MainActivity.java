@@ -14,6 +14,7 @@ import com.android.mb.movie.base.BaseActivity;
 import com.android.mb.movie.fragment.ChannelFragment;
 import com.android.mb.movie.fragment.FindFragment;
 import com.android.mb.movie.fragment.MainFragment;
+import com.android.mb.movie.fragment.SpecialFragment;
 import com.android.mb.movie.fragment.UserFragment;
 import com.android.mb.movie.utils.AppHelper;
 import com.android.mb.movie.utils.Helper;
@@ -96,7 +97,7 @@ public class MainActivity extends BaseActivity {
     private void initTabPager(){
         mFragmentList = new ArrayList<>();
         mFragmentList.add(new MainFragment());
-        mFragmentList.add(new ChannelFragment());
+        mFragmentList.add(new SpecialFragment());
         mFragmentList.add(new FindFragment());
         mFragmentList.add(new UserFragment());
         mFragmentViewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentList));

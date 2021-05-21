@@ -45,6 +45,7 @@
                            android:layout_alignParentLeft="true"
                            android:layout_alignParentBottom="true"
                            android:layout_marginLeft="15dp"
+                           android:visibility="gone"
                            android:gravity="center"
                            android:layout_gravity="bottom"
                            android:background="@drawable/shape_orange_bg"
@@ -60,6 +61,7 @@
                            android:layout_marginRight="15dp"
                            android:layout_gravity="bottom"
                            android:gravity="center"
+                           android:visibility="gone"
                            android:background="@drawable/shape_orange_bg"
                            android:textColor="@color/base_orange"
                            android:textSize="14sp"
@@ -70,8 +72,8 @@
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
                        android:layout_margin="20dp"
+                       android:paddingTop="30dp"
                        android:gravity="center"
-                       android:visibility="gone"
                        android:textColor="@color/base_orange"
                        android:textSize="16sp"
                        android:text="看官大人请登录"/>
@@ -79,19 +81,21 @@
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
                        android:gravity="center"
-                       android:layout_marginTop="10dp"
+                       android:layout_marginBottom="30dp"
                        android:textColor="@color/base_gray"
                        android:textSize="14sp"
-                       android:text="推广可增加更多次数哦~"/>
+                       android:text="看广告、推广可增加更多观影次数哦~"/>
                    <View
                        android:layout_width="match_parent"
                        android:layout_height="0.5dp"
                        android:layout_marginTop="15dp"
+                       android:visibility="gone"
                        android:background="@color/gray_divider"/>
                    <LinearLayout
                        android:id="@+id/btn_invite"
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
+                       android:visibility="gone"
                        android:padding="10dp"
                        android:gravity="center_vertical"
                        android:orientation="horizontal">
@@ -152,6 +156,7 @@
                        android:layout_width="match_parent"
                        android:layout_height="0.5dp"
                        android:layout_marginTop="15dp"
+                       android:visibility="gone"
                        android:background="@color/gray_divider"/>
                    <LinearLayout
                        android:layout_width="match_parent"

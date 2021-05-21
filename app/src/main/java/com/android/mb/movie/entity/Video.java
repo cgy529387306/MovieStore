@@ -25,6 +25,7 @@ public class Video implements Serializable{
 	private boolean isSelect;
 	private String coverUrl1; //横屏封面地址
 	private String coverUrl2; //竖屏封面地址
+	private int isPraise;
 
 	public String getId() {
 		return id == null ? "" : id;
@@ -155,5 +156,13 @@ public class Video implements Serializable{
 
 	public void setCoverUrl2(String coverUrl2) {
 		this.coverUrl2 = coverUrl2;
+	}
+
+	public boolean getIsPraise() {
+		return isPraise == 1;
+	}
+
+	public void setIsPraise(int isPraise) {
+		this.isPraise = isPraise;
 	}
 }

@@ -214,6 +214,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         if (mVideoInfo==null){
             return;
         }
+        mBtnFavor.setImageResource(mVideoInfo.getIsPraise() ? R.mipmap.favor_press:R.mipmap.favor_nopress);
         mToolbarLayout.setTitle(mVideoInfo.getName());
         //增加封面
         MyImageView1 imageView = new MyImageView1(mContext);
@@ -392,6 +393,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     public void praise(Object result) {
         ToastHelper.showToast("收藏成功");
         sendMsg(ProjectConstants.EVENT_GET_EXTRA_DATA,null);
+        getVideoDetail();
     }
 
     @Override
@@ -490,7 +492,8 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
                 NavigationHelper.startActivity(mContext, LoginActivity.class,null,false);
             }
         }else if (id == R.id.btn_share){
-            doShare(mVideoInfo);
+//            doShare(mVideoInfo);
+            NavigationHelper.startActivity(mContext, InviteActivity.class,null,false);
         }else if (id == R.id.tv_confirm){
             if (CurrentUser.getInstance().isLogin()){
                 String content = mEtContent.getText().toString().trim();

@@ -283,7 +283,7 @@ public class SearchActivity extends BaseMvpActivity<SearchPresenter,
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         Video video = mAdapter.getItem(position);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("videoInfo",video);
+        bundle.putString("videoId",video.getId());
         NavigationHelper.startActivity((Activity) mContext, DetailActivity.class,bundle,false);
     }
 

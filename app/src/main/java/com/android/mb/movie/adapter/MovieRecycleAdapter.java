@@ -47,7 +47,7 @@ public class MovieRecycleAdapter extends BaseQuickAdapter<AuthorVideo, BaseViewH
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("videoInfo",item.getVideos().get(position));
+                bundle.putString("videoId",item.getVideos().get(position).getId());
                 NavigationHelper.startActivity((Activity) mContext, DetailActivity.class,bundle,false);
             }
         });

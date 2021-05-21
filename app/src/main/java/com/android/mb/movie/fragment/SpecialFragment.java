@@ -46,7 +46,7 @@ public class SpecialFragment extends BaseMvpFragment<SpecialPresenter,ISpecialVi
     private GridView mGridCate;
     @Override
     protected int getLayoutId() {
-        return  R.layout.common_recycleview;
+        return  R.layout.frg_special;
     }
 
     @Override
@@ -57,10 +57,10 @@ public class SpecialFragment extends BaseMvpFragment<SpecialPresenter,ISpecialVi
         mAdapter = new MovieRecycleAdapter(R.layout.item_movie_recycle, new ArrayList());
         mRecyclerView.setAdapter(mAdapter);
 
-        //添加Header
-        View header = LayoutInflater.from(getActivity()).inflate(R.layout.item_special_header, mRecyclerView, false);
-        mGridCate = header.findViewById(R.id.gridCate);
-        mAdapter.addHeaderView(header);
+//        //添加Header
+//        View header = LayoutInflater.from(getActivity()).inflate(R.layout.item_special_header, mRecyclerView, false);
+//        mGridCate = header.findViewById(R.id.gridCate);
+//        mAdapter.addHeaderView(header);
     }
 
     @Override

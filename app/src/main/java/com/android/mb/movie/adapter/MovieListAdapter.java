@@ -34,10 +34,11 @@ public class MovieListAdapter extends BaseQuickAdapter<Video, BaseViewHolder> {
         checkBox.setVisibility(mIsCanEdit? View.VISIBLE:View.GONE);
         ImageUtils.loadImageUrlLight(helper.getView(R.id.iv_cover), item.getCoverUrl1());
         FlowTagLayout flowTagLayout = helper.getView(R.id.tagLayout);
-        TagSmallAdapter<Tag> tagAdapter = new TagSmallAdapter<>(mContext);
-        flowTagLayout.setAdapter(tagAdapter);
-        flowTagLayout.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_NONE);
-        tagAdapter.clearAndAddAll(item.getTagList());
+        flowTagLayout.setVisibility(View.INVISIBLE);
+//        TagSmallAdapter<Tag> tagAdapter = new TagSmallAdapter<>(mContext);
+//        flowTagLayout.setAdapter(tagAdapter);
+//        flowTagLayout.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_NONE);
+//        tagAdapter.clearAndAddAll(item.getTagList());
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

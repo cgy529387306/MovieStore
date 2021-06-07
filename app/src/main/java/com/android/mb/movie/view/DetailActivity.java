@@ -1,5 +1,6 @@
 package com.android.mb.movie.view;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -12,6 +13,8 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -21,13 +24,19 @@ import android.widget.TextView;
 
 import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.CommentAdapter;
+import com.android.mb.movie.adapter.MovieListAdapter;
 import com.android.mb.movie.base.BaseMvpActivity;
 import com.android.mb.movie.constants.ProjectConstants;
+import com.android.mb.movie.entity.AdData;
+import com.android.mb.movie.entity.Advert;
 import com.android.mb.movie.entity.CommentListData;
 import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.entity.VideoData;
+import com.android.mb.movie.entity.VideoListData;
+import com.android.mb.movie.fragment.AdvertDialogFragment;
 import com.android.mb.movie.presenter.DetailPresenter;
+import com.android.mb.movie.service.ScheduleMethods;
 import com.android.mb.movie.utils.AppHelper;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ImageUtils;
@@ -56,7 +65,11 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import rx.Observable;
+import rx.Subscriber;
 
 /**
  * CollapsingToolbarLayout的播放页面
@@ -79,11 +92,13 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     private TextView mTvPlayTimes;
 
     private SmartRefreshLayout mRefreshLayout;
-    private RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView,mMovieRecyclerView;
     private CommentAdapter mAdapter;
     private int mCurrentPage = 1;
     private ImageView mBtnFavor,mBtnDownload,mBtnShare;
     private EditText mEtContent;
+    private ImageView mIvAdvert;
+    private MovieListAdapter mMovieListAdapter;
 
     @Override
     public void onBackPressed() {
@@ -187,6 +202,15 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         mBtnShare = findViewById(R.id.btn_share);
         mEtContent = findViewById(R.id.et_content);
         mTvPlayTimes = findViewById(R.id.tv_times);
+
+        View header = LayoutInflater.from(mContext).inflate(R.layout.header_detail, mRecyclerView, false);
+        mIvAdvert = header.findViewById(R.id.iv_advert);
+        mMovieRecyclerView = header.findViewById(R.id.rv_recomment);
+        mMovieRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter.addHeaderView(header);
+
+        mMovieListAdapter = new MovieListAdapter(R.layout.item_movie_list, new ArrayList());
+        mMovieRecyclerView.setAdapter(mMovieListAdapter);
     }
 
     @Override
@@ -197,6 +221,8 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
             initData();
         }
         getComments();
+        getAdvert();
+        getRecommendVideo();
     }
 
     @Override
@@ -515,6 +541,51 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         share_intent.putExtra(Intent.EXTRA_SUBJECT, "分享");//添加分享内容标题
         share_intent.putExtra(Intent.EXTRA_TEXT, video.getName()+":https://www.baidu.com");//添加分享内容
         startActivity(share_intent);
+    }
+
+    private void getAdvert(){
+        Observable observable = ScheduleMethods.getInstance().getAdvert();
+        toSubscribe(observable,  new Subscriber<AdData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onNext(AdData result) {
+                if (Helper.isNotEmpty(result.getVideoDetailAdvert())){
+                    Advert advert = result.getVideoDetailAdvert().get(0);
+                    ImageUtils.loadImageUrlLight(mIvAdvert,advert.getCoverUrl());
+                }
+            }
+        });
+    }
+
+    private void getRecommendVideo(){
+        Observable observable = ScheduleMethods.getInstance().getRecommendVideo();
+        toSubscribe(observable,  new Subscriber<List<Video>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onNext(List<Video> result) {
+                if (Helper.isNotEmpty(result)){
+                    mMovieListAdapter.setNewData(result);
+                }
+            }
+        });
     }
 
 }

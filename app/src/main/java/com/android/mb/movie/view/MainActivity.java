@@ -1,5 +1,6 @@
 package com.android.mb.movie.view;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,12 +12,14 @@ import android.widget.TextView;
 import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.MyFragmentPagerAdapter;
 import com.android.mb.movie.base.BaseActivity;
-import com.android.mb.movie.fragment.ChannelFragment;
+import com.android.mb.movie.entity.AdData;
+import com.android.mb.movie.entity.Advert;
+import com.android.mb.movie.fragment.AdvertDialogFragment;
 import com.android.mb.movie.fragment.FindFragment;
 import com.android.mb.movie.fragment.MainFragment;
 import com.android.mb.movie.fragment.SpecialFragment;
 import com.android.mb.movie.fragment.UserFragment;
-import com.android.mb.movie.utils.AppHelper;
+import com.android.mb.movie.service.ScheduleMethods;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.widget.FragmentViewPager;
@@ -27,6 +30,8 @@ import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import rx.Observable;
+import rx.Subscriber;
 
 public class MainActivity extends BaseActivity {
 
@@ -61,6 +66,7 @@ public class MainActivity extends BaseActivity {
         mFragmentViewPager = findViewById(R.id.view_pager);
         mTabLayout = findViewById(R.id.tab_layout);
         initTabPager();
+        getAdvert();
     }
 
     @Override
@@ -136,5 +142,30 @@ public class MainActivity extends BaseActivity {
         }
         finish();
     }
+
+    private void getAdvert(){
+        Observable observable = ScheduleMethods.getInstance().getAdvert();
+        toSubscribe(observable,  new Subscriber<AdData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onNext(AdData result) {
+                if (Helper.isNotEmpty(result.getAppPopAdvert())){
+                    Advert advert = result.getAppPopAdvert().get(0);
+                    AdvertDialogFragment dialogFragment = AdvertDialogFragment.newInstance(advert.getCoverUrl(),advert.getRedirectUrl());
+                    dialogFragment.show(getFragmentManager(),"dialog");
+                }
+            }
+        });
+    }
+
 
 }

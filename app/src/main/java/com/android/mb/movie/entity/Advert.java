@@ -13,6 +13,7 @@ public class Advert implements Serializable{
 	private String desc;
 	private int type;
 	private String resId;
+	private String seconds;
 
 	public String getId() {
 		return id == null ? "" : id;
@@ -61,4 +62,17 @@ public class Advert implements Serializable{
 	public void setResId(String resId) {
 		this.resId = resId;
 	}
+
+    public int getSeconds() {
+	    try {
+	        return Integer.parseInt(seconds);
+        }catch (Exception e){
+	        e.printStackTrace();
+	        return  6;
+        }
+    }
+
+    public void setSeconds(String seconds) {
+        this.seconds = seconds;
+    }
 }

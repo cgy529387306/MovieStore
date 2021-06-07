@@ -1,6 +1,5 @@
 package com.android.mb.movie.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.ImageView;
 
 import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.CateAdapter;
@@ -22,7 +20,6 @@ import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.HomeData;
 import com.android.mb.movie.presenter.HomePresenter;
 import com.android.mb.movie.utils.Helper;
-import com.android.mb.movie.utils.ImageUtils;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.view.DetailActivity;
 import com.android.mb.movie.view.HistoryActivity;
@@ -30,6 +27,7 @@ import com.android.mb.movie.view.LoginActivity;
 import com.android.mb.movie.view.SearchActivity;
 import com.android.mb.movie.view.VideoListActivity;
 import com.android.mb.movie.view.interfaces.IHomeView;
+import com.android.mb.movie.widget.GlideImageLoader;
 import com.android.mb.movie.widget.MyDividerItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -38,7 +36,6 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
-import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -171,13 +168,6 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
                 bundle.putString(ProjectConstants.KEY_WEB_DETAIL_URL,advert.getRedirectUrl());
                 NavigationHelper.startActivity(mContext, BaseWebViewActivity.class,bundle,false);
             }
-        }
-    }
-
-    public class GlideImageLoader extends ImageLoader {
-        @Override
-        public void displayImage(Context context, Object path, ImageView imageView) {
-            ImageUtils.loadImageUrlDark(imageView,((Advert)path).getCoverUrl());
         }
     }
 

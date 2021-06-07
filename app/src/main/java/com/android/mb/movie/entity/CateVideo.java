@@ -11,6 +11,7 @@ public class CateVideo implements Serializable{
     private String cateName;
 
     private List<Video> videos;
+    private List<Advert> advert;
 
     public String getCateId() {
         return cateId == null ? "" : cateId;
@@ -38,5 +39,16 @@ public class CateVideo implements Serializable{
 
     public void setVideos(List<Video> videos) {
         this.videos = videos;
+    }
+
+    public List<Advert> getAdvert() {
+        if (advert == null) {
+            return new ArrayList<>();
+        }
+        return advert;
+    }
+
+    public void setAdvert(List<Advert> advert) {
+        this.advert = advert;
     }
 }

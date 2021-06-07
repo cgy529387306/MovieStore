@@ -2,6 +2,7 @@ package com.android.mb.movie.service;
 
 import android.util.Base64;
 
+import com.android.mb.movie.entity.AdData;
 import com.android.mb.movie.entity.Avatar;
 import com.android.mb.movie.entity.CommentListData;
 import com.android.mb.movie.entity.CountData;
@@ -279,6 +280,18 @@ public class ScheduleMethods extends BaseHttp {
         return getService().getAppVersion()
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<VersionBean>());
+    }
+
+    public Observable getAdvert(){
+        return getService().getAdvert()
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<AdData>());
+    }
+
+    public Observable getRecommendVideo(){
+        return getService().getRecommendVideo()
+                .compose(CacheTransformer.emptyTransformer())
+                .map(new HttpCacheResultFunc<List<Video>>());
     }
 
 }

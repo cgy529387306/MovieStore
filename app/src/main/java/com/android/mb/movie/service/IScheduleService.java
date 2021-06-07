@@ -1,5 +1,6 @@
 package com.android.mb.movie.service;
 
+import com.android.mb.movie.entity.AdData;
 import com.android.mb.movie.entity.Avatar;
 import com.android.mb.movie.entity.CommentListData;
 import com.android.mb.movie.entity.CountData;
@@ -236,4 +237,10 @@ public interface IScheduleService {
      */
     @GET("/movie/api/1.0/common/getAppVersion")
     Observable<HttpResult<VersionBean>> getAppVersion();
+
+    @GET("/movie/api/1.0/common/getAdvert")
+    Observable<HttpResult<AdData>> getAdvert();
+
+    @GET("/movie/api/1.0/common/getRecommendVideo")
+    Observable<HttpResult<List<Video>>> getRecommendVideo();
 }

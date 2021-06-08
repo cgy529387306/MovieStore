@@ -2,11 +2,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-    <com.android.mb.movie.widget.MyImageView1
-        android:id="@+id/video_player"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop"/>
+        android:layout_height="200dp">
+        <com.android.mb.movie.widget.MyImageView1
+            android:id="@+id/video_player"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"/>
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_play"/>
+    </FrameLayout>
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"

@@ -102,7 +102,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     private EditText mEtContent;
     private ImageView mIvAdvert;
     private MovieListAdapter mMovieListAdapter;
-    private TextView mTvSkip;
+    private TextView mTvSkip, mTvTitle;
     private MyCountDownTimer mCountDownTimer;
 
     @Override
@@ -212,6 +212,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         mTvPlayTimes.setFocusableInTouchMode(true);
         mTvPlayTimes.requestFocus();
         mTvSkip = findViewById(R.id.tv_skip);
+        mTvTitle = findViewById(R.id.tv_name);
 
         View header = LayoutInflater.from(mContext).inflate(R.layout.header_detail, mRecyclerView, false);
         mIvAdvert = header.findViewById(R.id.iv_advert);
@@ -239,7 +240,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         }else if (Helper.isNotEmpty(mVideoInfo)){
             initData();
         }
-        getComments();
+//        getComments();
         getAdvert();
         getRecommendVideo();
     }
@@ -260,7 +261,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
             return;
         }
         mBtnFavor.setImageResource(mVideoInfo.getIsPraise() ? R.mipmap.favor_press:R.mipmap.favor_nopress);
-        mToolbarLayout.setTitle(mVideoInfo.getName());
+
         //增加封面
         MyImageView1 imageView = new MyImageView1(mContext);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -268,6 +269,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         imageView.setLayoutParams(params);
         ImageUtils.loadImageUrlDark(imageView,mVideoInfo.getCoverUrl1());
         resolveNormalVideoUI();
+        mTvTitle.setText(mVideoInfo.getName());
         mTvPlayTimes.setText(String.format(getString(R.string.play_times_pre), mVideoInfo.getPlayCount()));
         //外部辅助的旋转，帮助全屏
         mOrientationUtils = new OrientationUtils(this, mDetailPlayer);

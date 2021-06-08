@@ -67,6 +67,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/base_theme"
+        android:visibility="gone"
         android:layout_gravity="bottom"
         app:layout_behavior="@string/behavior_footer">
         <com.android.mb.movie.widget.ContainsEmojiEditText

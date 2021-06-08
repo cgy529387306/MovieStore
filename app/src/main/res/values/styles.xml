@@ -54,7 +54,9 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
     <style name="StartTheme" parent="AppTheme">
-        <item name="android:windowBackground">@mipmap/bg_splash</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
 </resources>

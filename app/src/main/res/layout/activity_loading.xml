@@ -7,8 +7,7 @@
         android:id="@+id/iv_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@mipmap/bg_splash"
-        android:scaleType="centerCrop"/>
+        android:scaleType="fitXY"/>
     <TextView
         android:id="@+id/tv_skip"
         android:layout_width="wrap_content"

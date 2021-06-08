@@ -233,7 +233,8 @@ public class ScheduleMethods extends BaseHttp {
 
     public Observable delLike(Map<String,Object> requestMap){
         Map<String,Object> requestParams = new HashMap<>();
-        requestParams.put("params", Base64.encodeToString(JsonHelper.toJson(requestMap).getBytes(),Base64.DEFAULT));
+        String paramStr = JsonHelper.toJson(requestMap);
+        requestParams.put("params", Base64.encodeToString(paramStr.getBytes(),Base64.DEFAULT));
         return getService().delLike(requestParams)
                 .compose(CacheTransformer.emptyTransformer())
                 .map(new HttpCacheResultFunc<Object>());

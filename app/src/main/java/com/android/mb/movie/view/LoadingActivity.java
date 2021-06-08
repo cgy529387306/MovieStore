@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ImageUtils;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.WifiMacUtils;
+import com.smarx.notchlib.NotchScreenManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,9 +50,11 @@ public class LoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // 去除信号栏
+        requestWindowFeature(Window.FEATURE_NO_TITLE);  //无title
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);  //全屏
         super.onCreate(savedInstanceState);
+        NotchScreenManager.getInstance().setDisplayInNotch(this);
         setContentView(R.layout.activity_loading);
         mIvLoading = findViewById(R.id.iv_loading);
         mTvSkip = findViewById(R.id.tv_skip);
@@ -94,7 +98,6 @@ public class LoadingActivity extends AppCompatActivity {
 
 
         public void onFinish() {
-            NavigationHelper.startActivity(LoadingActivity.this, MainActivity.class, null, true);
         }
 
         public void onTick(long millisUntilFinished) {

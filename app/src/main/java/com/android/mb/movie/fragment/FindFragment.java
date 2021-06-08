@@ -240,10 +240,10 @@ public class FindFragment extends BaseMvpFragment<FindPresenter,IFindView> imple
     private void submitPraise(Video video){
         if (CurrentUser.getInstance().isLogin()){
             if (video.getIsPraise()) {
-//                List<String> idList = new ArrayList<>();
-//                idList.add(video.getId());
+                List<String> idList = new ArrayList<>();
+                idList.add(video.getId());
                 Map<String,Object> requestMap = new HashMap<>();
-                requestMap.put("videoIds", video.getId());
+                requestMap.put("videoIds", idList);
                 mPresenter.delLike(requestMap);
             }else {
                 Map<String,Object> requestMap = new HashMap<>();

@@ -2,15 +2,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-    <com.android.mb.movie.widget.MyVideoPlayerView
+    <com.android.mb.movie.widget.MyImageView1
         android:id="@+id/video_player"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"/>
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
         android:singleLine="true"
         android:textSize="16sp"
         android:textColor="#333333"

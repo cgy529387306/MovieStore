@@ -169,7 +169,7 @@ public interface IScheduleService {
     /**
      * @return
      */
-    @GET("/api/1.0/common/delLikeVideos")
+    @GET("/movie/api/1.0/common/delLikeVideos")
     Observable<HttpResult<Object>> delLike(@QueryMap Map<String,Object> requestMap);
 
     /**

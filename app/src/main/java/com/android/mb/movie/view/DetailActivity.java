@@ -275,7 +275,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         mOrientationUtils = new OrientationUtils(this, mDetailPlayer);
         //初始化不打开外部的旋转
         mOrientationUtils.setEnable(false);
-
+        mDetailPlayer.getBackButton().setVisibility(View.GONE);
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
         gsyVideoOption.setThumbImageView(imageView)
                 .setIsTouchWiget(true)
@@ -636,9 +636,11 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
                         super.onAutoComplete(url, objects);
                         mAdvertPlayer.setVisibility(View.GONE);
                         mTvSkip.setVisibility(View.GONE);
+                        mDetailPlayer.startPlayLogic();
                     }
                 })
                 .build(mAdvertPlayer);
+        mAdvertPlayer.getBackButton().setVisibility(View.GONE);
         mAdvertPlayer.startPlayLogic();
     }
 

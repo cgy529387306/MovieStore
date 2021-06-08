@@ -62,74 +62,75 @@ public class FindAdapter extends BaseQuickAdapter<Video, BaseViewHolder>{
         helper.setImageResource(R.id.btn_favor, item.getIsPraise() ? R.mipmap.favor_press:R.mipmap.favor_nopress);
         helper.setText(R.id.tv_title,item.getName());
         helper.setText(R.id.tv_times,String.format(mContext.getString(R.string.play_times_pre), item.getPlayCount()));
-        StandardGSYVideoPlayer videoPlayer = helper.getView(R.id.video_player);
-        MyImageView1 imageView = new MyImageView1(mContext);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.WRAP_CONTENT);
-        imageView.setLayoutParams(params);
-
+        ImageView imageView = helper.getView(R.id.video_player);
         ImageUtils.loadImageUrlDark(imageView, item.getCoverUrl1());
-        mVideoOptionBuilder
-                .setIsTouchWiget(false)
-                .setThumbImageView(imageView)
-                .setUrl(item.getVideoUrl())
-                .setVideoTitle(item.getName())
-                .setCacheWithPlay(false)
-                .setRotateViewAuto(true)
-                .setLockLand(true)
-                .setPlayTag(TAG)
-                .setShowFullAnimation(true)
-                .setNeedLockFull(true)
-                .setPlayPosition(helper.getAdapterPosition())
-                .setVideoAllCallBack(new GSYSampleCallBack() {
-                    @Override
-                    public void onPrepared(String url, Object... objects) {
-                        super.onPrepared(url, objects);
-                        if (!videoPlayer.isIfCurrentIsFullscreen()) {
-                            //静音
-                            GSYVideoManager.instance().setNeedMute(true);
-                        }
-                        int remainCount = PreferencesHelper.getInstance().getInt(ProjectConstants.KEY_REMAIN_COUNT,0);
-                        if(remainCount <= 0){
-                            GSYVideoManager.instance().stop();
-                            ToastHelper.showToast("今日观影次数已经用完，邀请好友可增加观影次数");
-                            NavigationHelper.startActivity((Activity) mContext, InviteActivity.class,null,false);
-                        }else{
-                            if (mOperateListener != null){
-                                mOperateListener.onPlayListener(item);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onQuitFullscreen(String url, Object... objects) {
-                        super.onQuitFullscreen(url, objects);
-                        GSYVideoManager.instance().setNeedMute(true);
-                    }
-
-                    @Override
-                    public void onEnterFullscreen(String url, Object... objects) {
-                        super.onEnterFullscreen(url, objects);
-                        //全屏不静音
-                        GSYVideoManager.instance().setNeedMute(false);
-                        videoPlayer.getCurrentPlayer().getTitleTextView().setText((String)objects[0]);
-                    }
-                }).build(videoPlayer);
-
-
-        //增加title
-        videoPlayer.getTitleTextView().setVisibility(View.GONE);
-
-        //设置返回键
-        videoPlayer.getBackButton().setVisibility(View.GONE);
-
-        //设置全屏按键功能
-        videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                videoPlayer.startWindowFullscreen(mContext, true, true);
-            }
-        });
+//        StandardGSYVideoPlayer videoPlayer = helper.getView(R.id.video_player);
+//        MyImageView1 imageView = new MyImageView1(mContext);
+//        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.WRAP_CONTENT);
+//        imageView.setLayoutParams(params);
+//
+//        mVideoOptionBuilder
+//                .setIsTouchWiget(false)
+//                .setThumbImageView(imageView)
+//                .setUrl(item.getVideoUrl())
+//                .setVideoTitle(item.getName())
+//                .setCacheWithPlay(false)
+//                .setRotateViewAuto(true)
+//                .setLockLand(true)
+//                .setPlayTag(TAG)
+//                .setShowFullAnimation(true)
+//                .setNeedLockFull(true)
+//                .setPlayPosition(helper.getAdapterPosition())
+//                .setVideoAllCallBack(new GSYSampleCallBack() {
+//                    @Override
+//                    public void onPrepared(String url, Object... objects) {
+//                        super.onPrepared(url, objects);
+//                        if (!videoPlayer.isIfCurrentIsFullscreen()) {
+//                            //静音
+//                            GSYVideoManager.instance().setNeedMute(true);
+//                        }
+//                        int remainCount = PreferencesHelper.getInstance().getInt(ProjectConstants.KEY_REMAIN_COUNT,0);
+//                        if(remainCount <= 0){
+//                            GSYVideoManager.instance().stop();
+//                            ToastHelper.showToast("今日观影次数已经用完，邀请好友可增加观影次数");
+//                            NavigationHelper.startActivity((Activity) mContext, InviteActivity.class,null,false);
+//                        }else{
+//                            if (mOperateListener != null){
+//                                mOperateListener.onPlayListener(item);
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onQuitFullscreen(String url, Object... objects) {
+//                        super.onQuitFullscreen(url, objects);
+//                        GSYVideoManager.instance().setNeedMute(true);
+//                    }
+//
+//                    @Override
+//                    public void onEnterFullscreen(String url, Object... objects) {
+//                        super.onEnterFullscreen(url, objects);
+//                        //全屏不静音
+//                        GSYVideoManager.instance().setNeedMute(false);
+//                        videoPlayer.getCurrentPlayer().getTitleTextView().setText((String)objects[0]);
+//                    }
+//                }).build(videoPlayer);
+//
+//
+//        //增加title
+//        videoPlayer.getTitleTextView().setVisibility(View.GONE);
+//
+//        //设置返回键
+//        videoPlayer.getBackButton().setVisibility(View.GONE);
+//
+//        //设置全屏按键功能
+//        videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                videoPlayer.startWindowFullscreen(mContext, true, true);
+//            }
+//        });
     }
 
 

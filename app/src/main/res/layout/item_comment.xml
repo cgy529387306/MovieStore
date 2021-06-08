@@ -4,8 +4,8 @@
     android:padding="10dp">
     <com.android.mb.movie.widget.CircleImageView
         android:id="@+id/iv_avatar"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:src="@mipmap/ic_head_s"/>
     <TextView
         android:id="@+id/tv_name"
@@ -15,7 +15,7 @@
         android:layout_marginLeft="10dp"
         android:singleLine="true"
         android:textSize="16sp"
-        android:textColor="@color/edit_color"
+        android:textColor="#333333"
         android:text="@string/app_name"/>
     <TextView
         android:id="@+id/tv_time"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/iv_avatar"
         android:layout_below="@id/tv_name"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="4dp"
         android:layout_marginLeft="10dp"
         android:singleLine="true"
         android:textSize="14sp"
@@ -36,6 +36,6 @@
         android:layout_below="@id/iv_avatar"
         android:layout_marginTop="10dp"
         android:textSize="16sp"
-        android:textColor="@color/edit_color"
+        android:textColor="#333333"
         android:text="@string/app_name"/>
 </RelativeLayout>

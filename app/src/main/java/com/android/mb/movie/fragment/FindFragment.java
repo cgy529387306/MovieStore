@@ -20,6 +20,7 @@ import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.DetailActivity;
+import com.android.mb.movie.view.InviteActivity;
 import com.android.mb.movie.view.LoginActivity;
 import com.android.mb.movie.view.SearchActivity;
 import com.android.mb.movie.view.interfaces.IFindView;
@@ -223,7 +224,8 @@ public class FindFragment extends BaseMvpFragment<FindPresenter,IFindView> imple
 
     @Override
     public void onShare(Video video) {
-        doShare(video);
+        NavigationHelper.startActivity(mContext, InviteActivity.class,null,false);
+//        doShare(video);
     }
 
     private void submitPraise(Video video){

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -13,6 +14,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,6 +85,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
 
     private OrientationUtils mOrientationUtils;
     private LandLayoutVideo mDetailPlayer;
+    private LandLayoutVideo mAdvertPlayer;
     private AppBarLayout mAppBarLayout;
     private CoordinatorLayout mCoordinatorLayout;
     private CollapsingToolbarLayout mToolbarLayout;
@@ -99,6 +102,8 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     private EditText mEtContent;
     private ImageView mIvAdvert;
     private MovieListAdapter mMovieListAdapter;
+    private TextView mTvSkip;
+    private MyCountDownTimer mCountDownTimer;
 
     @Override
     public void onBackPressed() {
@@ -176,6 +181,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     protected void bindViews() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         mDetailPlayer = findViewById(R.id.detail_player);
+        mAdvertPlayer = findViewById(R.id.advert_player);
         mCoordinatorLayout = findViewById(R.id.root_layout);
         toolbar.setNavigationIcon(R.mipmap.ic_video_back);
         setSupportActionBar(toolbar);
@@ -202,6 +208,10 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         mBtnShare = findViewById(R.id.btn_share);
         mEtContent = findViewById(R.id.et_content);
         mTvPlayTimes = findViewById(R.id.tv_times);
+        mTvPlayTimes.setFocusable(true);
+        mTvPlayTimes.setFocusableInTouchMode(true);
+        mTvPlayTimes.requestFocus();
+        mTvSkip = findViewById(R.id.tv_skip);
 
         View header = LayoutInflater.from(mContext).inflate(R.layout.header_detail, mRecyclerView, false);
         mIvAdvert = header.findViewById(R.id.iv_advert);
@@ -210,6 +220,15 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         mAdapter.addHeaderView(header);
 
         mMovieListAdapter = new MovieListAdapter(R.layout.item_movie_list, new ArrayList());
+        mMovieListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Video video = mMovieListAdapter.getItem(position);
+                Bundle bundle = new Bundle();
+                bundle.putString("videoId",video.getId());
+                NavigationHelper.startActivity( mContext, DetailActivity.class,bundle,false);
+            }
+        });
         mMovieRecyclerView.setAdapter(mMovieListAdapter);
     }
 
@@ -417,7 +436,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
 
     @Override
     public void praise(Object result) {
-        ToastHelper.showToast("收藏成功");
+        ToastHelper.showToast("点赞成功");
         sendMsg(ProjectConstants.EVENT_GET_EXTRA_DATA,null);
         getVideoDetail();
     }
@@ -436,7 +455,6 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
             if (mCurrentPage == 1){
                 mRefreshLayout.finishRefresh();
                 mAdapter.setNewData(result.getList());
-                mAdapter.setEmptyView(R.layout.empty_comment, (ViewGroup) mRecyclerView.getParent());
             }else{
                 if (Helper.isEmpty(result)){
                     mRefreshLayout.finishLoadMoreWithNoMoreData();
@@ -463,10 +481,37 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
 
     private void submitPraise(){
         if (mVideoInfo!=null){
-            Map<String,Object> requestMap = new HashMap<>();
-            requestMap.put("videoId", mVideoInfo.getId());
-            mPresenter.praise(requestMap);
+            if (mVideoInfo.getIsPraise()) {
+                delLike();
+            }else {
+                Map<String,Object> requestMap = new HashMap<>();
+                requestMap.put("videoId", mVideoInfo.getId());
+                mPresenter.praise(requestMap);
+            }
         }
+    }
+
+    public void delLike() {
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("videoIds", mVideoInfo.getId());
+        Observable observable = ScheduleMethods.getInstance().delLike(requestMap);
+        toSubscribe(observable,  new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(Object result) {
+                ToastHelper.showToast("取消点赞成功");
+                sendMsg(ProjectConstants.EVENT_GET_EXTRA_DATA,null);
+                getVideoDetail();
+            }
+        });
     }
 
     private void submitWatch(){
@@ -562,8 +607,37 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
                     Advert advert = result.getVideoDetailAdvert().get(0);
                     ImageUtils.loadImageUrlLight(mIvAdvert,advert.getCoverUrl());
                 }
+                if (Helper.isNotEmpty(result.getVideoPrePlayAdvert())){
+                    Advert advert = result.getVideoPrePlayAdvert().get(0);
+                    mCountDownTimer = new MyCountDownTimer(advert.getSeconds()*1000, 1000);
+                    mCountDownTimer.start();
+                    playAdvert(advert.getCoverUrl());
+                }
             }
         });
+    }
+
+    private void playAdvert(String videoUrl){
+        GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
+        gsyVideoOption.setIsTouchWiget(true)
+                .setRotateViewAuto(false)
+                .setLockLand(false)
+                .setShowFullAnimation(false)
+                .setNeedLockFull(true)
+                .setSeekRatio(1)
+                .setUrl(videoUrl)
+                .setCacheWithPlay(true)
+                .setVideoAllCallBack(new GSYSampleCallBack() {
+
+                    @Override
+                    public void onAutoComplete(String url, Object... objects) {
+                        super.onAutoComplete(url, objects);
+                        mAdvertPlayer.setVisibility(View.GONE);
+                        mTvSkip.setVisibility(View.GONE);
+                    }
+                })
+                .build(mAdvertPlayer);
+        mAdvertPlayer.startPlayLogic();
     }
 
     private void getRecommendVideo(){
@@ -586,6 +660,24 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
                 }
             }
         });
+    }
+
+    class MyCountDownTimer extends CountDownTimer {
+
+        public MyCountDownTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+
+        public void onFinish() {
+            mTvSkip.setVisibility(View.GONE);
+            mAdvertPlayer.setVisibility(View.GONE);
+        }
+
+        public void onTick(long millisUntilFinished) {
+            mTvSkip.setText(String.valueOf(millisUntilFinished / 1000));
+        }
+
     }
 
 }

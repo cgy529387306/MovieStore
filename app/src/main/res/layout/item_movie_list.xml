@@ -11,35 +11,38 @@
         android:layout_gravity="center_vertical"/>
     <com.android.mb.movie.widget.MyImageView1
         android:id="@+id/iv_cover"
-        android:layout_width="180dp"
-        android:layout_height="120dp"
+        android:layout_width="140dp"
+        android:layout_height="90dp"
         android:scaleType="centerCrop"
         android:src="@mipmap/bg_image_dark"/>
     <LinearLayout
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_marginLeft="10dp"
-        android:layout_height="wrap_content"
+        android:layout_height="90dp"
         android:orientation="vertical">
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:singleLine="true"
             android:textSize="14sp"
             android:textColor="@color/edit_color"
             android:text="@string/app_name"/>
-        <com.android.mb.movie.widget.taglayout.FlowTagLayout
-            android:id="@+id/tagLayout"
+        <TextView
+            android:id="@+id/tv_praise_count"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:minHeight="60dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:textColor="@color/base_gray"
+            android:text="@string/app_name"/>
         <TextView
             android:id="@+id/tv_play_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
             android:singleLine="true"
             android:textSize="14sp"
             android:textColor="@color/base_gray"

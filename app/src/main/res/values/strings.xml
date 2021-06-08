@@ -2,6 +2,7 @@
     <string name="app_name">Movie</string>
     <string name="behavior_footer">com.android.mb.movie.behavior.FooterBehavior</string>
     <string name="play_times_pre">%d次播放</string>
+    <string name="praise_times_pre">%d次点赞</string>
     <string name="count_history_pre">目前历史观看过%d部</string>
     <string name="count_cache_pre">目前本地大片有%d部</string>
     <string name="count_favor_pre">目前已有喜欢%d部</string>

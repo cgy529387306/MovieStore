@@ -59,6 +59,7 @@ public class FindAdapter extends BaseQuickAdapter<Video, BaseViewHolder>{
         helper.setOnClickListener(R.id.btn_favor,new MyOnClickListener(item));
         helper.setOnClickListener(R.id.btn_download,new MyOnClickListener(item));
         helper.setOnClickListener(R.id.btn_share,new MyOnClickListener(item));
+        helper.setImageResource(R.id.btn_favor, item.getIsPraise() ? R.mipmap.favor_press:R.mipmap.favor_nopress);
         helper.setText(R.id.tv_title,item.getName());
         helper.setText(R.id.tv_times,String.format(mContext.getString(R.string.play_times_pre), item.getPlayCount()));
         StandardGSYVideoPlayer videoPlayer = helper.getView(R.id.video_player);

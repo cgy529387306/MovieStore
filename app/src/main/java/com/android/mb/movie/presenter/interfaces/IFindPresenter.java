@@ -10,5 +10,7 @@ public interface IFindPresenter {
 
     void praise(Map<String, Object> requestMap);
 
+    void delLike(Map<String, Object> requestMap);
+
     void watch(Map<String, Object> requestMap);
 }

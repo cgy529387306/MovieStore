@@ -34,6 +34,7 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -198,8 +199,16 @@ public class FindFragment extends BaseMvpFragment<FindPresenter,IFindView> imple
 
     @Override
     public void praise(Object result) {
-        ToastHelper.showToast("收藏成功");
+        ToastHelper.showToast("点赞成功");
         sendMsg(ProjectConstants.EVENT_GET_EXTRA_DATA,null);
+        onRefresh(null);
+    }
+
+    @Override
+    public void delLike(Object result) {
+        ToastHelper.showToast("取消点赞成功");
+        sendMsg(ProjectConstants.EVENT_GET_EXTRA_DATA,null);
+        onRefresh(null);
     }
 
     @Override
@@ -230,9 +239,17 @@ public class FindFragment extends BaseMvpFragment<FindPresenter,IFindView> imple
 
     private void submitPraise(Video video){
         if (CurrentUser.getInstance().isLogin()){
-            Map<String,Object> requestMap = new HashMap<>();
-            requestMap.put("videoId", video.getId());
-            mPresenter.praise(requestMap);
+            if (video.getIsPraise()) {
+                List<String> idList = new ArrayList<>();
+                idList.add(video.getId());
+                Map<String,Object> requestMap = new HashMap<>();
+                requestMap.put("videoIds", idList);
+                mPresenter.delLike(requestMap);
+            }else {
+                Map<String,Object> requestMap = new HashMap<>();
+                requestMap.put("videoId", video.getId());
+                mPresenter.praise(requestMap);
+            }
         }else{
             NavigationHelper.startActivity(getActivity(), LoginActivity.class,null,false);
         }

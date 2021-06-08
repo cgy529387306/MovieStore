@@ -3,12 +3,14 @@ package com.android.mb.movie.presenter;
 import android.text.TextUtils;
 
 import com.android.mb.movie.base.BaseMvpPresenter;
+import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.UserBean;
 import com.android.mb.movie.entity.Video;
 import com.android.mb.movie.entity.VideoListData;
 import com.android.mb.movie.presenter.interfaces.IFindPresenter;
 import com.android.mb.movie.presenter.interfaces.IRegisterPresenter;
 import com.android.mb.movie.service.ScheduleMethods;
+import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.view.interfaces.IFindView;
 import com.android.mb.movie.view.interfaces.IRegisterView;
 
@@ -53,6 +55,31 @@ public class FindPresenter extends BaseMvpPresenter<IFindView> implements IFindP
     @Override
     public void praise(Map<String, Object> requestMap) {
         Observable observable = ScheduleMethods.getInstance().praise(requestMap);
+        toSubscribe(observable,  new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if(mMvpView!=null && !TextUtils.isEmpty(e.getMessage())){
+                    mMvpView.showToastMessage(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onNext(Object result) {
+                if (mMvpView!=null){
+                    mMvpView.praise(result);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void delLike(Map<String, Object> requestMap) {
+        Observable observable = ScheduleMethods.getInstance().delLike(requestMap);
         toSubscribe(observable,  new Subscriber<Object>() {
             @Override
             public void onCompleted() {

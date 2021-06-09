@@ -38,6 +38,7 @@ import com.android.mb.movie.entity.VideoData;
 import com.android.mb.movie.entity.VideoListData;
 import com.android.mb.movie.fragment.AdvertDialogFragment;
 import com.android.mb.movie.presenter.DetailPresenter;
+import com.android.mb.movie.rxbus.Events;
 import com.android.mb.movie.service.ScheduleMethods;
 import com.android.mb.movie.utils.AppHelper;
 import com.android.mb.movie.utils.Helper;
@@ -72,6 +73,7 @@ import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Action1;
 
 /**
  * CollapsingToolbarLayout的播放页面
@@ -104,6 +106,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     private MovieListAdapter mMovieListAdapter;
     private TextView mTvSkip, mTvTitle;
     private MyCountDownTimer mCountDownTimer;
+    private Toolbar mToolBar;
 
     @Override
     public void onBackPressed() {
@@ -179,15 +182,16 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
 
     @Override
     protected void bindViews() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        mToolBar = findViewById(R.id.toolbar);
+
         mDetailPlayer = findViewById(R.id.detail_player);
         mAdvertPlayer = findViewById(R.id.advert_player);
         mCoordinatorLayout = findViewById(R.id.root_layout);
-        toolbar.setNavigationIcon(R.mipmap.ic_video_back);
-        setSupportActionBar(toolbar);
+        mToolBar.setNavigationIcon(R.mipmap.ic_video_back);
+        setSupportActionBar(mToolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//左侧添加一个默认的返回图标
         getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -225,12 +229,19 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Video video = mMovieListAdapter.getItem(position);
-                Bundle bundle = new Bundle();
-                bundle.putString("videoId",video.getId());
-                NavigationHelper.startActivity( mContext, DetailActivity.class,bundle,false);
+                mVideoId = video.getId();
+                getVideoDetail();
+                getAdvert();
+                getRecommendVideo();
             }
         });
         mMovieRecyclerView.setAdapter(mMovieListAdapter);
+        regiestEvent(ProjectConstants.EVENT_BACK, new Action1<Events<?>>() {
+            @Override
+            public void call(Events<?> events) {
+                onBackPressed();
+            }
+        });
     }
 
     @Override
@@ -275,9 +286,10 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
         mOrientationUtils = new OrientationUtils(this, mDetailPlayer);
         //初始化不打开外部的旋转
         mOrientationUtils.setEnable(false);
-        mDetailPlayer.getBackButton().setVisibility(View.GONE);
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
         gsyVideoOption.setThumbImageView(imageView)
+                .setShrinkImageRes(R.drawable.video_shrink)
+                .setEnlargeImageRes(R.drawable.video_enlarge)
                 .setIsTouchWiget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
@@ -285,7 +297,7 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
                 .setNeedLockFull(true)
                 .setSeekRatio(1)
                 .setUrl(mVideoInfo.getVideoUrl())
-                .setCacheWithPlay(false)
+                .setCacheWithPlay(true)
                 .setVideoTitle("测试视频")
                 .setVideoAllCallBack(new GSYSampleCallBack() {
 
@@ -358,11 +370,12 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
                 mOrientationUtils.resolveByClick();
 
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                mDetailPlayer.startWindowFullscreen(DetailActivity.this, true, true);
+                mDetailPlayer.startWindowFullscreen(DetailActivity.this, false, true);
             }
         });
 
         mDetailPlayer.setLinkScroll(true);
+        mDetailPlayer.setBottomProgressBarDrawable(getResources().getDrawable(R.drawable.video_new_progress));
     }
 
     private void resolveNormalVideoUI() {
@@ -620,11 +633,14 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
     }
 
     private void playAdvert(String videoUrl){
+        mTvSkip.setVisibility(View.VISIBLE);
+        mAdvertPlayer.setVisibility(View.VISIBLE);
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
         gsyVideoOption.setIsTouchWiget(true)
+                .setIsTouchWigetFull(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
-                .setShowFullAnimation(false)
+                .setShowFullAnimation(true)
                 .setNeedLockFull(true)
                 .setSeekRatio(1)
                 .setUrl(videoUrl)

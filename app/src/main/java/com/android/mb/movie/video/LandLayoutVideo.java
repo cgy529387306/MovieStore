@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.android.mb.movie.R;
+import com.android.mb.movie.adapter.FindAdapter;
+import com.android.mb.movie.constants.ProjectConstants;
+import com.android.mb.movie.entity.Video;
+import com.android.mb.movie.rxbus.RxBus;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -46,14 +50,12 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
                 gestureDetector = new GestureDetector(getContext().getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
                     @Override
                     public boolean onDoubleTap(MotionEvent e) {
-                        touchDoubleUp();
                         return super.onDoubleTap(e);
                     }
 
                     @Override
                     public boolean onSingleTapConfirmed(MotionEvent e) {
                         if (!mChangePosition && !mChangeVolume && !mBrightness) {
-                            onClickUiToggle();
                         }
                         Debuger.printfError("555a","9999999999999999999999");
                         return super.onSingleTapConfirmed(e);
@@ -65,6 +67,14 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
                         Debuger.printfError("555a","0000000000000000000000");
                     }
                 });
+                if (mIfCurrentIsFullscreen && findViewById(R.id.video_back) != null) {
+                    findViewById(R.id.video_back).setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            RxBus.getInstance().send(ProjectConstants.EVENT_BACK,null);
+                        }
+                    });
+                }
             }
         });
     }
@@ -127,4 +137,5 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
     public void setLinkScroll(boolean linkScroll) {
         isLinkScroll = linkScroll;
     }
+
 }

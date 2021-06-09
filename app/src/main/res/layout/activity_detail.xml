@@ -35,7 +35,8 @@
                 <com.android.mb.movie.widget.MyLandLayoutVideo
                     android:id="@+id/advert_player"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp" />
+                    android:layout_height="200dp"
+                    />
                 <TextView
                     android:id="@+id/tv_skip"
                     android:layout_width="wrap_content"

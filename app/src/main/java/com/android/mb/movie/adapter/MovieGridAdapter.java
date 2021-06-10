@@ -10,6 +10,7 @@ import com.android.mb.movie.base.BaseWebViewActivity;
 import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.Advert;
 import com.android.mb.movie.entity.CateVideo;
+import com.android.mb.movie.rxbus.RxBus;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.view.DetailActivity;
@@ -48,6 +49,7 @@ public class MovieGridAdapter extends BaseQuickAdapter<CateVideo, BaseViewHolder
                 public void OnBannerClick(int position) {
                     if (Helper.isNotEmpty(mAdvertList) && mAdvertList.size()>position){
                         Advert advert = mAdvertList.get(position);
+                        RxBus.getInstance().send(ProjectConstants.EVENT_VISIT_ADVERT,advert.getId());
                         if (advert.getType()==1){
                             Bundle bundle = new Bundle();
                             bundle.putString("videoId",advert.getResId());

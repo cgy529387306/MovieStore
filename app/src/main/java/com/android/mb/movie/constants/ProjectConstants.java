@@ -14,6 +14,8 @@ public class ProjectConstants {
 
     public static final int EVENT_BACK = 1000111;
 
+    public static final int EVENT_VISIT_ADVERT = 1000222;
+
     public static final int EVENT_UPDATE_SCHEDULE = 10003;
 
     public static final int EVENT_UPDATE_SELECT = 10004;

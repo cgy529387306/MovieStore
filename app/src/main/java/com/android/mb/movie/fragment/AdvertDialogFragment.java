@@ -17,9 +17,10 @@ import android.widget.ImageView;
 import com.android.mb.movie.R;
 import com.android.mb.movie.base.BaseWebViewActivity;
 import com.android.mb.movie.constants.ProjectConstants;
+import com.android.mb.movie.entity.Advert;
+import com.android.mb.movie.rxbus.RxBus;
 import com.android.mb.movie.utils.ImageUtils;
 import com.android.mb.movie.utils.NavigationHelper;
-import com.android.mb.movie.view.LoadingActivity;
 
 public class AdvertDialogFragment extends DialogFragment {
 
@@ -33,6 +34,7 @@ public class AdvertDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        String advertId = getArguments().getString("advertId");
         String imageUrl = getArguments().getString("imageUrl");
         String redirectUrl = getArguments().getString("redirectUrl");
         mIvAdvert = view.findViewById(R.id.iv_advert);
@@ -50,6 +52,7 @@ public class AdvertDialogFragment extends DialogFragment {
                 Bundle bundle = new Bundle();
                 bundle.putString(ProjectConstants.KEY_WEB_DETAIL_URL,redirectUrl);
                 NavigationHelper.startActivity(getActivity(), BaseWebViewActivity.class,bundle,false);
+                RxBus.getInstance().send(ProjectConstants.EVENT_VISIT_ADVERT,advertId);
             }
         });
     }
@@ -73,11 +76,12 @@ public class AdvertDialogFragment extends DialogFragment {
         getDialog().setCanceledOnTouchOutside(false);
     }
 
-    public static AdvertDialogFragment newInstance(String imageUrl, String redirectUrl){
+    public static AdvertDialogFragment newInstance(Advert advert){
         AdvertDialogFragment fragment = new AdvertDialogFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("imageUrl", imageUrl);
-        bundle.putString("redirectUrl", redirectUrl);
+        bundle.putString("advertId", advert.getId());
+        bundle.putString("imageUrl", advert.getCoverUrl());
+        bundle.putString("redirectUrl", advert.getRedirectUrl());
         fragment.setArguments(bundle);
         return fragment;
     }

@@ -19,6 +19,7 @@ import com.android.mb.movie.entity.CateVideo;
 import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.HomeData;
 import com.android.mb.movie.presenter.HomePresenter;
+import com.android.mb.movie.rxbus.RxBus;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.view.DetailActivity;
@@ -153,6 +154,7 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
     public void OnBannerClick(int position) {
         if (Helper.isNotEmpty(mAdvertList) && mAdvertList.size()>position){
             Advert advert = mAdvertList.get(position);
+            RxBus.getInstance().send(ProjectConstants.EVENT_VISIT_ADVERT,advert.getId());
             if (advert.getType()==1){
                 Bundle bundle = new Bundle();
                 bundle.putString("videoId",advert.getResId());

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.MyFragmentPagerAdapter;
 import com.android.mb.movie.base.BaseActivity;
+import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.AdData;
 import com.android.mb.movie.entity.Advert;
 import com.android.mb.movie.fragment.AdvertDialogFragment;
@@ -19,33 +20,27 @@ import com.android.mb.movie.fragment.FindFragment;
 import com.android.mb.movie.fragment.MainFragment;
 import com.android.mb.movie.fragment.SpecialFragment;
 import com.android.mb.movie.fragment.UserFragment;
+import com.android.mb.movie.rxbus.Events;
+import com.android.mb.movie.rxbus.RxBus;
 import com.android.mb.movie.service.ScheduleMethods;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.widget.FragmentViewPager;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity {
 
     private TabLayout mTabLayout;
     private FragmentViewPager mFragmentViewPager;
     private List<Fragment> mFragmentList = new ArrayList<>();
-
-    OkHttpClient mOkHttpClient = new OkHttpClient();
-
-    private void okhttpTest() throws IOException{
-        //通过builder 模式构建出Request
-        Request request = new Request.Builder().url("http://www.baidu.com").build();
-        mOkHttpClient.newCall(request).execute();
-    }
 
     @Override
     protected void loadIntent() {
@@ -77,7 +72,34 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        regiestEvent(ProjectConstants.EVENT_VISIT_ADVERT, new Action1<Events<?>>() {
+            @Override
+            public void call(Events<?> events) {
+                String advertId = (String) events.content;
+                visitAdvert(advertId);
+            }
+        });
+    }
 
+    private void visitAdvert(String advertId){
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("advertId", advertId);
+        Observable observable = ScheduleMethods.getInstance().visitAdvert(requestMap);
+        toSubscribe(observable,  new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onNext(Object result) {
+            }
+        });
     }
 
     @Override
@@ -160,7 +182,7 @@ public class MainActivity extends BaseActivity {
             public void onNext(AdData result) {
                 if (Helper.isNotEmpty(result.getAppPopAdvert())){
                     Advert advert = result.getAppPopAdvert().get(0);
-                    AdvertDialogFragment dialogFragment = AdvertDialogFragment.newInstance(advert.getCoverUrl(),advert.getRedirectUrl());
+                    AdvertDialogFragment dialogFragment = AdvertDialogFragment.newInstance(advert);
                     dialogFragment.show(getFragmentManager(),"dialog");
                 }
             }

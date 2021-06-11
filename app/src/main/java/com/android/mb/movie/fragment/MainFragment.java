@@ -12,11 +12,13 @@ import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.CateAdapter;
 import com.android.mb.movie.adapter.MovieGridAdapter;
 import com.android.mb.movie.base.BaseMvpFragment;
+import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.Advert;
 import com.android.mb.movie.entity.CateVideo;
 import com.android.mb.movie.entity.CurrentUser;
 import com.android.mb.movie.entity.HomeData;
 import com.android.mb.movie.presenter.HomePresenter;
+import com.android.mb.movie.rxbus.RxBus;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ProjectHelper;
@@ -151,6 +153,7 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
     public void OnBannerClick(int position) {
         if (Helper.isNotEmpty(mAdvertList) && mAdvertList.size()>position){
             Advert advert = mAdvertList.get(position);
+            RxBus.getInstance().send(ProjectConstants.EVENT_VISIT_ADVERT,advert.getId());
             ProjectHelper.getToAdvert(advert,mContext);
         }
     }

@@ -69,11 +69,16 @@ public class LoadingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mAdvert!=null){
                     ProjectHelper.getToAdvert(mAdvert,LoadingActivity.this);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(ProjectConstants.KEY_WEB_DETAIL_URL,mAdvert.getRedirectUrl());
+                    NavigationHelper.startActivity(LoadingActivity.this, BaseWebViewActivity.class,bundle,false);
+                    visitAdvert(mAdvert);
                 }
             }
         });
         doRegister();
         getAdvert();
+        loginFor();
     }
 
     class MyCountDownTimer extends CountDownTimer {
@@ -152,6 +157,46 @@ public class LoadingActivity extends AppCompatActivity {
                     mCountDownTimer = new MyCountDownTimer(advert.getSeconds()*1000, 1000);
                     mCountDownTimer.start();
                 }
+            }
+        });
+    }
+
+    private void loginFor(){
+        Observable observable = ScheduleMethods.getInstance().loginFor();
+        toSubscribe(observable,  new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onNext(Object result) {
+            }
+        });
+    }
+
+    private void visitAdvert(Advert advert){
+        Map<String,Object> requestMap = new HashMap<>();
+        requestMap.put("advertId", advert.getId());
+        Observable observable = ScheduleMethods.getInstance().visitAdvert(requestMap);
+        toSubscribe(observable,  new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onNext(Object result) {
             }
         });
     }

@@ -243,4 +243,10 @@ public interface IScheduleService {
 
     @GET("/movie/api/1.0/common/getRecommendVideo")
     Observable<HttpResult<List<Video>>> getRecommendVideo();
+
+    @GET("/movie/api/1.0/common/visitAdvert")
+    Observable<HttpResult<Object>> visitAdvert(@QueryMap Map<String,Object> requestMap);
+
+    @GET("/movie/api/1.0/common/loginFor ")
+    Observable<HttpResult<Object>> loginFor();
 }

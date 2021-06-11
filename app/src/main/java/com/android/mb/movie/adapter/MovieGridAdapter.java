@@ -8,6 +8,7 @@ import android.widget.GridView;
 import com.android.mb.movie.R;
 import com.android.mb.movie.entity.Advert;
 import com.android.mb.movie.entity.CateVideo;
+import com.android.mb.movie.rxbus.RxBus;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.ProjectHelper;

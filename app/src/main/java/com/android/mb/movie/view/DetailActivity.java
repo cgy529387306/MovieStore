@@ -45,6 +45,7 @@ import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ImageUtils;
 import com.android.mb.movie.utils.NavigationHelper;
 import com.android.mb.movie.utils.PreferencesHelper;
+import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.ToastHelper;
 import com.android.mb.movie.video.LandLayoutVideo;
 import com.android.mb.movie.video.listener.AppBarStateChangeListener;
@@ -621,6 +622,12 @@ public class DetailActivity extends BaseMvpActivity<DetailPresenter,IDetailView>
                 if (Helper.isNotEmpty(result.getVideoDetailAdvert())){
                     Advert advert = result.getVideoDetailAdvert().get(0);
                     ImageUtils.loadImageUrlLight(mIvAdvert,advert.getCoverUrl());
+                    mIvAdvert.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ProjectHelper.getToAdvert(advert,mContext);
+                        }
+                    });
                 }
                 if (Helper.isNotEmpty(result.getVideoPrePlayAdvert())){
                     Advert advert = result.getVideoPrePlayAdvert().get(0);

@@ -1,10 +1,18 @@
 package com.android.mb.movie.utils;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.widget.Toast;
+
+import com.android.mb.movie.base.BaseWebViewActivity;
+import com.android.mb.movie.constants.ProjectConstants;
+import com.android.mb.movie.entity.Advert;
+import com.android.mb.movie.view.DetailActivity;
+import com.android.mb.movie.view.VideoListActivity;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -59,6 +67,24 @@ public class ProjectHelper {
             context.startActivity(intent);
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void getToAdvert(Advert advert, Context mContext){
+        if (advert.getType()==1){
+            Bundle bundle = new Bundle();
+            bundle.putString("videoId",advert.getResId());
+            NavigationHelper.startActivity((Activity) mContext, DetailActivity.class,bundle,false);
+        }else if (advert.getType()==2){
+            String name = advert.getDesc();
+            Bundle bundle = new Bundle();
+            bundle.putString("name",name);
+            bundle.putString("cateId",advert.getResId());
+            NavigationHelper.startActivity((Activity) mContext, VideoListActivity.class,bundle,false);
+        }else{
+            Bundle bundle = new Bundle();
+            bundle.putString(ProjectConstants.KEY_WEB_DETAIL_URL,advert.getRedirectUrl());
+            NavigationHelper.startActivity((Activity) mContext, BaseWebViewActivity.class,bundle,false);
         }
     }
 }

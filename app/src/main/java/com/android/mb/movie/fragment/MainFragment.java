@@ -12,8 +12,6 @@ import com.android.mb.movie.R;
 import com.android.mb.movie.adapter.CateAdapter;
 import com.android.mb.movie.adapter.MovieGridAdapter;
 import com.android.mb.movie.base.BaseMvpFragment;
-import com.android.mb.movie.base.BaseWebViewActivity;
-import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.Advert;
 import com.android.mb.movie.entity.CateVideo;
 import com.android.mb.movie.entity.CurrentUser;
@@ -21,7 +19,7 @@ import com.android.mb.movie.entity.HomeData;
 import com.android.mb.movie.presenter.HomePresenter;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.NavigationHelper;
-import com.android.mb.movie.view.DetailActivity;
+import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.view.HistoryActivity;
 import com.android.mb.movie.view.LoginActivity;
 import com.android.mb.movie.view.SearchActivity;
@@ -153,21 +151,7 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
     public void OnBannerClick(int position) {
         if (Helper.isNotEmpty(mAdvertList) && mAdvertList.size()>position){
             Advert advert = mAdvertList.get(position);
-            if (advert.getType()==1){
-                Bundle bundle = new Bundle();
-                bundle.putString("videoId",advert.getResId());
-                NavigationHelper.startActivity(mContext, DetailActivity.class,bundle,false);
-            }else if (advert.getType()==2){
-                String name = advert.getDesc();
-                Bundle bundle = new Bundle();
-                bundle.putString("name",name);
-                bundle.putString("cateId",advert.getResId());
-                NavigationHelper.startActivity(mContext, VideoListActivity.class,bundle,false);
-            }else{
-                Bundle bundle = new Bundle();
-                bundle.putString(ProjectConstants.KEY_WEB_DETAIL_URL,advert.getRedirectUrl());
-                NavigationHelper.startActivity(mContext, BaseWebViewActivity.class,bundle,false);
-            }
+            ProjectHelper.getToAdvert(advert,mContext);
         }
     }
 

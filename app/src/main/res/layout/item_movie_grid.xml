@@ -31,10 +31,10 @@
             android:textColor="@color/base_gray"
             android:textSize="16sp" />
     </LinearLayout>
-    <com.youth.banner.Banner
+    <com.android.mb.movie.widget.MyBanner
         android:id="@+id/bannerView"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
         app:is_auto_play="true"/>
     <com.android.mb.movie.widget.NestedGridView

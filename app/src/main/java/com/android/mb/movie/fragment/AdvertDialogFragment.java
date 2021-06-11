@@ -19,7 +19,7 @@ import com.android.mb.movie.base.BaseWebViewActivity;
 import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.utils.ImageUtils;
 import com.android.mb.movie.utils.NavigationHelper;
-import com.android.mb.movie.view.LoadingActivity;
+import com.android.mb.movie.utils.ProjectHelper;
 
 public class AdvertDialogFragment extends DialogFragment {
 

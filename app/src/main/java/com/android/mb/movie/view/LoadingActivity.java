@@ -4,7 +4,6 @@ package com.android.mb.movie.view;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,8 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.mb.movie.R;
-import com.android.mb.movie.base.BaseWebViewActivity;
-import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.AdData;
 import com.android.mb.movie.entity.Advert;
 import com.android.mb.movie.entity.CurrentUser;
@@ -24,6 +21,7 @@ import com.android.mb.movie.service.ScheduleMethods;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ImageUtils;
 import com.android.mb.movie.utils.NavigationHelper;
+import com.android.mb.movie.utils.ProjectHelper;
 import com.android.mb.movie.utils.WifiMacUtils;
 import com.smarx.notchlib.NotchScreenManager;
 
@@ -70,9 +68,7 @@ public class LoadingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mAdvert!=null){
-                    Bundle bundle = new Bundle();
-                    bundle.putString(ProjectConstants.KEY_WEB_DETAIL_URL,mAdvert.getRedirectUrl());
-                    NavigationHelper.startActivity(LoadingActivity.this, BaseWebViewActivity.class,bundle,false);
+                    ProjectHelper.getToAdvert(mAdvert,LoadingActivity.this);
                 }
             }
         });

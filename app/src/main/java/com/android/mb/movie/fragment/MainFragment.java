@@ -153,7 +153,6 @@ public class MainFragment extends BaseMvpFragment<HomePresenter,IHomeView> imple
     public void OnBannerClick(int position) {
         if (Helper.isNotEmpty(mAdvertList) && mAdvertList.size()>position){
             Advert advert = mAdvertList.get(position);
-            RxBus.getInstance().send(ProjectConstants.EVENT_VISIT_ADVERT,advert.getId());
             ProjectHelper.getToAdvert(advert,mContext);
         }
     }

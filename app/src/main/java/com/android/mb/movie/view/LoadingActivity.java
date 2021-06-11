@@ -69,9 +69,6 @@ public class LoadingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mAdvert!=null){
                     ProjectHelper.getToAdvert(mAdvert,LoadingActivity.this);
-                    Bundle bundle = new Bundle();
-                    bundle.putString(ProjectConstants.KEY_WEB_DETAIL_URL,mAdvert.getRedirectUrl());
-                    NavigationHelper.startActivity(LoadingActivity.this, BaseWebViewActivity.class,bundle,false);
                     visitAdvert(mAdvert);
                 }
             }

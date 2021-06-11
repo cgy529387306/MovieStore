@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.android.mb.movie.base.BaseWebViewActivity;
 import com.android.mb.movie.constants.ProjectConstants;
 import com.android.mb.movie.entity.Advert;
+import com.android.mb.movie.rxbus.RxBus;
 import com.android.mb.movie.view.DetailActivity;
 import com.android.mb.movie.view.VideoListActivity;
 
@@ -71,6 +72,7 @@ public class ProjectHelper {
     }
 
     public static void getToAdvert(Advert advert, Context mContext){
+        RxBus.getInstance().send(ProjectConstants.EVENT_VISIT_ADVERT,advert.getId());
         if (advert.getType()==1){
             Bundle bundle = new Bundle();
             bundle.putString("videoId",advert.getResId());

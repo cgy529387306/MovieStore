@@ -21,7 +21,6 @@ import com.android.mb.movie.fragment.MainFragment;
 import com.android.mb.movie.fragment.SpecialFragment;
 import com.android.mb.movie.fragment.UserFragment;
 import com.android.mb.movie.rxbus.Events;
-import com.android.mb.movie.rxbus.RxBus;
 import com.android.mb.movie.service.ScheduleMethods;
 import com.android.mb.movie.utils.Helper;
 import com.android.mb.movie.utils.ToastHelper;
